@@ -1,27 +1,31 @@
-# CadmusItineraApp
+# Cadmus Itinera
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
-## Development server
+This is the frontend for the second generation of the Cadmus Itinera editor. Currently it's an empty shell, which will be progressively filled with new content. At the end, this will supersede the [old editor frontend](https://github.com/vedph/cadmus_itinera).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The codicological parts in this project will be imported from an [independent library](https://github.com/vedph/cadmus-codicology).
 
-## Code scaffolding
+## Docker
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Quick Docker image build:
 
-## Build
+1. `npm run build-all`
+2. `ng build --configuration production`
+3. `docker build . -t vedph2020/cadmus-itinera-app:1.0.46 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Production
 
-## Running unit tests
+1. build the image as above.
+2. after building the app, change `env.js` in the `dist` folder for these variables:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```js
+window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
+window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
+```
 
-## Running end-to-end tests
+3. build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:1.0.46-prod`. The production version is labeled like this one, with `-prod` suffix.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## History
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- 2022-01-06: [created](https://github.com/vedph/cadmus_doc/blob/master/guide/frontend/creating.md) the new shell.
