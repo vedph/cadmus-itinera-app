@@ -3,6 +3,7 @@
   window.__env = window.__env || {};
 
   // environment-dependent settings
-  window.__env.apiUrl = 'http://localhost:54183/api/';
+  window.__env.apiUrl = 'http://localhost:5052/api/';
   window.__env.biblioApiUrl = 'http://localhost:61691/api/';
+  window.__env.version = '2.0.0';
 })(this);
