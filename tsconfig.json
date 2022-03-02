@@ -2,6 +2,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@myrmidon/cadmus-part-itinera-pg": [
+        "dist/myrmidon/cadmus-part-itinera-pg/myrmidon-cadmus-part-itinera-pg",
+        "dist/myrmidon/cadmus-part-itinera-pg"
+      ]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
