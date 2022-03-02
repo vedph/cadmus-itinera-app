@@ -20,10 +20,15 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { CodLociPartComponent } from './cod-loci-part/cod-loci-part.component';
 import { CodLocusComponent } from './cod-locus/cod-locus.component';
+import { CodLociPartFeatureComponent } from './cod-loci-part-feature/cod-loci-part-feature.component';
 // bricks: TODO: customize
 
 @NgModule({
-  declarations: [CodLociPartComponent, CodLocusComponent],
+  declarations: [
+    CodLociPartComponent,
+    CodLocusComponent,
+    CodLociPartFeatureComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -44,6 +49,10 @@ import { CodLocusComponent } from './cod-locus/cod-locus.component';
     CadmusCodLocationModule,
     CadmusCodicologyUiModule,
   ],
-  exports: [CodLociPartComponent, CodLocusComponent],
+  exports: [
+    CodLociPartComponent,
+    CodLocusComponent,
+    CodLociPartFeatureComponent,
+  ],
 })
 export class CadmusPartItineraCodLociModule {}

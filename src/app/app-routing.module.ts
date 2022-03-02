@@ -88,6 +88,15 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
   },
+  // itinera - parts
+  {
+    path: 'items/:iid/itinera',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-part-itinera-pg').then(
+        (module) => module.CadmusPartItineraPgModule
+      ),
+    canActivate: [AuthJwtGuardService],
+  },
   // cadmus - graph
   {
     path: 'graph',

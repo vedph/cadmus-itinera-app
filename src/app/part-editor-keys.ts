@@ -9,9 +9,12 @@ import {
 import { PartEditorKeys } from '@myrmidon/cadmus-core';
 import { EXT_BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-biblio-ui';
 
+// Itinera
+import { COD_LOCI_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-cod-loci/src/public-api';
+
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
-// const PHILOLOGY = 'philology';
+const ITINERA = 'itinera';
 
 /**
  * The parts and fragments editor keys for this UI.
@@ -41,5 +44,8 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [NOTE_PART_TYPEID]: {
     part: GENERAL,
   },
-  // itinera parts
+  // Itinera parts
+  [COD_LOCI_PART_TYPEID]: {
+    part: ITINERA,
+  },
 };
