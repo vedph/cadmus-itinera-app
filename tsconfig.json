@@ -3,6 +3,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "@myrmidon/cadmus-part-itinera-cod-loci": [
+        "dist/myrmidon/cadmus-part-itinera-cod-loci/myrmidon-cadmus-part-itinera-cod-loci",
+        "dist/myrmidon/cadmus-part-itinera-cod-loci"
+      ],
       "@myrmidon/cadmus-part-itinera-pg": [
         "dist/myrmidon/cadmus-part-itinera-pg/myrmidon-cadmus-part-itinera-pg",
         "dist/myrmidon/cadmus-part-itinera-pg"

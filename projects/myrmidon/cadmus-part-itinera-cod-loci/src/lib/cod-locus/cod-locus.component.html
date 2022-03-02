@@ -1,0 +1,75 @@
+<form [formGroup]="form" (submit)="save()">
+  <div class="form-row">
+    <!-- citation -->
+    <mat-form-field>
+      <input matInput [formControl]="citation" placeholder="citation" />
+      <mat-error
+        *ngIf="
+          $any(citation).errors?.required &&
+          (citation.dirty || citation.touched)
+        "
+        >citation required</mat-error
+      >
+      <mat-error
+        *ngIf="
+          $any(citation).errors?.maxLength &&
+          (citation.dirty || citation.touched)
+        "
+        >citation too long</mat-error
+      >
+    </mat-form-field>
+
+    <!-- range -->
+    <cadmus-cod-location
+      [required]="true"
+      [location]="initialRanges"
+      (locationChange)="onLocationChange($event)"
+    ></cadmus-cod-location>
+  </div>
+
+  <div>
+    <!-- text -->
+    <mat-form-field>
+      <input matInput [formControl]="text" placeholder="text" />
+      <mat-error
+        *ngIf="$any(text).errors?.required && (text.dirty || text.touched)"
+        >text required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(text).errors?.maxLength && (text.dirty || text.touched)"
+        >text too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <div>
+    <!-- images -->
+    <cadmus-cod-images
+      [typeEntries]="imgTypeEntries"
+      [images]="initialImages"
+      (imagesChange)="onImagesChange($event)"
+    ></cadmus-cod-images>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button
+      type="button"
+      color="warn"
+      mat-icon-button
+      matTooltip="Discard changes"
+      (click)="cancel()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      color="primary"
+      mat-icon-button
+      matTooltip="Accept changes"
+      [disabled]="form.invalid || form.pristine"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>
