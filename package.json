@@ -9,7 +9,7 @@
     "test": "ng test",
     "build-cod-loci": "ng build @myrmidon/cadmus-part-itinera-cod-loci",
     "build-pg": "ng build @myrmidon/cadmus-part-itinera-pg",
-    "build-lib": "npm run build-cod-loci && npm run build-lib"
+    "build-lib": "npm run build-cod-loci && npm run build-pg"
   },
   "private": true,
   "dependencies": {
