@@ -17,9 +17,12 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+import { CodPoemRangesPartComponent } from './cod-poem-ranges-part/cod-poem-ranges-part.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    CodPoemRangesPartComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
