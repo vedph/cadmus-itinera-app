@@ -1,6 +1,18 @@
 {
   "name": "@myrmidon/cadmus-part-itinera-cod-poem-ranges",
   "version": "0.0.1",
+  "description": "Cadmus Itinera - CodPoemRangesPart.",
+  "keywords": [
+    "Cadmus"
+  ],
+  "homepage": "https://github.com/vedph/cadmus-itinera-shell",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedph/cadmus-itinera-shell"
+  },
+  "author": {
+    "name": "Daniele Fusi"
+  },
   "peerDependencies": {
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0"
