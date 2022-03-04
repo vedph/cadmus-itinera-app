@@ -17,11 +17,14 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import { CodPoemRangesPartComponent } from './cod-poem-ranges-part/cod-poem-ranges-part.component';
+import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts/cod-poem-range-layouts.component';
 
 @NgModule({
   declarations: [
-    CodPoemRangesPartComponent
+    CodPoemRangesPartComponent,
+    CodPoemRangeLayoutsComponent
   ],
   imports: [
     CommonModule,
@@ -43,6 +46,9 @@ import { CodPoemRangesPartComponent } from './cod-poem-ranges-part/cod-poem-rang
     CadmusCodLocationModule,
     CadmusCodicologyUiModule,
   ],
-  exports: [],
+  exports: [
+    CodPoemRangesPartComponent,
+    CodPoemRangeLayoutsComponent
+  ],
 })
 export class CadmusPartItineraCodPoemRangesModule {}

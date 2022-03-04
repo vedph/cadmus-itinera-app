@@ -15,15 +15,15 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
-import { CodPoemRangesPartComponent } from './cod-poem-ranges-part.component';
+import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts.component';
 
-describe('CodPoemRangesPartComponent', () => {
-  let component: CodPoemRangesPartComponent;
-  let fixture: ComponentFixture<CodPoemRangesPartComponent>;
+describe('CodPoemRangeLayoutsComponent', () => {
+  let component: CodPoemRangeLayoutsComponent;
+  let fixture: ComponentFixture<CodPoemRangeLayoutsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodPoemRangesPartComponent ],
+      declarations: [ CodPoemRangeLayoutsComponent ],
       imports: [
         CommonModule,
         FormsModule,
@@ -49,7 +49,7 @@ describe('CodPoemRangesPartComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CodPoemRangesPartComponent);
+    fixture = TestBed.createComponent(CodPoemRangeLayoutsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
