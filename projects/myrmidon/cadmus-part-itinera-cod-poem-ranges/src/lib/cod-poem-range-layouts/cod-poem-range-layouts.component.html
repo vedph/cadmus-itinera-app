@@ -1,1 +1,81 @@
-<p>cod-poem-range-layouts works!</p>
+<div>
+  <form class="form-row" (submit)="applyLayout()">
+    <!-- layout (bound) -->
+    <mat-form-field *ngIf="layoutEntries?.length" class="form-col">
+      <mat-select [formControl]="layout" placeholder="layout">
+        <mat-option [value]="null">---</mat-option>
+        <mat-option *ngFor="let e of layoutEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- layout (free) -->
+    <mat-form-field *ngIf="!layoutEntries?.length" class="form-col">
+      <input matInput [formControl]="layout" placeholder="layout" />
+      <mat-error
+        *ngIf="
+          $any(layout).errors?.maxLength && (layout.dirty || layout.touched)
+        "
+        >layout too long</mat-error
+      >
+    </mat-form-field>
+
+    <button
+      mat-icon-button
+      type="submit"
+      color="primary"
+      matTooltip="Apply layout to selected rows"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </form>
+  <div class="cols">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>nr.</th>
+          <th>layout</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of rows$ | async; let i = index"
+          [style.background-color]="row.checked ? '#ace0fa' : 'transparent'"
+        >
+          <td>
+            <button
+              mat-icon-button
+              type="button"
+              color="primary"
+              (click)="setCheck(i)"
+            >
+              <mat-icon>task_alt</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              color="warn"
+              (click)="clearLayout(i)"
+            >
+              <mat-icon>clear</mat-icon>
+            </button>
+          </td>
+          <td>
+            {{ row.nr.n + (row.nr.a || "") }}
+          </td>
+          <td>
+            {{ row.layout }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <button type="button" mat-flat-button color="primary" (click)="save()">
+      <mat-icon>check_circle</mat-icon>
+      apply
+    </button>
+  </div>
+</div>

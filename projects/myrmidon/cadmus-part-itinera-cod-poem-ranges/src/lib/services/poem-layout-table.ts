@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { CodPoemLayout } from '../cod-poem-ranges-part';
 
 import { Alnum } from './alnum';
 import { AlnumRange, AlnumRangeService } from './alnum-range.service';
@@ -53,6 +54,38 @@ export class PoemLayoutTable {
           nr: an,
         });
       }
+    });
+    this._rows$.next(rows);
+  }
+
+  /**
+   * Set the layout of the row at the specified index in this table.
+   * @param index The row index.
+   * @param layout The layout to set.
+   */
+  public setLayout(index: number, layout: string | null | undefined): void {
+    const rows = [...this._rows$.value];
+    rows[index].layout = layout ? layout : undefined;
+    this._rows$.next(rows);
+  }
+
+  /**
+   * Sets the specified layouts on the table's rows.
+   *
+   * @param layouts The layouts to set.
+   */
+  public setLayouts(layouts: CodPoemLayout[]): void {
+    const rows = [...this._rows$.value];
+    layouts.forEach((l) => {
+      this._alnumService.expandRanges([l.range]).forEach((s) => {
+        const an = Alnum.parse(s);
+        if (an) {
+          const row = rows.find((r) => r.nr.n === an.n && r.nr.a == an.a);
+          if (row) {
+            row.layout = l.layout;
+          }
+        }
+      });
     });
     this._rows$.next(rows);
   }

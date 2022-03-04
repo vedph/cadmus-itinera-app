@@ -189,4 +189,32 @@ describe('PoemLayoutTable', () => {
     expect(rows[1].layout).toBe('x');
     expect(rows[2].layout).toBe('x');
   });
+
+  it('setLayouts should set rows layout', () => {
+    const table = new PoemLayoutTable();
+    table.setRows([
+      {
+        a: '1',
+        b: '5',
+      },
+    ]);
+    table.setLayouts([
+      {
+        range: { a: '1' },
+        layout: 'x',
+      },
+      {
+        range: { a: '4', b: '5' },
+        layout: 'y',
+      },
+    ]);
+
+    const rows = table.getRows();
+    expect(rows.length).toBe(5);
+    expect(rows[0].layout).toBe('x');
+    expect(rows[1].layout).toBeUndefined();
+    expect(rows[2].layout).toBeUndefined();
+    expect(rows[3].layout).toBe('y');
+    expect(rows[4].layout).toBe('y');
+  });
 });
