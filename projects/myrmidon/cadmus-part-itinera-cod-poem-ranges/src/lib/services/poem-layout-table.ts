@@ -175,4 +175,40 @@ export class PoemLayoutTable {
     }
     this._rows$.next(rows);
   }
+
+  /**
+   * Get the currently defined layouts in the table.
+   * @returns Array of layouts.
+   */
+  public getLayouts(): CodPoemLayout[] {
+    const rows = this._rows$.value;
+    const layouts: CodPoemLayout[] = [];
+    let i = 0;
+    while (i < rows.length) {
+      if (rows[i].layout) {
+        let start = i++;
+        // rows are expanded here, so we can assume that
+        // all the consecutive rows with the same layout
+        // and without any alpha (which breaks sequences)
+        // belongs to the same range
+        while (
+          i < rows.length &&
+          rows[i].layout === rows[start].layout &&
+          !rows[i].nr.a
+        ) {
+          i++;
+        }
+        layouts.push({
+          range: {
+            a: Alnum.toString(rows[start].nr),
+            b: start + 1 === i ? undefined : Alnum.toString(rows[i - 1].nr),
+          },
+          layout: rows[start].layout!,
+        });
+      } else {
+        i++;
+      }
+    }
+    return layouts;
+  }
 }

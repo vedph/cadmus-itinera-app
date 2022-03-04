@@ -7,8 +7,8 @@ import {
 } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { Observable } from 'rxjs';
-import { CodPoemLayout } from '../cod-poem-ranges-part';
 
+import { CodPoemLayout } from '../cod-poem-ranges-part';
 import { AlnumRange } from '../services/alnum-range.service';
 import { PoemLayoutRow, PoemLayoutTable } from '../services/poem-layout-table';
 
@@ -104,6 +104,6 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
   }
 
   public save(): void {
-    // TODO compact and emit
+    this.layoutsChange.emit(this._table.getLayouts());
   }
 }

@@ -27,13 +27,13 @@ export class Alnum {
     return m ? new Alnum(+m[1], m[2] ? m[2] : null) : null;
   }
 
-  public toString(): string {
+  public static toString(nr: Alnum): string {
     const sb: string[] = [];
-    if (this.n) {
-      sb.push(this.n.toString());
+    if (nr.n) {
+      sb.push(nr.n.toString());
     }
-    if (this.a) {
-      sb.push(this.a);
+    if (nr.a) {
+      sb.push(nr.a);
     }
     return sb.join('');
   }
