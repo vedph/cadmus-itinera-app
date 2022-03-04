@@ -4,22 +4,19 @@ import { Alnum } from './alnum';
 /**
  * A range of alphanumerics.
  */
- export interface AlnumRange {
+export interface AlnumRange {
   a: string;
   b?: string;
 }
+
+export const ALNUM_RANGE_PATTERN = '([^-\\s,]+)(?:-([^-\\s,]+))?';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlnumRangeService {
-  public static readonly rangeRegExp = new RegExp(
-    '([^-\\s,]+)(?:-([^-\\s,]+))?'
-  );
-  private static readonly _rangesRegExp = new RegExp(
-    '([^-\\s,]+)(?:-([^-\\s,]+))?',
-    'g'
-  );
+  public static readonly rangeRegExp = new RegExp(ALNUM_RANGE_PATTERN);
+  private static readonly _rangesRegExp = new RegExp(ALNUM_RANGE_PATTERN, 'g');
 
   private getRangeFromMatch(match: RegExpExecArray): AlnumRange | null {
     return match
@@ -40,7 +37,7 @@ export class AlnumRangeService {
       return null;
     }
     const m = AlnumRangeService.rangeRegExp.exec(text);
-    return m? this.getRangeFromMatch(m) : null;
+    return m ? this.getRangeFromMatch(m) : null;
   }
 
   /**

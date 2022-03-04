@@ -1,1 +1,161 @@
-<p>cod-poem-ranges-part works!</p>
+<form [formGroup]="form!" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Poem Ranges Part</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group (selectedIndexChange)="onTabIndexChange($event)">
+        <!-- RANGES -->
+        <mat-tab label="ranges">
+          <div>
+            <!-- sortType (bound) -->
+            <mat-form-field *ngIf="sortEntries?.length" class="form-col">
+              <mat-select [formControl]="sortType" placeholder="type">
+                <mat-option *ngFor="let e of sortEntries" [value]="e.id">{{
+                  e.value
+                }}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  $any(sortType).errors?.required &&
+                  (sortType.dirty || sortType.touched)
+                "
+                >type required</mat-error
+              >
+            </mat-form-field>
+            <!-- sortType (free) -->
+            <mat-form-field *ngIf="!sortEntries?.length" class="form-col">
+              <input matInput [formControl]="sortType" placeholder="type" />
+              <mat-error
+                *ngIf="
+                  $any(sortType).errors?.required &&
+                  (sortType.dirty || sortType.touched)
+                "
+                >type required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  $any(sortType).errors?.maxLength &&
+                  (sortType.dirty || sortType.touched)
+                "
+                >type too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <!-- ranges adder -->
+          <fieldset>
+            <legend>ranges</legend>
+            <form class="form-row" (submit)="addRanges()">
+              <!-- addedPresets -->
+              <mat-form-field>
+                <mat-select [formControl]="addedPresets" placeholder="preset">
+                  <mat-option [value]="0">sonetto</mat-option>
+                  <mat-option [value]="1">canzone</mat-option>
+                  <mat-option [value]="2">ballata</mat-option>
+                  <mat-option [value]="3">madrigale</mat-option>
+                  <mat-option [value]="4">sestina</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- addedRanges -->
+              <mat-form-field style="flex: 1 0 auto">
+                <input
+                  #adder
+                  matInput
+                  [formControl]="addedRanges"
+                  placeholder="ranges"
+                />
+                <mat-error
+                  *ngIf="
+                    $any(addedRanges).errors?.required &&
+                    (addedRanges.dirty || addedRanges.touched)
+                  "
+                  >ranges required</mat-error
+                >
+              </mat-form-field>
+
+              <!-- add -->
+              <button
+                type="submit"
+                mat-icon-button
+                [disabled]="addedRanges.invalid"
+              >
+                <mat-icon>add_circle</mat-icon>
+              </button>
+            </form>
+          </fieldset>
+          <!-- ranges -->
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let range of ranges?.value || [];
+                  let i = index;
+                  let first = first;
+                  let last = last
+                "
+              >
+                <td>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this range up"
+                    [disabled]="first"
+                    (click)="moveRangeUp(i)"
+                  >
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this range down"
+                    [disabled]="last"
+                    (click)="moveRangeDown(i)"
+                  >
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="warn"
+                    matTooltip="Delete this range"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+                <td>{{ range }} TODO pipe</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+
+        <!-- LAYOUTS -->
+        <mat-tab label="layouts">
+          <cadmus-cod-poem-range-layouts
+            [layoutEntries]="layoutEntries"
+            [ranges]="initialRanges"
+            [layouts]="initialLayouts"
+            (layoutsChange)="onLayoutsChange($event)"
+          ></cadmus-cod-poem-range-layouts>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>
