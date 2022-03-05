@@ -103,6 +103,14 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
     this._table.setLayout(index, null);
   }
 
+  public selectAllPoems(): void {
+    this._table.toggleAllCheck(true);
+  }
+
+  public deselectAllPoems(): void {
+    this._table.toggleAllCheck(false);
+  }
+
   public save(): void {
     this.layoutsChange.emit(this._table.getLayouts());
   }

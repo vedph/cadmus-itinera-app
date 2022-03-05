@@ -25,55 +25,57 @@
       type="submit"
       color="primary"
       matTooltip="Apply layout to selected rows"
+      (click)="applyLayout()"
     >
       <mat-icon>check_circle</mat-icon>
     </button>
+    <button
+      mat-icon-button
+      type="button"
+      matTooltip="Select all"
+      (click)="selectAllPoems()"
+    >
+      <mat-icon>done_all</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      type="button"
+      matTooltip="Deselect all"
+      color="warn"
+      (click)="deselectAllPoems()"
+    >
+      <mat-icon>remove_done</mat-icon>
+    </button>
   </form>
-  <div class="cols">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>nr.</th>
-          <th>layout</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let row of rows$ | async; let i = index"
-          [style.background-color]="row.checked ? '#ace0fa' : 'transparent'"
-        >
-          <td>
-            <button
-              mat-icon-button
-              type="button"
-              color="primary"
-              (click)="setCheck(i)"
-            >
-              <mat-icon>task_alt</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              type="button"
-              color="warn"
-              (click)="clearLayout(i)"
-            >
-              <mat-icon>clear</mat-icon>
-            </button>
-          </td>
-          <td>
-            {{ row.nr.n + (row.nr.a || "") }}
-          </td>
-          <td>
-            {{ row.layout }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="poems">
+    <div
+      *ngFor="let row of rows$ | async; let i = index"
+      [style.background-color]="row.checked ? '#ace0fa' : 'transparent'"
+      class="form-row"
+    >
+      <button
+        mat-icon-button
+        type="button"
+        color="primary"
+        (click)="setCheck(i)"
+      >
+        <mat-icon>task_alt</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        type="button"
+        color="warn"
+        (click)="clearLayout(i)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <span>{{ row.nr.n + (row.nr.a || "") }}</span>
+      <span>{{ row.layout }}</span>
+    </div>
   </div>
 
-  <div>
-    <button type="button" mat-flat-button color="primary" (click)="save()">
+  <div style="margin-top: 12px">
+    <button type="button" mat-icon-button color="primary" (click)="save()">
       <mat-icon>check_circle</mat-icon>
       apply
     </button>
