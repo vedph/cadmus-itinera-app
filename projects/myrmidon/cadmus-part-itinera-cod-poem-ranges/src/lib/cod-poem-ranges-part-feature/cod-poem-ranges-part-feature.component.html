@@ -1,1 +1,10 @@
-<p>cod-poem-ranges-part-feature works!</p>
+<cadmus-current-item-bar></cadmus-current-item-bar>
+<cadmus-cod-poem-ranges-part
+  [itemId]="itemId"
+  [roleId]="roleId"
+  [model]="$any(part$ | async)"
+  (modelChange)="save($event)"
+  [thesauri]="(thesauri$ | async) || undefined"
+  (editorClose)="close()"
+  (dirtyChange)="onDirtyChange($event)"
+></cadmus-cod-poem-ranges-part>

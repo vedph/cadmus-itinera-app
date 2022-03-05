@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build-cod-loci": "ng build @myrmidon/cadmus-part-itinera-cod-loci",
+    "build-cod-poem": "ng build @myrmidon/cadmus-part-itinera-cod-poem-ranges",
     "build-pg": "ng build @myrmidon/cadmus-part-itinera-pg",
     "build-lib": "npm run build-cod-loci && npm run build-pg"
   },

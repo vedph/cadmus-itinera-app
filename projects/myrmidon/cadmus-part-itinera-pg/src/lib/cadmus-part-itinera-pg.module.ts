@@ -10,6 +10,11 @@ import {
   CodLociPartFeatureComponent,
   CadmusPartItineraCodLociModule,
 } from '@myrmidon/cadmus-part-itinera-cod-loci';
+import {
+  COD_POEM_RANGES_PART_TYPEID,
+  CodPoemRangesPartFeatureComponent,
+  CadmusPartItineraCodPoemRangesModule,
+} from '@myrmidon/cadmus-part-itinera-cod-poem-ranges';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -19,6 +24,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${COD_LOCI_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: CodLociPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${COD_POEM_RANGES_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: CodPoemRangesPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);
@@ -37,6 +48,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusUiPgModule,
     // Itinera
     CadmusPartItineraCodLociModule,
+    CadmusPartItineraCodPoemRangesModule,
   ],
   exports: [],
 })
