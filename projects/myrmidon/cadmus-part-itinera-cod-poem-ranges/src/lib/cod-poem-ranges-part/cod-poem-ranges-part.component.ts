@@ -94,7 +94,7 @@ export class CodPoemRangesPartComponent
     });
     this.addedRanges = formBuilder.control(null, [
       Validators.required,
-      Validators.pattern(ALNUM_RANGE_PATTERN),
+      Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN, 'g')),
     ]);
     this.addedPresets = formBuilder.control(null);
     this.addForm = formBuilder.group({
@@ -109,6 +109,7 @@ export class CodPoemRangesPartComponent
     this.addedPresets.valueChanges.subscribe((value) => {
       if (value !== undefined) {
         this.addedRanges.setValue(this._presets[value]);
+        this.addedRanges.updateValueAndValidity();
         setTimeout(() => {
           this.adderRef?.nativeElement.focus();
         }, 0);
