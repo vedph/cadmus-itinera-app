@@ -29,7 +29,7 @@
 
   <div>
     <!-- text -->
-    <mat-form-field>
+    <mat-form-field class="long-text">
       <input matInput [formControl]="text" placeholder="text" />
       <mat-error
         *ngIf="$any(text).errors?.required && (text.dirty || text.touched)"
