@@ -21,12 +21,14 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { CodPoemRangesPartComponent } from './cod-poem-ranges-part/cod-poem-ranges-part.component';
 import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts/cod-poem-range-layouts.component';
 import { AlnumRangePipe } from './pipes/alnum-range.pipe';
+import { CodPoemRangesPartFeatureComponent } from './cod-poem-ranges-part-feature/cod-poem-ranges-part-feature.component';
 
 @NgModule({
   declarations: [
     CodPoemRangesPartComponent,
     CodPoemRangeLayoutsComponent,
-    AlnumRangePipe
+    AlnumRangePipe,
+    CodPoemRangesPartFeatureComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,9 @@ import { AlnumRangePipe } from './pipes/alnum-range.pipe';
   ],
   exports: [
     CodPoemRangesPartComponent,
-    CodPoemRangeLayoutsComponent
+    CodPoemRangeLayoutsComponent,
+    AlnumRangePipe,
+    CodPoemRangesPartFeatureComponent
   ],
 })
 export class CadmusPartItineraCodPoemRangesModule {}
