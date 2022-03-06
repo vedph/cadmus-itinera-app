@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -26,6 +21,9 @@ import {
   AlnumRangeService,
   ALNUM_RANGE_PATTERN,
 } from '../services/alnum-range.service';
+import { Alnum } from '../services/alnum';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+import { take } from 'rxjs';
 
 /**
  * CodPoemRanges part editor component.
@@ -75,7 +73,8 @@ export class CodPoemRangesPartComponent
   constructor(
     authService: AuthJwtService,
     formBuilder: FormBuilder,
-    private _alnumService: AlnumRangeService
+    private _alnumService: AlnumRangeService,
+    private _dialogService: DialogService
   ) {
     super(authService);
     this.initialRanges = [];
@@ -183,8 +182,35 @@ export class CodPoemRangesPartComponent
     }
     const newRanges = this._alnumService.parseRanges(this.addedRanges.value);
     if (newRanges.length) {
-      this.ranges.setValue([...this.ranges.value, ...newRanges]);
+      // insert each range at its place according to its A value
+      const ranges: AlnumRange[] = [...this.ranges.value];
+
+      for (let i = 0; i < newRanges.length; i++) {
+        const add = Alnum.parse(newRanges[i].a);
+        if (!add) {
+          continue;
+        }
+        let j = 0;
+        while (j < ranges.length) {
+          const current = Alnum.parse(ranges[j].a);
+          const n = add.compare(current);
+          if (n === 0) {
+            break;
+          }
+          if (n < 0) {
+            ranges.splice(j, 0, newRanges[i]);
+            break;
+          }
+          j++;
+        }
+        if (j === ranges.length) {
+          ranges.push(newRanges[i]);
+        }
+      }
+
+      this.ranges.setValue(ranges);
       this.ranges.markAsDirty();
+      this.addedRanges.reset();
     }
   }
 
@@ -193,6 +219,20 @@ export class CodPoemRangesPartComponent
     newRanges.splice(index, 1);
     this.ranges.setValue(newRanges);
     this.ranges.markAsDirty();
+  }
+
+  public deleteAllRanges(): void {
+    if (!this.ranges.value.length) {
+      return;
+    }
+    this._dialogService
+      .confirm('Clear Ranges', 'Delete all the ranges?')
+      .pipe(take(1))
+      .subscribe((yes) => {
+        if (yes) {
+          this.ranges.setValue([]);
+        }
+      });
   }
 
   public moveRangeUp(index: number): void {
@@ -224,7 +264,6 @@ export class CodPoemRangesPartComponent
     if (index === 1 && this.ranges.dirty) {
       this.initialRanges = this.ranges.value;
       this.initialLayouts = this.layouts.value;
-      this.ranges.markAsPristine();
     }
   }
 

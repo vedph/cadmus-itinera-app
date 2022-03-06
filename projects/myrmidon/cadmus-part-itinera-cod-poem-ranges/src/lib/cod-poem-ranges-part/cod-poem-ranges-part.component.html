@@ -87,6 +87,17 @@
               >
                 <mat-icon>add_circle</mat-icon>
               </button>
+
+              <button
+                type="button"
+                color="warn"
+                mat-icon-button
+                [disabled]="!ranges.value?.length"
+                matTooltip="Delete all ranges"
+                (click)="deleteAllRanges()"
+              >
+                <mat-icon>delete_sweep</mat-icon>
+              </button>
             </form>
           </fieldset>
           <!-- ranges -->
@@ -130,11 +141,12 @@
                     type="button"
                     color="warn"
                     matTooltip="Delete this range"
+                    (click)="deleteRange(i)"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>
                 </td>
-                <td>{{ range | alnumRange}}</td>
+                <td>{{ range | alnumRange }}</td>
               </tr>
             </tbody>
           </table>
