@@ -16,6 +16,10 @@ import {
   CadmusPartItineraCodPoemRangesModule,
 } from '@myrmidon/cadmus-part-itinera-cod-poem-ranges';
 import {
+  LetterInfoPartFeatureComponent,
+  LETTER_INFO_PART_TYPEID,
+} from '@myrmidon/cadmus-part-itinera-letter-info';
+import {
   PersonInfoPartFeatureComponent,
   PERSON_INFO_PART_TYPEID,
 } from '@myrmidon/cadmus-part-itinera-person-info';
@@ -50,6 +54,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${PERSON_WORKS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: PersonWorksPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${LETTER_INFO_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: LetterInfoPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);

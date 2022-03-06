@@ -13,9 +13,10 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { LetterInfoPartComponent } from './letter-info-part/letter-info-part.component';
+import { LetterInfoPartFeatureComponent } from './letter-info-part-feature/letter-info-part-feature.component';
 
 @NgModule({
-  declarations: [LetterInfoPartComponent],
+  declarations: [LetterInfoPartComponent, LetterInfoPartFeatureComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -34,6 +35,6 @@ import { LetterInfoPartComponent } from './letter-info-part/letter-info-part.com
     CadmusUiModule,
     CadmusUiPgModule,
   ],
-  exports: [LetterInfoPartComponent],
+  exports: [LetterInfoPartComponent, LetterInfoPartFeatureComponent],
 })
 export class CadmusPartItineraLetterInfoModule {}
