@@ -8,14 +8,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
+import { PersonInfoPartComponent } from './person-info-part/person-info-part.component';
+import { PersonInfoPartFeatureComponent } from './person-info-part-feature/person-info-part-feature.component';
+
 @NgModule({
-  declarations: [],
+  declarations: [
+    PersonInfoPartComponent,
+    PersonInfoPartFeatureComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -29,11 +36,15 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
     MatTabsModule,
     MatTooltipModule,
     NgMatToolsModule,
+    MonacoEditorModule,
     // Cadmus
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
   ],
-  exports: [],
+  exports: [
+    PersonInfoPartComponent,
+    PersonInfoPartFeatureComponent
+  ],
 })
 export class CadmusPartItineraPersonInfoModule {}

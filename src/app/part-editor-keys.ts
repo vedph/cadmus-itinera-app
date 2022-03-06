@@ -12,6 +12,7 @@ import { EXT_BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-biblio-ui';
 // Itinera
 import { COD_LOCI_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-cod-loci/src/public-api';
 import { COD_POEM_RANGES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src/public-api';
+import { PERSON_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-person-info/src/public-api';
 
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
@@ -50,6 +51,9 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
     part: ITINERA,
   },
   [COD_POEM_RANGES_PART_TYPEID]: {
+    part: ITINERA,
+  },
+  [PERSON_INFO_PART_TYPEID]: {
     part: ITINERA,
   },
 };

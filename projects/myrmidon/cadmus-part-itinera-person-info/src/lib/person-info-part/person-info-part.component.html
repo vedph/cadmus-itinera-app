@@ -1,0 +1,57 @@
+<form [formGroup]="form!" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Person Info Part</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <!-- sex (bound) -->
+        <mat-form-field *ngIf="sexEntries?.length">
+          <mat-select [formControl]="sex" placeholder="sex">
+            <mat-option *ngFor="let e of sexEntries" [value]="e.id">{{
+              e.value
+            }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="$any(sex).errors?.required && (sex.dirty || sex.touched)"
+            >sex required</mat-error
+          >
+        </mat-form-field>
+        <!-- sex (free) -->
+        <mat-form-field *ngIf="!sexEntries?.length">
+          <input matInput [formControl]="sex" placeholder="sex" />
+          <mat-error
+            *ngIf="$any(sex).errors?.required && (sex.dirty || sex.touched)"
+            >sex required</mat-error
+          >
+          <mat-error
+            *ngIf="$any(sex).errors?.maxLength && (sex.dirty || sex.touched)"
+            >sex too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- bio -->
+      <div>
+        <ngx-monaco-editor
+          [options]="editorOptions"
+          formControlName="bio"
+        ></ngx-monaco-editor>
+        <mat-error
+          *ngIf="$any(bio).errors?.maxLength && (bio.touched || bio.dirty)"
+          >too long</mat-error
+        >
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>
