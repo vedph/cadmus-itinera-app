@@ -16,8 +16,11 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 
+import { PersonWorksPartComponent } from './person-works-part/person-works-part.component';
+import { PersonWorkComponent } from './person-work/person-work.component';
+
 @NgModule({
-  declarations: [],
+  declarations: [PersonWorksPartComponent, PersonWorkComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -38,6 +41,6 @@ import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
     CadmusUiModule,
     CadmusUiPgModule,
   ],
-  exports: [],
+  exports: [PersonWorksPartComponent, PersonWorkComponent],
 })
 export class CadmusPartItineraPersonWorksModule {}

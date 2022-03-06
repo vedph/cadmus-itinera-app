@@ -1,0 +1,62 @@
+<form [formGroup]="form" (submit)="save()">
+  <!-- title -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="title" placeholder="title" />
+      <mat-error
+        *ngIf="$any(title).errors?.required && (title.dirty || title.touched)"
+        >title required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(title).errors?.maxLength && (title.dirty || title.touched)"
+        >title too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- eid -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="eid" placeholder="EID" />
+      <mat-error
+        *ngIf="$any(eid).errors?.maxLength && (eid.dirty || eid.touched)"
+        >EID too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- assertion -->
+  <div>
+    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
+    <cadmus-refs-assertion
+      *ngIf="hasAssertion?.value"
+      [assTagEntries]="assTagEntries"
+      [refTagEntries]="refTagEntries"
+      [refTypeEntries]="refTypeEntries"
+      [assertion]="initialAssertion"
+      (assertionChange)="onAssertionChange($event)"
+    ></cadmus-refs-assertion>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button
+      type="button"
+      color="warn"
+      mat-icon-button
+      matTooltip="Discard changes"
+      (click)="cancel()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      color="primary"
+      mat-icon-button
+      matTooltip="Accept changes"
+      [disabled]="form.invalid || form.pristine"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>
