@@ -1,0 +1,66 @@
+<form [formGroup]="form!" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Letter Info Part</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- subject -->
+      <div>
+        <mat-form-field class="long-text">
+          <input matInput [formControl]="subject" placeholder="subject" />
+          <mat-error
+            *ngIf="
+              $any(subject).errors?.required &&
+              (subject.dirty || subject.touched)
+            "
+            >subject required</mat-error
+          >
+          <mat-error
+            *ngIf="
+              $any(subject).errors?.maxLength &&
+              (subject.dirty || subject.touched)
+            "
+            >subject too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- header -->
+      <div>
+        <mat-form-field class="long-text">
+          <input matInput [formControl]="header" placeholder="header" />
+          <mat-error
+            *ngIf="
+              $any(header).errors?.maxLength && (header.dirty || header.touched)
+            "
+            >header too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- textDate -->
+      <div>
+        <mat-form-field class="long-text">
+          <input matInput [formControl]="textDate" placeholder="text date" />
+          <mat-error
+            *ngIf="
+              $any(textDate).errors?.maxLength &&
+              (textDate.dirty || textDate.touched)
+            "
+            >date too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>
