@@ -19,6 +19,10 @@ import {
   PersonInfoPartFeatureComponent,
   PERSON_INFO_PART_TYPEID,
 } from '@myrmidon/cadmus-part-itinera-person-info';
+import {
+  PERSON_WORKS_PART_TYPEID,
+  PersonWorksPartFeatureComponent,
+} from '@myrmidon/cadmus-part-itinera-person-works';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -40,6 +44,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${PERSON_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: PersonInfoPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${PERSON_WORKS_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: PersonWorksPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);

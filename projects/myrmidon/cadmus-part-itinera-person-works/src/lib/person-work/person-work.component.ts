@@ -16,7 +16,7 @@ import { PersonWork } from '../person-works-part';
   styleUrls: ['./person-work.component.css'],
 })
 export class PersonWorkComponent implements OnInit {
-  private _model: PersonWork | undefined;
+  private _work: PersonWork | undefined;
 
   // assertion-tags
   @Input()
@@ -30,10 +30,10 @@ export class PersonWorkComponent implements OnInit {
 
   @Input()
   public get work(): PersonWork | undefined {
-    return this._model;
+    return this._work;
   }
   public set work(value: PersonWork | undefined) {
-    this._model = value;
+    this._work = value;
     this.updateForm(value);
   }
 
@@ -69,11 +69,7 @@ export class PersonWorkComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    if (this._model) {
-      this.updateForm(this._model);
-    }
-  }
+  ngOnInit(): void {}
 
   private updateForm(model: PersonWork | undefined): void {
     if (!model) {
@@ -83,8 +79,8 @@ export class PersonWorkComponent implements OnInit {
 
     this.eid.setValue(model.eid);
     this.title.setValue(model.title);
-    this.hasAssertion.setValue(model.assertion ? true : false);
     this.initialAssertion = model.assertion;
+    this.hasAssertion.setValue(model.assertion ? true : false);
     this.form.markAsPristine();
   }
 
@@ -98,7 +94,6 @@ export class PersonWorkComponent implements OnInit {
 
   public onAssertionChange(assertion: Assertion | undefined): void {
     this.assertion.setValue(assertion);
-    this.assertion.markAsDirty();
   }
 
   public cancel(): void {
@@ -109,10 +104,6 @@ export class PersonWorkComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const model = this.getModel();
-    if (!model) {
-      return;
-    }
-    this.workChange.emit(model);
+    this.workChange.emit(this.getModel());
   }
 }

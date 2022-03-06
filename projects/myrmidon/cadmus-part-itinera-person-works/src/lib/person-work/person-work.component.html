@@ -1,7 +1,7 @@
 <form [formGroup]="form" (submit)="save()">
   <!-- title -->
   <div>
-    <mat-form-field>
+    <mat-form-field class="long-text">
       <input matInput [formControl]="title" placeholder="title" />
       <mat-error
         *ngIf="$any(title).errors?.required && (title.dirty || title.touched)"
@@ -16,7 +16,7 @@
 
   <!-- eid -->
   <div>
-    <mat-form-field>
+    <mat-form-field class="long-text">
       <input matInput [formControl]="eid" placeholder="EID" />
       <mat-error
         *ngIf="$any(eid).errors?.maxLength && (eid.dirty || eid.touched)"
@@ -29,7 +29,7 @@
   <div>
     <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
     <cadmus-refs-assertion
-      *ngIf="hasAssertion?.value"
+      *ngIf="hasAssertion.value"
       [assTagEntries]="assTagEntries"
       [refTagEntries]="refTagEntries"
       [refTypeEntries]="refTypeEntries"
