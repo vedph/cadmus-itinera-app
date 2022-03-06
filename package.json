@@ -11,8 +11,9 @@
     "build-cod-poem": "ng build @myrmidon/cadmus-part-itinera-cod-poem-ranges",
     "build-prs": "ng build @myrmidon/cadmus-part-itinera-person-info",
     "build-pwk": "ng build @myrmidon/cadmus-part-itinera-person-works",
+    "build-lti": "ng build @myrmidon/cadmus-part-itinera-letter-info",
     "build-pg": "ng build @myrmidon/cadmus-part-itinera-pg",
-    "build-lib": "npm run build-cod-loci && npm run build-cod-poem && npm run build-prs && npm run build-pwk && npm run build-pg"
+    "build-lib": "npm run build-cod-loci && npm run build-cod-poem && npm run build-prs && npm run build-pwk && npm run build-lti && npm run build-pg"
   },
   "private": true,
   "dependencies": {
