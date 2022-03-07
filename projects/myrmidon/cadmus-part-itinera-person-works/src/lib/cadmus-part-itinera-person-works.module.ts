@@ -16,6 +16,7 @@ import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
+import { CadmusUiFlagsPickerModule } from '@myrmidon/cadmus-ui-flags-picker';
 
 import { PersonWorksPartComponent } from './person-works-part/person-works-part.component';
 import { PersonWorkComponent } from './person-work/person-work.component';
@@ -42,6 +43,7 @@ import { PersonWorksPartFeatureComponent } from './person-works-part-feature/per
     MatTooltipModule,
     NgMatToolsModule,
     // bricks
+    CadmusUiFlagsPickerModule,
     CadmusRefsAssertionModule,
     // Cadmus
     CadmusStateModule,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { deepCopy } from '@myrmidon/ng-tools';
+import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
@@ -10,6 +10,7 @@ import {
   LiteraryWorkInfoPart,
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
+import { Flag } from '@myrmidon/cadmus-ui-flags-picker';
 
 /**
  * LiteraryWorkInfo part editor component.
@@ -26,7 +27,18 @@ export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>
   implements OnInit
 {
-  // TODO form controls (form: FormGroup is inherited)
+  public languages: FormControl;
+  public genre: FormControl;
+  public metres: FormControl;
+  public strophes: FormControl;
+  public isLost: FormControl;
+  public titles: FormControl;
+  public note: FormControl;
+
+  public langFlags: Flag[];
+  public initialLanguages: string[];
+  public mtrFlags: Flag[];
+  public initialMetres: string[];
 
   // literary-work-languages
   public langEntries: ThesaurusEntry[] | undefined;
@@ -43,8 +55,36 @@ export class LiteraryWorkInfoPartComponent
 
   constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
     super(authService);
+    this.langFlags = [];
+    this.initialLanguages = [];
+    this.mtrFlags = [];
+    this.initialMetres = [];
     // form
-    // TODO build controls and set this.form
+    this.languages = formBuilder.control(
+      [],
+      NgToolsValidators.strictMinLengthValidator(1)
+    );
+    this.genre = formBuilder.control(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
+    this.metres = formBuilder.control([]);
+    this.strophes = formBuilder.control(null);
+    this.isLost = formBuilder.control(false);
+    this.titles = formBuilder.control(
+      [],
+      NgToolsValidators.strictMinLengthValidator(1)
+    );
+    this.note = formBuilder.control(null, Validators.maxLength(1000));
+    this.form = formBuilder.group({
+      languages: this.languages,
+      genre: this.genre,
+      metres: this.metres,
+      strophes: this.strophes,
+      isLost: this.isLost,
+      titles: this.titles,
+      note: this.note,
+    });
   }
 
   public ngOnInit(): void {
@@ -56,7 +96,15 @@ export class LiteraryWorkInfoPartComponent
       this.form!.reset();
       return;
     }
-    // TODO set controls values from model
+    this.initialLanguages = model.languages || [];
+    this.genre.setValue(model.genre);
+    this.initialMetres = model.metres || [];
+    this.strophes.setValue(
+      model.strophes?.length ? model.strophes.join('\n') : ''
+    );
+    this.isLost.setValue(model.isLost ? true : false);
+    this.titles.setValue(model.titles || []);
+    this.note.setValue(model.note);
     this.form!.markAsPristine();
   }
 
@@ -101,6 +149,35 @@ export class LiteraryWorkInfoPartComponent
     } else {
       this.refTagEntries = undefined;
     }
+
+    this.langFlags = this.entriesToFlags(this.langEntries);
+    this.mtrFlags = this.entriesToFlags(this.mtrEntries);
+  }
+
+  private entriesToFlags(entries: ThesaurusEntry[] | undefined): Flag[] {
+    return entries?.length
+      ? entries.map((e) => {
+          return {
+            id: e.id,
+            label: e.value,
+          } as Flag;
+        })
+      : [];
+  }
+
+  private parseStrophes(text: string): string[] | undefined {
+    if (!text) {
+      return undefined;
+    }
+    const strophes = [
+      ...new Set(
+        text
+          .split('\n')
+          .map((s) => s.trim())
+          .filter((s) => s)
+      ),
+    ];
+    return strophes.length ? strophes : undefined;
   }
 
   protected getModelFromForm(): LiteraryWorkInfoPart {
@@ -117,10 +194,31 @@ export class LiteraryWorkInfoPartComponent
         userId: '',
         languages: [],
         genre: '',
-        titles: []
+        titles: [],
       };
     }
-    // TODO set part.properties from form controls
+    part.languages = this.languages.value || [];
+    part.genre = this.genre.value?.trim();
+    part.metres = this.metres.value?.length ? this.metres.value : undefined;
+    part.strophes = this.parseStrophes(this.strophes.value);
+    part.isLost = this.isLost.value ? true : undefined;
+    part.titles = this.titles.value || [];
+    part.note = this.note.value?.trim();
+
     return part;
+  }
+
+  public onLangFlagsChange(ids: string[]): void {
+    this.languages.setValue(ids);
+    this.languages.markAsDirty();
+  }
+
+  public onMtrFlagsChange(ids: string[]): void {
+    this.metres.setValue(ids);
+    this.metres.markAsDirty();
+  }
+
+  public onEntryChange(entry: ThesaurusEntry): void {
+    this.genre.setValue(entry.id);
   }
 }
