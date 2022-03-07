@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ModelEditorComponentBase, renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
+  AssertedTitle,
   LiteraryWorkInfoPart,
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
@@ -27,6 +30,10 @@ export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>
   implements OnInit
 {
+  private _editedIndex;
+
+  public editedTitle: AssertedTitle | undefined;
+
   public languages: FormControl;
   public genre: FormControl;
   public metres: FormControl;
@@ -53,12 +60,17 @@ export class LiteraryWorkInfoPartComponent
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
 
-  constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
+  constructor(
+    authService: AuthJwtService,
+    formBuilder: FormBuilder,
+    private _dialogService: DialogService
+  ) {
     super(authService);
     this.langFlags = [];
     this.initialLanguages = [];
     this.mtrFlags = [];
     this.initialMetres = [];
+    this._editedIndex = -1;
     // form
     this.languages = formBuilder.control(
       [],
@@ -208,12 +220,12 @@ export class LiteraryWorkInfoPartComponent
     return part;
   }
 
-  public onLangFlagsChange(ids: string[]): void {
+  public onLanguagesChange(ids: string[]): void {
     this.languages.setValue(ids);
     this.languages.markAsDirty();
   }
 
-  public onMtrFlagsChange(ids: string[]): void {
+  public onMetresChange(ids: string[]): void {
     this.metres.setValue(ids);
     this.metres.markAsDirty();
   }
@@ -221,4 +233,82 @@ export class LiteraryWorkInfoPartComponent
   public onEntryChange(entry: ThesaurusEntry): void {
     this.genre.setValue(entry.id);
   }
+
+  public renderLabel(label: string): string {
+    return renderLabelFromLastColon(label);
+  }
+
+  //#region Titles
+  public addTitle(): void {
+    const title: AssertedTitle = {
+      language: this.langEntries?.length ? this.langEntries[0].id : '',
+      value: '',
+    };
+    this.titles.setValue([...this.titles.value, title]);
+    this.titles.markAsDirty();
+    this.editTitle(this.titles.value.length - 1);
+  }
+
+  public editTitle(index: number): void {
+    if (index < 0) {
+      this._editedIndex = -1;
+      this.editedTitle = undefined;
+    } else {
+      this._editedIndex = index;
+      this.editedTitle = this.titles.value[index];
+    }
+  }
+
+  public onTitleSave(item: AssertedTitle): void {
+    this.titles.setValue(
+      this.titles.value.map((x: AssertedTitle, i: number) =>
+        i === this._editedIndex ? item : x
+      )
+    );
+    this.titles.markAsDirty();
+    this.editTitle(-1);
+  }
+
+  public onTitleClose(): void {
+    this.editTitle(-1);
+  }
+
+  public deleteTitle(index: number): void {
+    this._dialogService
+      .confirm('Confirmation', 'Delete title?')
+      .pipe(take(1))
+      .subscribe((yes) => {
+        if (yes) {
+          const titles = [...this.titles.value];
+          titles.splice(index, 1);
+          this.titles.setValue(titles);
+          this.titles.markAsDirty();
+        }
+      });
+  }
+
+  public moveTitleUp(index: number): void {
+    if (index < 1) {
+      return;
+    }
+    const title = this.titles.value[index];
+    const titles = [...this.titles.value];
+    titles.splice(index, 1);
+    titles.splice(index - 1, 0, title);
+    this.titles.setValue(titles);
+    this.titles.markAsDirty();
+  }
+
+  public moveTitleDown(index: number): void {
+    if (index + 1 >= this.titles.value.length) {
+      return;
+    }
+    const title = this.titles.value[index];
+    const titles = [...this.titles.value];
+    titles.splice(index, 1);
+    titles.splice(index + 1, 0, title);
+    this.titles.setValue(titles);
+    this.titles.markAsDirty();
+  }
+  //#endregion
 }

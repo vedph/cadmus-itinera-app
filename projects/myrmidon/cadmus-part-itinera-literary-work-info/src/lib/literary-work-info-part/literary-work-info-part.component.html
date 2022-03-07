@@ -7,7 +7,199 @@
       <mat-card-title>Literary Work Part</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      TODO
+      <mat-tab-group>
+        <!-- GENERAL -->
+        <mat-tab label="general">
+          <!-- titles -->
+          <fieldset>
+            <legend>titles</legend>
+            <div>
+              <button
+                type="button"
+                mat-icon-button
+                color="primary"
+                (click)="addTitle()"
+              >
+                <mat-icon>add_circle</mat-icon> add title
+              </button>
+            </div>
+            <table *ngIf="titles?.value?.length">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>language</th>
+                  <th>title</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let title of titles?.value;
+                    let i = index;
+                    let first = first;
+                    let last = last
+                  "
+                >
+                  <td>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      color="primary"
+                      matTooltip="Edit this title"
+                      (click)="editTitle(i)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      matTooltip="Move this title up"
+                      [disabled]="first"
+                      (click)="moveTitleUp(i)"
+                    >
+                      <mat-icon>arrow_upward</mat-icon>
+                    </button>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      matTooltip="Move this title down"
+                      [disabled]="last"
+                      (click)="moveTitleDown(i)"
+                    >
+                      <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      color="warn"
+                      matTooltip="Delete this title"
+                      (click)="deleteTitle(i)"
+                    >
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+                  </td>
+                  <td>{{ title.language }}</td>
+                  <td>{{ title.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <mat-expansion-panel
+              [disabled]="!editedTitle"
+              [expanded]="editedTitle"
+            >
+              <mat-expansion-panel-header>
+                {{ editedTitle?.value }}
+              </mat-expansion-panel-header>
+              <cadmus-asserted-title
+                [langEntries]="langEntries"
+                [assTagEntries]="assTagEntries"
+                [refTagEntries]="refTagEntries"
+                [refTypeEntries]="refTypeEntries"
+                [title]="editedTitle"
+                (titleChange)="onTitleSave($event)"
+              ></cadmus-asserted-title>
+            </mat-expansion-panel>
+          </fieldset>
+
+          <!-- lost -->
+          <div>
+            <mat-checkbox [formControl]="isLost">lost</mat-checkbox>
+          </div>
+
+          <!-- note -->
+          <div>
+            <mat-form-field class="long-text">
+              <input matInput [formControl]="note" placeholder="note" />
+              <mat-error
+                *ngIf="
+                  $any(note).errors?.maxLength && (note.dirty || note.touched)
+                "
+                >note too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </mat-tab>
+
+        <!-- note -->
+        <mat-tab label="lang./note">
+          <!-- languages -->
+          <fieldset>
+            <legend>language(s)</legend>
+            <cadmus-ui-flags-picker
+              [flags]="langFlags"
+              [selectedIds]="initialLanguages"
+              (selectedIdsChange)="onLanguagesChange($event)"
+            ></cadmus-ui-flags-picker>
+          </fieldset>
+
+          <!-- genre -->
+          <fieldset>
+            <legend>genre</legend>
+            <mat-form-field *ngIf="!genreEntries?.length">
+              <input matInput [formControl]="genre" placeholder="genre" />
+              <mat-error
+                *ngIf="
+                  $any(genre).errors?.required && (genre.dirty || genre.touched)
+                "
+                >genre required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  $any(genre).errors?.maxLength &&
+                  (genre.dirty || genre.touched)
+                "
+                >genre too long</mat-error
+              >
+            </mat-form-field>
+
+            <div *ngIf="genreEntries?.length">
+              <span>genre: {{ genre?.value }}</span>
+              <mat-error
+                *ngIf="
+                  $any(genre).errors?.required && (genre.dirty || genre.touched)
+                "
+                >genre required</mat-error
+              >
+              <cadmus-thesaurus-tree
+                [renderLabel]="renderLabel"
+                [entries]="genreEntries"
+                (entryChange)="onEntryChange($event)"
+              ></cadmus-thesaurus-tree>
+            </div>
+          </fieldset>
+        </mat-tab>
+
+        <!-- POETRY -->
+        <mat-tab label="poetry">
+          <!-- metres -->
+          <fieldset *ngIf="mtrFlags?.length">
+            <legend>metre(s)</legend>
+            <cadmus-ui-flags-picker
+              [flags]="mtrFlags"
+              [selectedIds]="initialMetres"
+              (selectedIdsChange)="onMetresChange($event)"
+            ></cadmus-ui-flags-picker>
+          </fieldset>
+
+          <!-- strophes -->
+          <div>
+            <mat-form-field>
+              <input
+                matInput
+                [formControl]="strophes"
+                placeholder="strophes (1 per line)"
+              />
+              <mat-error
+                *ngIf="
+                  $any(strophes).errors?.maxLength &&
+                  (strophes.dirty || strophes.touched)
+                "
+                >strophes too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-card-content>
     <mat-card-actions>
       <cadmus-close-save-buttons

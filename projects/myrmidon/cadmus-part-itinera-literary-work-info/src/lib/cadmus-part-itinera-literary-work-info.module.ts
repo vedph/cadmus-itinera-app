@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
+import { CadmusUiFlagsPickerModule } from '@myrmidon/cadmus-ui-flags-picker';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
@@ -42,6 +43,7 @@ import { LiteraryWorkInfoPartComponent } from './literary-work-info-part/literar
     CadmusUiModule,
     CadmusUiPgModule,
     CadmusRefsAssertionModule,
+    CadmusUiFlagsPickerModule
   ],
   exports: [LiteraryWorkInfoPartComponent, AssertedTitleComponent],
 })
