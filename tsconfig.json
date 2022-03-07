@@ -15,6 +15,10 @@
         "dist/myrmidon/cadmus-part-itinera-letter-info/myrmidon-cadmus-part-itinera-letter-info",
         "dist/myrmidon/cadmus-part-itinera-letter-info"
       ],
+      "@myrmidon/cadmus-part-itinera-literary-work-info": [
+        "dist/myrmidon/cadmus-part-itinera-literary-work-info/myrmidon-cadmus-part-itinera-literary-work-info",
+        "dist/myrmidon/cadmus-part-itinera-literary-work-info"
+      ],
       "@myrmidon/cadmus-part-itinera-person-info": [
         "dist/myrmidon/cadmus-part-itinera-person-info/myrmidon-cadmus-part-itinera-person-info",
         "dist/myrmidon/cadmus-part-itinera-person-info"

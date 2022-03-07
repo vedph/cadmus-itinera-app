@@ -1,0 +1,87 @@
+<form [formGroup]="form" (submit)="save()">
+  <div>
+    <!-- language (bound) -->
+    <mat-form-field *ngIf="langEntries?.length">
+      <mat-select [formControl]="language" placeholder="language">
+        <mat-option *ngFor="let e of langEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          $any(language).errors?.required &&
+          (language.dirty || language.touched)
+        "
+        >language required</mat-error
+      >
+    </mat-form-field>
+    <!-- language (free) -->
+    <mat-form-field *ngIf="!langEntries?.length">
+      <input matInput [formControl]="language" placeholder="language" />
+      <mat-error
+        *ngIf="
+          $any(language).errors?.required &&
+          (language.dirty || language.touched)
+        "
+        >language required</mat-error
+      >
+      <mat-error
+        *ngIf="
+          $any(language).errors?.maxLength &&
+          (language.dirty || language.touched)
+        "
+        >language too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- value -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="value" placeholder="title" />
+      <mat-error
+        *ngIf="$any(value).errors?.required && (value.dirty || value.touched)"
+        >title required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(value).errors?.maxLength && (value.dirty || value.touched)"
+        >title too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- assertion -->
+  <div>
+    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
+    <cadmus-refs-assertion
+      *ngIf="hasAssertion.value"
+      [assTagEntries]="assTagEntries"
+      [refTagEntries]="refTagEntries"
+      [refTypeEntries]="refTypeEntries"
+      [assertion]="initialAssertion"
+      (assertionChange)="onAssertionChange($event)"
+    ></cadmus-refs-assertion>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button
+      type="button"
+      color="warn"
+      mat-icon-button
+      matTooltip="Discard changes"
+      (click)="cancel()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      color="primary"
+      mat-icon-button
+      matTooltip="Accept changes"
+      [disabled]="form.invalid || form.pristine"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>
