@@ -328,6 +328,37 @@
           }
         }
       }
+    },
+    "@myrmidon/cadmus-part-itinera-referenced-texts": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-referenced-texts",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-referenced-texts/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "cadmus-itinera-app"

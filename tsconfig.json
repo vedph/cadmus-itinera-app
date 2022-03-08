@@ -30,6 +30,10 @@
       "@myrmidon/cadmus-part-itinera-pg": [
         "dist/myrmidon/cadmus-part-itinera-pg/myrmidon-cadmus-part-itinera-pg",
         "dist/myrmidon/cadmus-part-itinera-pg"
+      ],
+      "@myrmidon/cadmus-part-itinera-referenced-texts": [
+        "dist/myrmidon/cadmus-part-itinera-referenced-texts/myrmidon-cadmus-part-itinera-referenced-texts",
+        "dist/myrmidon/cadmus-part-itinera-referenced-texts"
       ]
     },
     "baseUrl": "./",
