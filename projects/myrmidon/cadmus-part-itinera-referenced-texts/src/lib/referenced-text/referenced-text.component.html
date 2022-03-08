@@ -1,0 +1,119 @@
+<form [formGroup]="form" (submit)="save()">
+  <div>
+    <!-- type (bound) -->
+    <mat-form-field *ngIf="txtTypeEntries?.length">
+      <mat-select [formControl]="type" placeholder="type">
+        <mat-option *ngFor="let e of txtTypeEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="$any(type).errors?.required && (type.dirty || type.touched)"
+        >type required</mat-error
+      >
+    </mat-form-field>
+    <!-- type (free) -->
+    <mat-form-field *ngIf="!txtTypeEntries?.length">
+      <input matInput [formControl]="type" placeholder="type" />
+      <mat-error
+        *ngIf="$any(type).errors?.required && (type.dirty || type.touched)"
+        >type required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(type).errors?.maxLength && (type.dirty || type.touched)"
+        >type too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <!-- targetId -->
+    <mat-form-field>
+      <input matInput [formControl]="targetId" placeholder="target ID" />
+      <mat-error
+        *ngIf="
+          $any(targetId).errors?.required &&
+          (targetId.dirty || targetId.touched)
+        "
+        >ID required</mat-error
+      >
+      <mat-error
+        *ngIf="
+          $any(targetId).errors?.maxLength &&
+          (targetId.dirty || targetId.touched)
+        "
+        >ID too long</mat-error
+      >
+    </mat-form-field>
+
+    <!-- targetCitation -->
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="targetCitation"
+        placeholder="target citation"
+      />
+      <mat-error
+        *ngIf="
+          $any(targetCitation).errors?.maxLength &&
+          (targetCitation.dirty || targetCitation.touched)
+        "
+        >citation too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- sourceCitations -->
+  <div>
+    <mat-form-field class="long-text">
+      <textarea
+        rows="3"
+        matInput
+        [formControl]="sourceCitations"
+        placeholder="sources (1 per line)"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          $any(sourceCitations).errors?.maxLength &&
+          (sourceCitations.dirty || sourceCitations.touched)
+        "
+        >sources too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- assertion -->
+  <div>
+    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
+    <cadmus-refs-assertion
+      *ngIf="hasAssertion.value"
+      [assTagEntries]="assTagEntries"
+      [refTagEntries]="refTagEntries"
+      [refTypeEntries]="refTypeEntries"
+      [assertion]="initialAssertion"
+      (assertionChange)="onAssertionChange($event)"
+    ></cadmus-refs-assertion>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button
+      type="button"
+      color="warn"
+      mat-icon-button
+      matTooltip="Discard changes"
+      (click)="cancel()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      color="primary"
+      mat-icon-button
+      matTooltip="Accept changes"
+      [disabled]="form.invalid || form.pristine"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>

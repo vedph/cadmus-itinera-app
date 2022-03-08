@@ -5,7 +5,7 @@ export interface ReferencedText {
   type: string;
   targetId: string;
   targetCitation?: string;
-  sourceCitations?: string;
+  sourceCitations?: string[];
   assertion?: Assertion;
 }
 

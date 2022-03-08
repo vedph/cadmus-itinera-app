@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
@@ -15,9 +16,11 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { ReferencedTextsPartComponent } from './referenced-texts-part/referenced-texts-part.component';
+import { ReferencedTextComponent } from './referenced-text/referenced-text.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ReferencedTextsPartComponent, ReferencedTextComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -25,6 +28,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     // material
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
@@ -36,8 +40,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusRefsAssertionModule
+    CadmusRefsAssertionModule,
   ],
-  exports: [],
+  exports: [ReferencedTextsPartComponent, ReferencedTextComponent],
 })
 export class CadmusPartItineraReferencedTextsModule {}
