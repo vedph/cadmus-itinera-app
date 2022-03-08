@@ -14,8 +14,9 @@
     "build-lti": "ng build @myrmidon/cadmus-part-itinera-letter-info",
     "build-lwi": "ng build @myrmidon/cadmus-part-itinera-literary-work-info",
     "build-rft": "ng build @myrmidon/cadmus-part-itinera-referenced-texts",
+    "build-rep": "ng build @myrmidon/cadmus-part-itinera-related-persons",
     "build-pg": "ng build @myrmidon/cadmus-part-itinera-pg",
-    "build-lib": "npm run build-cod-loci && npm run build-cod-poem && npm run build-prs && npm run build-pwk && npm run build-lti && npm run build-lwi && npm run build-rft && npm run build-pg"
+    "build-lib": "npm run build-cod-loci && npm run build-cod-poem && npm run build-prs && npm run build-pwk && npm run build-lti && npm run build-lwi && npm run build-rft && npm run build-rep && npm run build-pg"
   },
   "private": true,
   "dependencies": {

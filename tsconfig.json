@@ -34,6 +34,10 @@
       "@myrmidon/cadmus-part-itinera-referenced-texts": [
         "dist/myrmidon/cadmus-part-itinera-referenced-texts/myrmidon-cadmus-part-itinera-referenced-texts",
         "dist/myrmidon/cadmus-part-itinera-referenced-texts"
+      ],
+      "@myrmidon/cadmus-part-itinera-related-persons": [
+        "dist/myrmidon/cadmus-part-itinera-related-persons/myrmidon-cadmus-part-itinera-related-persons",
+        "dist/myrmidon/cadmus-part-itinera-related-persons"
       ]
     },
     "baseUrl": "./",
