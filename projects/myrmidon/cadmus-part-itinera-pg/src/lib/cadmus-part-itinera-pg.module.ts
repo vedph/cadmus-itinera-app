@@ -27,6 +27,10 @@ import {
   PERSON_WORKS_PART_TYPEID,
   PersonWorksPartFeatureComponent,
 } from '@myrmidon/cadmus-part-itinera-person-works';
+import {
+  LITERARY_WORK_INFO_PART_TYPEID,
+  LiteraryWorkInfoPartFeatureComponent,
+} from '@myrmidon/cadmus-part-itinera-literary-work-info';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -60,6 +64,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${LETTER_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: LetterInfoPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${LITERARY_WORK_INFO_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: LiteraryWorkInfoPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);

@@ -20,9 +20,14 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { AssertedTitleComponent } from './asserted-title/asserted-title.component';
 import { LiteraryWorkInfoPartComponent } from './literary-work-info-part/literary-work-info-part.component';
+import { LiteraryWorkInfoPartFeatureComponent } from './literary-work-info-part-feature/literary-work-info-part-feature.component';
 
 @NgModule({
-  declarations: [LiteraryWorkInfoPartComponent, AssertedTitleComponent],
+  declarations: [
+    LiteraryWorkInfoPartComponent,
+    AssertedTitleComponent,
+    LiteraryWorkInfoPartFeatureComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -43,8 +48,12 @@ import { LiteraryWorkInfoPartComponent } from './literary-work-info-part/literar
     CadmusUiModule,
     CadmusUiPgModule,
     CadmusRefsAssertionModule,
-    CadmusUiFlagsPickerModule
+    CadmusUiFlagsPickerModule,
   ],
-  exports: [LiteraryWorkInfoPartComponent, AssertedTitleComponent],
+  exports: [
+    LiteraryWorkInfoPartComponent,
+    AssertedTitleComponent,
+    LiteraryWorkInfoPartFeatureComponent,
+  ],
 })
 export class CadmusPartItineraLiteraryWorkInfoModule {}

@@ -97,6 +97,7 @@
                 [refTypeEntries]="refTypeEntries"
                 [title]="editedTitle"
                 (titleChange)="onTitleSave($event)"
+                (editorClose)="onTitleClose()"
               ></cadmus-asserted-title>
             </mat-expansion-panel>
           </fieldset>
@@ -153,7 +154,7 @@
             </mat-form-field>
 
             <div *ngIf="genreEntries?.length">
-              <span>genre: {{ genre?.value }}</span>
+              genre: <span class="pick">{{ pickedGenre }}</span>
               <mat-error
                 *ngIf="
                   $any(genre).errors?.required && (genre.dirty || genre.touched)
@@ -161,6 +162,7 @@
                 >genre required</mat-error
               >
               <cadmus-thesaurus-tree
+                rootLabel="genre"
                 [renderLabel]="renderLabel"
                 [entries]="genreEntries"
                 (entryChange)="onEntryChange($event)"
@@ -182,13 +184,14 @@
           </fieldset>
 
           <!-- strophes -->
-          <div>
-            <mat-form-field>
-              <input
+          <div style="margin-top: 8px">
+            <mat-form-field class="long-text">
+              <textarea
+                rows="3"
                 matInput
                 [formControl]="strophes"
                 placeholder="strophes (1 per line)"
-              />
+              ></textarea>
               <mat-error
                 *ngIf="
                   $any(strophes).errors?.maxLength &&

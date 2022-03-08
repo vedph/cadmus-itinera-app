@@ -47,6 +47,8 @@ export class LiteraryWorkInfoPartComponent
   public mtrFlags: Flag[];
   public initialMetres: string[];
 
+  public pickedGenre?: string;
+
   // literary-work-languages
   public langEntries: ThesaurusEntry[] | undefined;
   // literary-work-genres
@@ -106,10 +108,12 @@ export class LiteraryWorkInfoPartComponent
   private updateForm(model: LiteraryWorkInfoPart): void {
     if (!model) {
       this.form!.reset();
+      this.pickedGenre = undefined;
       return;
     }
     this.initialLanguages = model.languages || [];
     this.genre.setValue(model.genre);
+    this.pickedGenre = this.genreEntries?.find(e => e.id === model.genre)?.value;
     this.initialMetres = model.metres || [];
     this.strophes.setValue(
       model.strophes?.length ? model.strophes.join('\n') : ''
@@ -232,6 +236,7 @@ export class LiteraryWorkInfoPartComponent
 
   public onEntryChange(entry: ThesaurusEntry): void {
     this.genre.setValue(entry.id);
+    this.pickedGenre = entry.value;
   }
 
   public renderLabel(label: string): string {

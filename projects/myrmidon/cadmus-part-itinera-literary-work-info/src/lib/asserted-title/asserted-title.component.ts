@@ -104,7 +104,7 @@ export class AssertedTitleComponent implements OnInit {
 
   public onAssertionChange(assertion: Assertion | undefined): void {
     this.assertion.setValue(assertion);
-    this.assertion.markAsDirty();
+    setTimeout(() => this.assertion.markAsDirty(), 0);
   }
 
   public cancel(): void {

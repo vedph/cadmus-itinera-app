@@ -37,7 +37,7 @@
 
   <!-- value -->
   <div>
-    <mat-form-field>
+    <mat-form-field class="long-text">
       <input matInput [formControl]="value" placeholder="title" />
       <mat-error
         *ngIf="$any(value).errors?.required && (value.dirty || value.touched)"
