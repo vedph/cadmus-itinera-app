@@ -16,6 +16,7 @@ import { PERSON_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-p
 import { PERSON_WORKS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-person-works/src/public-api';
 import { LETTER_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-letter-info/src/public-api';
 import { LITERARY_WORK_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-literary-work-info/src/public-api';
+import { REFERENCED_TEXTS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-referenced-texts/src/public-api';
 
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
@@ -67,5 +68,8 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   },
   [LITERARY_WORK_INFO_PART_TYPEID]: {
     part: ITINERA,
+  },
+  [REFERENCED_TEXTS_PART_TYPEID]: {
+    part: ITINERA
   }
 };

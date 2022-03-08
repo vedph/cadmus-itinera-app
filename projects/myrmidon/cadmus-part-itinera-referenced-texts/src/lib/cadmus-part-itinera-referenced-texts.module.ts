@@ -18,9 +18,14 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { ReferencedTextsPartComponent } from './referenced-texts-part/referenced-texts-part.component';
 import { ReferencedTextComponent } from './referenced-text/referenced-text.component';
+import { ReferencedTextsPartFeatureComponent } from './referenced-texts-part-feature/referenced-texts-part-feature.component';
 
 @NgModule({
-  declarations: [ReferencedTextsPartComponent, ReferencedTextComponent],
+  declarations: [
+    ReferencedTextsPartComponent,
+    ReferencedTextComponent,
+    ReferencedTextsPartFeatureComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -42,6 +47,10 @@ import { ReferencedTextComponent } from './referenced-text/referenced-text.compo
     CadmusUiPgModule,
     CadmusRefsAssertionModule,
   ],
-  exports: [ReferencedTextsPartComponent, ReferencedTextComponent],
+  exports: [
+    ReferencedTextsPartComponent,
+    ReferencedTextComponent,
+    ReferencedTextsPartFeatureComponent,
+  ],
 })
 export class CadmusPartItineraReferencedTextsModule {}

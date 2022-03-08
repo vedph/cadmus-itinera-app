@@ -31,6 +31,10 @@ import {
   LITERARY_WORK_INFO_PART_TYPEID,
   LiteraryWorkInfoPartFeatureComponent,
 } from '@myrmidon/cadmus-part-itinera-literary-work-info';
+import {
+  REFERENCED_TEXTS_PART_TYPEID,
+  ReferencedTextsPartFeatureComponent,
+} from '@myrmidon/cadmus-part-itinera-referenced-texts';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -70,6 +74,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${LITERARY_WORK_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: LiteraryWorkInfoPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${REFERENCED_TEXTS_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: ReferencedTextsPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);
