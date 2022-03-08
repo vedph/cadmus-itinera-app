@@ -15,9 +15,12 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { RelatedPersonComponent } from './related-person/related-person.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    RelatedPersonComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -39,6 +42,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     CadmusUiPgModule,
     CadmusRefsAssertionModule,
   ],
-  exports: [],
+  exports: [
+    RelatedPersonComponent
+  ],
 })
 export class CadmusPartItineraRelatedPersonsModule {}

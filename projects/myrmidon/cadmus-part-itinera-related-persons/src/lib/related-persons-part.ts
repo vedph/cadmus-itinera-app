@@ -92,6 +92,43 @@ export const RELATED_PERSONS_PART_SCHEMA = {
               },
               assertion: {
                 type: 'object',
+                required: ['rank'],
+                properties: {
+                  tag: {
+                    type: 'string',
+                  },
+                  rank: {
+                    type: 'integer',
+                  },
+                  note: {
+                    type: 'string',
+                  },
+                  references: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        {
+                          type: 'object',
+                          required: ['citation'],
+                          properties: {
+                            type: {
+                              type: 'string',
+                            },
+                            tag: {
+                              type: 'string',
+                            },
+                            citation: {
+                              type: 'string',
+                            },
+                            note: {
+                              type: 'string',
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
               },
             },
           },

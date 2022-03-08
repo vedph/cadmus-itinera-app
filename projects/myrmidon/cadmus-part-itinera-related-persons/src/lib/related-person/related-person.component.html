@@ -1,0 +1,97 @@
+<form [formGroup]="form" (submit)="save()">
+  <div>
+    <!-- type (bound) -->
+    <mat-form-field *ngIf="prsTypeEntries?.length">
+      <mat-select [formControl]="type" placeholder="type">
+        <mat-option *ngFor="let e of prsTypeEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="$any(type).errors?.required && (type.dirty || type.touched)"
+        >type required</mat-error
+      >
+    </mat-form-field>
+    <!-- type (free) -->
+    <mat-form-field *ngIf="!prsTypeEntries?.length">
+      <input matInput [formControl]="type" placeholder="type" />
+      <mat-error
+        *ngIf="$any(type).errors?.required && (type.dirty || type.touched)"
+        >type required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(type).errors?.maxLength && (type.dirty || type.touched)"
+        >type too long</mat-error
+      >
+    </mat-form-field>
+
+    <!-- name -->
+    <mat-form-field>
+      <input matInput [formControl]="name" placeholder="name" />
+      <mat-error
+        *ngIf="$any(name).errors?.required && (name.dirty || name.touched)"
+        >name required</mat-error
+      >
+      <mat-error
+        *ngIf="$any(name).errors?.maxLength && (name.dirty || name.touched)"
+        >name too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <div>
+    <!-- target ID -->
+    <mat-form-field class="long-text">
+      <input matInput [formControl]="targetId" placeholder="target ID" />
+      <mat-error
+        *ngIf="
+          $any(targetId).errors?.required &&
+          (targetId.dirty || targetId.touched)
+        "
+        >target ID required</mat-error
+      >
+      <mat-error
+        *ngIf="
+          $any(targetId).errors?.maxLength &&
+          (targetId.dirty || targetId.touched)
+        "
+        >target ID too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- assertion -->
+  <div>
+    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
+    <cadmus-refs-assertion
+      *ngIf="hasAssertion.value"
+      [assTagEntries]="assTagEntries"
+      [refTagEntries]="refTagEntries"
+      [refTypeEntries]="refTypeEntries"
+      [assertion]="initialAssertion"
+      (assertionChange)="onAssertionChange($event)"
+    ></cadmus-refs-assertion>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button
+      type="button"
+      color="warn"
+      mat-icon-button
+      matTooltip="Discard changes"
+      (click)="cancel()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      color="primary"
+      mat-icon-button
+      matTooltip="Accept changes"
+      [disabled]="form.invalid || form.pristine"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>
