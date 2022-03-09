@@ -1,4 +1,60 @@
-<div>
-  <h2>Cadmus Itinera</h2>
-  <p>New Cadmus Itinera homepage stub.</p>
+<div style="margin: 0 16px">
+  <div id="banner">
+    <img
+      srcset="
+        ./assets/img/banner-1024.jpg 1024w,
+        ./assets/img/banner-512.jpg   512w
+      "
+      sizes="(max-width: 600px) 512px, 1024px"
+    />
+  </div>
+  <div>
+    <div id="buttons">
+      <span
+        style="display: inline-block; margin-left: 16px"
+        *ngIf="!logged"
+        style="margin-bottom: 8px"
+      >
+        <a mat-mini-fab color="primary" matTooltip="Login" routerLink="/login"
+          ><mat-icon>login</mat-icon></a
+        >
+      </span>
+      <span style="margin-left: 16px">
+        <a
+          mat-mini-fab
+          href="https://github.com/vedph/cadmus-itinera"
+          target="_blank"
+          matTooltip="Technical documentation"
+          ><mat-icon>menu_book</mat-icon></a
+        >
+      </span>
+    </div>
+    <div
+      fxLayout="row wrap"
+      fxLayout.lt-md="column"
+      fxLayoutAlign="center center"
+    >
+      <div fxFlex>
+        <img src="./assets/img/unisi-300.png" alt="Università di Siena" />
+      </div>
+      <div fxFlex>
+        <img
+          src="./assets/img/unina-300.png"
+          alt="Università degli studi di Napoli"
+        />
+      </div>
+      <div fxFlex>
+        <img
+          src="./assets/img/unirm3-300.png"
+          alt="Università degli studi di Roma 3"
+        />
+      </div>
+      <div fxFlex>
+        <img
+          src="./assets/img/unistrapg-300.png"
+          alt="Università per stranieri di Perugia"
+        />
+      </div>
+    </div>
+  </div>
 </div>

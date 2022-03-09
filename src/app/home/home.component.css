@@ -1,0 +1,19 @@
+#banner {
+  margin-bottom: 16px;
+}
+#buttons {
+  margin: 0 0 32px 140px;
+}
+h1 {
+  position: relative;
+  padding-top: 60px;
+  width: auto;
+  text-align: center;
+  font-size: 100px;
+  font-weight: normal;
+  letter-spacing: -5px;
+  color: #ac7666;
+}
+article {
+  column-width: 600px;
+}
