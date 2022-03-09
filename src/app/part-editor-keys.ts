@@ -22,6 +22,7 @@ import { WITNESSES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-wit
 
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
+const CODICOLOGY = 'codicology';
 const ITINERA = 'itinera';
 
 /**
@@ -31,9 +32,11 @@ const ITINERA = 'itinera';
  * with the mappings between fragment type IDs and their editor keys.
  */
 export const PART_EDITOR_KEYS: PartEditorKeys = {
+  // biblio
   [EXT_BIBLIOGRAPHY_PART_TYPEID]: {
     part: BIBLIO,
   },
+  // general
   [CATEGORIES_PART_TYPEID]: {
     part: GENERAL,
   },
@@ -52,7 +55,38 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [NOTE_PART_TYPEID]: {
     part: GENERAL,
   },
-  // Itinera parts
+  // codicology
+  [COD_BINDINGS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_CONTENTS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_DECORATIONS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_EDITS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_HANDS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_LAYOUTS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_MATERIAL_DSC_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_SHEET_LABELS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_SHELFMARKS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  [COD_WATERMARKS_PART_TYPEID]: {
+    part: CODICOLOGY,
+  },
+  // itinera
   [COD_LOCI_PART_TYPEID]: {
     part: ITINERA,
   },

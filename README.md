@@ -12,19 +12,20 @@ Quick Docker image build:
 
 1. `npm run build-all`
 2. `ng build --configuration production`
-3. `docker build . -t vedph2020/cadmus-itinera-app:1.0.46 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:2.0.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
-1. build the image as above.
-2. after building the app, change `env.js` in the `dist` folder for these variables:
+(1) build the image as above.
+
+(2) after building the app, change `env.js` in the `dist` folder for these variables and for `version`:
 
 ```js
 window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-3. build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:1.0.46-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:1.0.46-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
 
