@@ -9,19 +9,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+
 import { RelatedPersonComponent } from './related-person/related-person.component';
 import { RelatedPersonsPartComponent } from './related-persons-part/related-persons-part.component';
+import { RelatedPersonsPartFeatureComponent } from './related-persons-part-feature/related-persons-part-feature.component';
 
 @NgModule({
   declarations: [
     RelatedPersonComponent,
-    RelatedPersonsPartComponent
+    RelatedPersonsPartComponent,
+    RelatedPersonsPartFeatureComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +50,8 @@ import { RelatedPersonsPartComponent } from './related-persons-part/related-pers
   ],
   exports: [
     RelatedPersonComponent,
-    RelatedPersonsPartComponent
+    RelatedPersonsPartComponent,
+    RelatedPersonsPartFeatureComponent
   ],
 })
 export class CadmusPartItineraRelatedPersonsModule {}

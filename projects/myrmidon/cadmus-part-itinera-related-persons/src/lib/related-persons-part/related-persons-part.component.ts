@@ -8,12 +8,16 @@ import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
-import { RelatedPerson, RelatedPersonsPart, RELATED_PERSONS_PART_TYPEID } from '../related-persons-part';
+import {
+  RelatedPerson,
+  RelatedPersonsPart,
+  RELATED_PERSONS_PART_TYPEID,
+} from '../related-persons-part';
 
 /**
  * RelatedPersonsPart editor component.
  * Thesauri: related-person-types, assertion-tags, doc-reference-types,
- * doc-reference-tags.
+ * doc-reference-tags (all optional).
  */
 @Component({
   selector: 'cadmus-related-persons-part',
@@ -123,7 +127,9 @@ export class RelatedPersonsPartComponent
 
   public addPerson(): void {
     const person: RelatedPerson = {
-      // TODO set properties
+      type: this.prsTypeEntries?.length ? this.prsTypeEntries[0].id : '',
+      name: '',
+      targetId: ''
     };
     this.persons.setValue([...this.persons.value, person]);
     this.editPerson(this.persons.value.length - 1);

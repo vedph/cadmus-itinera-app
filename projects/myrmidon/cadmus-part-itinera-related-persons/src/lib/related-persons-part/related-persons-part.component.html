@@ -1,1 +1,107 @@
-<p>related-persons-part works!</p>
+<form [formGroup]="form!" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Related Persons Part</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="tabIndex">
+        <mat-tab label="persons">
+          <div>
+            <button
+              type="button"
+              mat-icon-button
+              color="primary"
+              (click)="addPerson()"
+            >
+              <mat-icon>add_circle</mat-icon> add person
+            </button>
+          </div>
+          <table *ngIf="persons?.value?.length">
+            <thead>
+              <tr>
+                <th></th>
+                <th>type</th>
+                <th>name</th>
+                <th>target ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let person of persons?.value;
+                  let i = index;
+                  let first = first;
+                  let last = last
+                "
+              >
+                <td>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    color="primary"
+                    matTooltip="Edit this person"
+                    (click)="editPerson(i)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this person up"
+                    [disabled]="first"
+                    (click)="movePersonUp(i)"
+                  >
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this person down"
+                    [disabled]="last"
+                    (click)="movePersonDown(i)"
+                  >
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    color="warn"
+                    matTooltip="Delete this person"
+                    (click)="deletePerson(i)"
+                  >
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
+                </td>
+                <td>{{ person.type }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.targetId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+
+        <mat-tab label="person" *ngIf="editedPerson">
+          <cadmus-related-person
+            [assTagEntries]="assTagEntries"
+            [refTagEntries]="refTagEntries"
+            [prsTypeEntries]="prsTypeEntries"
+            [refTypeEntries]="refTypeEntries"
+            [person]="editedPerson"
+            (personChange)="onPersonSave($event)"
+            (editorClose)="onPersonClose()"
+          ></cadmus-related-person>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>

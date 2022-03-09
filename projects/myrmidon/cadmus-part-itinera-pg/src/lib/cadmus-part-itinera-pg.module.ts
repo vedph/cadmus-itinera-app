@@ -35,6 +35,10 @@ import {
   REFERENCED_TEXTS_PART_TYPEID,
   ReferencedTextsPartFeatureComponent,
 } from '@myrmidon/cadmus-part-itinera-referenced-texts';
+import {
+  RelatedPersonsPartFeatureComponent,
+  RELATED_PERSONS_PART_TYPEID,
+} from '@myrmidon/cadmus-part-itinera-related-persons';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -80,6 +84,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${REFERENCED_TEXTS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: ReferencedTextsPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${RELATED_PERSONS_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: RelatedPersonsPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);

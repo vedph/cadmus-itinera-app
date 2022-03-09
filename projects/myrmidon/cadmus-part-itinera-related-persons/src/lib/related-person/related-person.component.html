@@ -1,5 +1,5 @@
 <form [formGroup]="form" (submit)="save()">
-  <div>
+  <div class="form-row">
     <!-- type (bound) -->
     <mat-form-field *ngIf="prsTypeEntries?.length">
       <mat-select [formControl]="type" placeholder="type">
