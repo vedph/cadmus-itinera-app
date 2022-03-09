@@ -39,6 +39,10 @@ import {
   RelatedPersonsPartFeatureComponent,
   RELATED_PERSONS_PART_TYPEID,
 } from '@myrmidon/cadmus-part-itinera-related-persons';
+import {
+  WitnessesPartFeatureComponent,
+  WITNESSES_PART_TYPEID,
+} from '@myrmidon/cadmus-part-itinera-witnesses';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -90,6 +94,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${RELATED_PERSONS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: RelatedPersonsPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${WITNESSES_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: WitnessesPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
 ]);

@@ -4,10 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
@@ -15,10 +15,16 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { WitnessesPartComponent } from './witnesses-part/witnesses-part.component';
+import { WitnessComponent } from './witness/witness.component';
+import { WitnessesPartFeatureComponent } from './witnesses-part-feature/witnesses-part-feature.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    WitnessesPartComponent,
+    WitnessComponent,
+    WitnessesPartFeatureComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -30,16 +36,19 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatTabsModule,
+    MatExpansionModule,
     MatTooltipModule,
     NgMatToolsModule,
-    MonacoEditorModule,
     // Cadmus
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
     CadmusCodLocationModule,
   ],
-  exports: [],
+  exports: [
+    WitnessesPartComponent,
+    WitnessComponent,
+    WitnessesPartFeatureComponent,
+  ],
 })
 export class CadmusPartItineraWitnessesModule {}
