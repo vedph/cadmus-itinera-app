@@ -38,6 +38,10 @@
       "@myrmidon/cadmus-part-itinera-related-persons": [
         "dist/myrmidon/cadmus-part-itinera-related-persons/myrmidon-cadmus-part-itinera-related-persons",
         "dist/myrmidon/cadmus-part-itinera-related-persons"
+      ],
+      "@myrmidon/cadmus-part-itinera-witnesses": [
+        "dist/myrmidon/cadmus-part-itinera-witnesses/myrmidon-cadmus-part-itinera-witnesses",
+        "dist/myrmidon/cadmus-part-itinera-witnesses"
       ]
     },
     "baseUrl": "./",
