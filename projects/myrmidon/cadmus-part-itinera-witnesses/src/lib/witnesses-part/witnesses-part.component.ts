@@ -91,6 +91,8 @@ export class WitnessesPartComponent
       range: { start: { n: 0 }, end: { n: 0 } },
     };
     this.witnesses.setValue([...this.witnesses.value, witness]);
+    this.witnesses.updateValueAndValidity();
+    this.witnesses.markAsDirty();
     this.editWitness(this.witnesses.value.length - 1);
   }
 
@@ -110,6 +112,8 @@ export class WitnessesPartComponent
         i === this._editedIndex ? entry : e
       )
     );
+    this.witnesses.updateValueAndValidity();
+    this.witnesses.markAsDirty();
     this.editWitness(-1);
   }
 
@@ -126,6 +130,8 @@ export class WitnessesPartComponent
           const witnesses = [...this.witnesses.value];
           witnesses.splice(index, 1);
           this.witnesses.setValue(witnesses);
+          this.witnesses.updateValueAndValidity();
+          this.witnesses.markAsDirty();
         }
       });
   }
@@ -139,6 +145,8 @@ export class WitnessesPartComponent
     witnesses.splice(index, 1);
     witnesses.splice(index - 1, 0, witness);
     this.witnesses.setValue(witnesses);
+    this.witnesses.updateValueAndValidity();
+    this.witnesses.markAsDirty();
   }
 
   public moveWitnessDown(index: number): void {
@@ -150,5 +158,7 @@ export class WitnessesPartComponent
     witnesses.splice(index, 1);
     witnesses.splice(index + 1, 0, witness);
     this.witnesses.setValue(witnesses);
+    this.witnesses.updateValueAndValidity();
+    this.witnesses.markAsDirty();
   }
 }

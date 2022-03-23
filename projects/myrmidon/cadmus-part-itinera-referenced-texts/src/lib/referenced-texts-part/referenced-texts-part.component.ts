@@ -131,6 +131,7 @@ export class ReferencedTextsPartComponent
       targetId: '',
     };
     this.texts.setValue([...this.texts.value, text]);
+    this.texts.updateValueAndValidity();
     this.editText(this.texts.value.length - 1);
   }
 
@@ -154,6 +155,8 @@ export class ReferencedTextsPartComponent
         i === this._editedIndex ? entry : e
       )
     );
+    this.texts.updateValueAndValidity();
+    this.texts.markAsDirty();
     this.editText(-1);
   }
 
@@ -170,6 +173,8 @@ export class ReferencedTextsPartComponent
           const texts = [...this.texts.value];
           texts.splice(index, 1);
           this.texts.setValue(texts);
+          this.texts.updateValueAndValidity();
+          this.texts.markAsDirty();
         }
       });
   }
@@ -183,7 +188,9 @@ export class ReferencedTextsPartComponent
     texts.splice(index, 1);
     texts.splice(index - 1, 0, text);
     this.texts.setValue(texts);
-  }
+    this.texts.updateValueAndValidity();
+    this.texts.markAsDirty();
+}
 
   public moveTextDown(index: number): void {
     if (index + 1 >= this.texts.value.length) {
@@ -194,5 +201,7 @@ export class ReferencedTextsPartComponent
     texts.splice(index, 1);
     texts.splice(index + 1, 0, text);
     this.texts.setValue(texts);
-  }
+    this.texts.updateValueAndValidity();
+    this.texts.markAsDirty();
+}
 }

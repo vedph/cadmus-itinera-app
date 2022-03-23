@@ -129,9 +129,11 @@ export class RelatedPersonsPartComponent
     const person: RelatedPerson = {
       type: this.prsTypeEntries?.length ? this.prsTypeEntries[0].id : '',
       name: '',
-      targetId: ''
+      targetId: '',
     };
     this.persons.setValue([...this.persons.value, person]);
+    this.persons.updateValueAndValidity();
+    this.persons.markAsDirty();
     this.editPerson(this.persons.value.length - 1);
   }
 
@@ -155,6 +157,8 @@ export class RelatedPersonsPartComponent
         i === this._editedIndex ? entry : e
       )
     );
+    this.persons.updateValueAndValidity();
+    this.persons.markAsDirty();
     this.editPerson(-1);
   }
 
@@ -171,6 +175,8 @@ export class RelatedPersonsPartComponent
           const entries = [...this.persons.value];
           entries.splice(index, 1);
           this.persons.setValue(entries);
+          this.persons.updateValueAndValidity();
+          this.persons.markAsDirty();
         }
       });
   }
@@ -184,6 +190,8 @@ export class RelatedPersonsPartComponent
     entries.splice(index, 1);
     entries.splice(index - 1, 0, entry);
     this.persons.setValue(entries);
+    this.persons.updateValueAndValidity();
+    this.persons.markAsDirty();
   }
 
   public movePersonDown(index: number): void {
@@ -195,5 +203,7 @@ export class RelatedPersonsPartComponent
     entries.splice(index, 1);
     entries.splice(index + 1, 0, entry);
     this.persons.setValue(entries);
+    this.persons.updateValueAndValidity();
+    this.persons.markAsDirty();
   }
 }

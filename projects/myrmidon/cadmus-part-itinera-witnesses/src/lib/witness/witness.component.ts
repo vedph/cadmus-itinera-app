@@ -72,6 +72,7 @@ export class WitnessComponent implements OnInit {
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
     this.range.setValue(ranges || []);
+    this.range.updateValueAndValidity();
     this.range.markAsDirty();
   }
 

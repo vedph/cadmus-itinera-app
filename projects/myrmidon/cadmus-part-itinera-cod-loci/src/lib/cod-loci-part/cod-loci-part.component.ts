@@ -126,6 +126,8 @@ export class CodLociPartComponent
         i === this._editedIndex ? entry : e
       )
     );
+    this.loci.updateValueAndValidity();
+    this.loci.markAsDirty();
     this.editLocus(-1);
   }
 
@@ -142,7 +144,9 @@ export class CodLociPartComponent
           const entries = [...this.loci.value];
           entries.splice(index, 1);
           this.loci.setValue(entries);
-        }
+          this.loci.updateValueAndValidity();
+          this.loci.markAsDirty();
+              }
       });
   }
 
@@ -155,6 +159,8 @@ export class CodLociPartComponent
     entries.splice(index, 1);
     entries.splice(index - 1, 0, entry);
     this.loci.setValue(entries);
+    this.loci.updateValueAndValidity();
+    this.loci.markAsDirty();
   }
 
   public moveLocusDown(index: number): void {
@@ -166,5 +172,7 @@ export class CodLociPartComponent
     entries.splice(index, 1);
     entries.splice(index + 1, 0, entry);
     this.loci.setValue(entries);
+    this.loci.updateValueAndValidity();
+    this.loci.markAsDirty();
   }
 }

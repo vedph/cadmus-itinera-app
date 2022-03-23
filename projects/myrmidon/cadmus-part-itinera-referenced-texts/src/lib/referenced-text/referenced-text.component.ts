@@ -129,6 +129,7 @@ export class ReferencedTextComponent implements OnInit {
 
   public onAssertionChange(assertion: Assertion | undefined): void {
     this.assertion.setValue(assertion);
+    this.assertion.updateValueAndValidity();
     setTimeout(() => this.assertion.markAsDirty(), 0);
   }
 

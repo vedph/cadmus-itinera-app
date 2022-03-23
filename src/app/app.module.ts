@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -44,8 +43,6 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 // ngx-markdown
 import { MarkdownModule } from 'ngx-markdown';
-// moment
-import { MomentModule } from 'ngx-moment';
 
 // myrmidon
 import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
@@ -137,8 +134,6 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     MonacoEditorModule.forRoot(),
     // markdown
     MarkdownModule.forRoot(),
-    // moment
-    MomentModule,
     // myrmidon
     NgToolsModule,
     NgMatToolsModule,

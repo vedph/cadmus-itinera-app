@@ -102,11 +102,13 @@ export class CodLocusComponent implements OnInit {
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
     this.range.setValue(ranges || []);
+    this.range.updateValueAndValidity();
     this.range.markAsDirty();
   }
 
   public onImagesChange(images: CodImage[] | undefined): void {
     this.images.setValue(images);
+    this.images.updateValueAndValidity();
     this.images.markAsDirty();
   }
 

@@ -226,16 +226,20 @@ export class LiteraryWorkInfoPartComponent
 
   public onLanguagesChange(ids: string[]): void {
     this.languages.setValue(ids);
+    this.languages.updateValueAndValidity();
     this.languages.markAsDirty();
   }
 
   public onMetresChange(ids: string[]): void {
     this.metres.setValue(ids);
+    this.metres.updateValueAndValidity();
     this.metres.markAsDirty();
   }
 
   public onEntryChange(entry: ThesaurusEntry): void {
     this.genre.setValue(entry.id);
+    this.genre.updateValueAndValidity();
+    this.genre.markAsDirty();
     this.pickedGenre = entry.value;
   }
 
@@ -250,6 +254,7 @@ export class LiteraryWorkInfoPartComponent
       value: '',
     };
     this.titles.setValue([...this.titles.value, title]);
+    this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
     this.editTitle(this.titles.value.length - 1);
   }
@@ -270,6 +275,7 @@ export class LiteraryWorkInfoPartComponent
         i === this._editedIndex ? item : x
       )
     );
+    this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
     this.editTitle(-1);
   }
@@ -287,6 +293,7 @@ export class LiteraryWorkInfoPartComponent
           const titles = [...this.titles.value];
           titles.splice(index, 1);
           this.titles.setValue(titles);
+          this.titles.updateValueAndValidity();
           this.titles.markAsDirty();
         }
       });
@@ -301,6 +308,7 @@ export class LiteraryWorkInfoPartComponent
     titles.splice(index, 1);
     titles.splice(index - 1, 0, title);
     this.titles.setValue(titles);
+    this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
   }
 
@@ -313,6 +321,7 @@ export class LiteraryWorkInfoPartComponent
     titles.splice(index, 1);
     titles.splice(index + 1, 0, title);
     this.titles.setValue(titles);
+    this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
   }
   //#endregion

@@ -94,6 +94,8 @@ export class PersonWorkComponent implements OnInit {
 
   public onAssertionChange(assertion: Assertion | undefined): void {
     this.assertion.setValue(assertion);
+    this.assertion.updateValueAndValidity();
+    this.assertion.markAsDirty();
   }
 
   public cancel(): void {

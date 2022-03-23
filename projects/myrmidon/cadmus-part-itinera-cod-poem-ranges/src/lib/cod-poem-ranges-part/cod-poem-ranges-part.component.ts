@@ -209,6 +209,7 @@ export class CodPoemRangesPartComponent
       }
 
       this.ranges.setValue(ranges);
+      this.ranges.updateValueAndValidity();
       this.ranges.markAsDirty();
       this.addedRanges.reset();
     }
@@ -218,6 +219,7 @@ export class CodPoemRangesPartComponent
     const newRanges = [...this.ranges.value];
     newRanges.splice(index, 1);
     this.ranges.setValue(newRanges);
+    this.ranges.updateValueAndValidity();
     this.ranges.markAsDirty();
   }
 
@@ -231,6 +233,8 @@ export class CodPoemRangesPartComponent
       .subscribe((yes) => {
         if (yes) {
           this.ranges.setValue([]);
+          this.ranges.updateValueAndValidity();
+          this.ranges.markAsDirty();
         }
       });
   }
@@ -244,6 +248,7 @@ export class CodPoemRangesPartComponent
     items.splice(index, 1);
     items.splice(index - 1, 0, item);
     this.ranges.setValue(items);
+    this.ranges.updateValueAndValidity();
     this.ranges.markAsDirty();
   }
 
@@ -256,6 +261,7 @@ export class CodPoemRangesPartComponent
     items.splice(index, 1);
     items.splice(index + 1, 0, item);
     this.ranges.setValue(items);
+    this.ranges.updateValueAndValidity();
     this.ranges.markAsDirty();
   }
 
@@ -269,6 +275,7 @@ export class CodPoemRangesPartComponent
 
   public onLayoutsChange(layouts: CodPoemLayout[]): void {
     this.layouts.setValue(layouts);
+    this.layouts.updateValueAndValidity();
     this.layouts.markAsDirty();
   }
 }

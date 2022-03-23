@@ -121,6 +121,8 @@ export class PersonWorksPartComponent
       title: '',
     };
     this.works.setValue([...this.works.value, work]);
+    this.works.updateValueAndValidity();
+    this.works.markAsDirty();
     this.editWork(this.works.value.length - 1);
   }
 
@@ -144,6 +146,7 @@ export class PersonWorksPartComponent
         i === this._editedIndex ? work : e
       )
     );
+    this.works.updateValueAndValidity();
     this.works.markAsDirty();
     this.editWork(-1);
   }
@@ -161,6 +164,7 @@ export class PersonWorksPartComponent
           const works = [...this.works.value];
           works.splice(index, 1);
           this.works.setValue(works);
+          this.works.updateValueAndValidity();
           this.works.markAsDirty();
         }
       });
@@ -175,6 +179,7 @@ export class PersonWorksPartComponent
     works.splice(index, 1);
     works.splice(index - 1, 0, work);
     this.works.setValue(works);
+    this.works.updateValueAndValidity();
     this.works.markAsDirty();
   }
 
@@ -187,6 +192,7 @@ export class PersonWorksPartComponent
     works.splice(index, 1);
     works.splice(index + 1, 0, work);
     this.works.setValue(works);
+    this.works.updateValueAndValidity();
     this.works.markAsDirty();
   }
 }
