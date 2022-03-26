@@ -5,8 +5,6 @@
 # biblio API: localhost:61691
 # web: localhost:4200
 
-version: '3.7'
-
 services:
   # MongoDB
   cadmus-mongo:
@@ -50,7 +48,7 @@ services:
     image: vedph2020/cadmus-itinera-api:2.0.0
     ports:
       # https://stackoverflow.com/questions/48669548/why-does-aspnet-core-start-on-port-80-from-within-docker
-      - 54183:80
+      - 5052:80
     depends_on:
       - cadmus-mongo
       - cadmus-mysql
@@ -91,7 +89,7 @@ services:
       - cadmus-network
 
   cadmus-web:
-    image: vedph2020/cadmus-itinera-app:2.0.0
+    image: vedph2020/cadmus-itinera-app:2.0.1
     ports:
       - 4200:80
     depends_on:
