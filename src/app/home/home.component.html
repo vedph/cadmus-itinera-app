@@ -12,7 +12,7 @@
     <div id="buttons">
       <span
         style="display: inline-block; margin-left: 16px"
-        *ngIf="!logged"
+        *ngIf="!(user$ | async)"
         style="margin-bottom: 8px"
       >
         <a mat-mini-fab color="primary" matTooltip="Login" routerLink="/login"
@@ -21,6 +21,7 @@
       </span>
       <span style="margin-left: 16px">
         <a
+          color="primary"
           mat-mini-fab
           href="https://github.com/vedph/cadmus-itinera"
           target="_blank"
