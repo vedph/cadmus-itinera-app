@@ -3,6 +3,15 @@
 }
 #buttons {
   margin: 0 0 32px 140px;
+  display: flex;
+  flex: row nowrap;
+  gap: 16px;
+}
+#info {
+  color: #666;
+  margin: 32px;
+  column-width: 400px;
+  column-count: 4;
 }
 h1 {
   position: relative;

@@ -1,4 +1,5 @@
 <div style="margin: 0 16px">
+  <!-- banner -->
   <div id="banner">
     <img
       srcset="
@@ -8,29 +9,68 @@
       sizes="(max-width: 600px) 512px, 1024px"
     />
   </div>
+
+  <!-- buttons -->
   <div>
     <div id="buttons">
-      <span
-        style="display: inline-block; margin-left: 16px"
+      <button
+        type="button"
         *ngIf="!(user$ | async)"
-        style="margin-bottom: 8px"
+        mat-mini-fab
+        color="primary"
+        matTooltip="Login"
+        routerLink="/login"
       >
-        <a mat-mini-fab color="primary" matTooltip="Login" routerLink="/login"
-          ><mat-icon>login</mat-icon></a
-        >
-      </span>
-      <span style="margin-left: 16px">
-        <a
-          color="primary"
-          mat-mini-fab
-          href="https://github.com/vedph/cadmus-itinera"
-          target="_blank"
-          matTooltip="Technical documentation"
-          ><mat-icon>menu_book</mat-icon></a
-        >
-      </span>
+        <mat-icon>login</mat-icon>
+      </button>
+      <button
+        type="button"
+        color="primary"
+        mat-mini-fab
+        href="https://github.com/vedph/cadmus-itinera"
+        target="_blank"
+        matTooltip="Technical documentation"
+      >
+        <mat-icon>menu_book</mat-icon>
+      </button>
     </div>
   </div>
+
+  <div id="info">
+    <p>
+      Welcome to the Itinera project data editor. Access to this site is
+      restricted to authorized users.
+    </p>
+    <p>
+      This project aims at a census of Petrarch's friends and correspondents by
+      way of an innovative work tool, the purpose of which is the reconstruction
+      of Petrarch's intellectual network in the context of the European
+      Trecento.
+    </p>
+    <p>
+      Petrarch's literary, scholarly and diplomatic relations provide a unique
+      insight into a culture and society in transition from the civilization of
+      the Middle Ages to that of Renaissance Humanism. Of this transition
+      Petrarch was the initiator, both as a prominent Latin writer and a
+      celebrated model for vernacular poetry. His outstanding epistolary prose
+      (Latin) and verse (Latin and vernacular) engage with over 200
+      correspondents characterized by wide geographical distribution and social
+      variety.
+    </p>
+    <p>
+      In collecting the relevant documentary, historical, philological,
+      codicological, paleographical and archival evidence into a database, the
+      project builds upon previous achievements while overcoming their
+      limitations (excessive pulverization and the overconfident treatment,
+      typical of positivist erudition, of Petrarch's texts as plain documentary
+      sources). The interaction of multiple competences (historical, IT,
+      geographical)and the diversified interrogation modalities of the collected
+      data will produce a map of intellectual exchanges across
+      fourteenth-century Europe.
+    </p>
+  </div>
+
+  <!-- logos -->
   <div id="logos">
     <div>
       <img src="./assets/img/unisi-300.png" alt="Università di Siena" />
