@@ -10,8 +10,8 @@ The codicological parts in this project will be imported from an [independent li
 
 Quick Docker image build:
 
-1. `npm run build-all`
-2. `ng build --configuration production`
+1. `npm run build-lib`
+2. update version in `env.js` and `ng build --configuration production`
 3. `docker build . -t vedph2020/cadmus-itinera-app:2.0.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
@@ -29,4 +29,5 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-03-26: updated packages.
 - 2022-01-06: [created](https://github.com/vedph/cadmus_doc/blob/master/guide/frontend/creating.md) the new shell.

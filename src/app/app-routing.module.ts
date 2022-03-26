@@ -97,6 +97,15 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
   },
+  // codicology - parts
+  {
+    path: 'items/:iid/codicology',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-part-codicology-pg').then(
+        (module) => module.CadmusPartCodicologyPgModule
+      ),
+    canActivate: [AuthJwtGuardService],
+  },
   // cadmus - graph
   {
     path: 'graph',

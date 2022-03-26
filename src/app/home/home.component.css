@@ -17,3 +17,14 @@ h1 {
 article {
   column-width: 600px;
 }
+#logos {
+  margin: 32px 16px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+#logos img {
+  width: 150px;
+}
