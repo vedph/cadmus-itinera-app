@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register-user-page',
   templateUrl: './register-user-page.component.html',
-  styleUrls: ['./register-user-page.component.css']
+  styleUrls: ['./register-user-page.component.scss']
 })
 export class RegisterUserPageComponent implements OnInit {
 
