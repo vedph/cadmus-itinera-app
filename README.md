@@ -25,7 +25,7 @@ window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:1.0.46-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.0.0-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
 
