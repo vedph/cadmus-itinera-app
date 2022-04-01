@@ -26,10 +26,7 @@ export class LetterInfoPartComponent
   constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
     super(authService);
     // form
-    this.subject = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
+    this.subject = formBuilder.control(null, Validators.maxLength(200));
     this.header = formBuilder.control(null, Validators.maxLength(500));
     this.textDate = formBuilder.control(null, Validators.maxLength(100));
     this.form = formBuilder.group({
@@ -70,7 +67,6 @@ export class LetterInfoPartComponent
         creatorId: '',
         timeModified: new Date(),
         userId: '',
-        subject: '',
       };
     }
     part.subject = this.subject.value?.trim();

@@ -13,13 +13,6 @@
           <input matInput [formControl]="subject" placeholder="subject" />
           <mat-error
             *ngIf="
-              $any(subject).errors?.required &&
-              (subject.dirty || subject.touched)
-            "
-            >subject required</mat-error
-          >
-          <mat-error
-            *ngIf="
               $any(subject).errors?.maxLength &&
               (subject.dirty || subject.touched)
             "

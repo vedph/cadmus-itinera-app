@@ -4,7 +4,7 @@ import { Part } from '@myrmidon/cadmus-core';
  * The LetterInfo part model.
  */
 export interface LetterInfoPart extends Part {
-  subject: string;
+  subject?: string;
   header?: string;
   textDate?: string;
 }
@@ -30,8 +30,7 @@ export const LetterInfo_PART_SCHEMA = {
     'timeCreated',
     'creatorId',
     'timeModified',
-    'userId',
-    'subject'
+    'userId'
   ],
   properties: {
     timeCreated: {

@@ -8,6 +8,7 @@ import {
   METADATA_PART_TYPEID,
   HISTORICAL_EVENTS_PART_TYPEID,
   NAMES_PART_TYPEID,
+  CHRONOTOPES_PART_TYPEID,
 } from '@myrmidon/cadmus-part-general-ui';
 import { PartEditorKeys } from '@myrmidon/cadmus-core';
 import { EXT_BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-biblio-ui';
@@ -53,6 +54,9 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   },
   // general
   [CATEGORIES_PART_TYPEID]: {
+    part: GENERAL,
+  },
+  [CHRONOTOPES_PART_TYPEID]: {
     part: GENERAL,
   },
   [DOC_REFERENCES_PART_TYPEID]: {
