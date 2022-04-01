@@ -5,6 +5,9 @@ import {
   KEYWORDS_PART_TYPEID,
   INDEX_KEYWORDS_PART_TYPEID,
   NOTE_PART_TYPEID,
+  METADATA_PART_TYPEID,
+  HISTORICAL_EVENTS_PART_TYPEID,
+  NAMES_PART_TYPEID,
 } from '@myrmidon/cadmus-part-general-ui';
 import { PartEditorKeys } from '@myrmidon/cadmus-core';
 import { EXT_BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-biblio-ui';
@@ -29,11 +32,13 @@ import { LITERARY_WORK_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-it
 import { REFERENCED_TEXTS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-referenced-texts/src/public-api';
 import { RELATED_PERSONS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-related-persons/src/public-api';
 import { WITNESSES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-witnesses/src/public-api';
+import { EXTERNAL_IDS_PART_TYPEID } from '@myrmidon/cadmus-part-refs-ui';
 
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
 const CODICOLOGY = 'codicology';
 const ITINERA = 'itinera';
+const REFS = 'refs';
 
 /**
  * The parts and fragments editor keys for this UI.
@@ -53,6 +58,9 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [DOC_REFERENCES_PART_TYPEID]: {
     part: GENERAL,
   },
+  [HISTORICAL_EVENTS_PART_TYPEID]: {
+    part: GENERAL,
+  },
   [HISTORICAL_DATE_PART_TYPEID]: {
     part: GENERAL,
   },
@@ -62,8 +70,18 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [KEYWORDS_PART_TYPEID]: {
     part: GENERAL,
   },
+  [METADATA_PART_TYPEID]: {
+    part: GENERAL,
+  },
+  [NAMES_PART_TYPEID]: {
+    part: GENERAL,
+  },
   [NOTE_PART_TYPEID]: {
     part: GENERAL,
+  },
+  // refs
+  [EXTERNAL_IDS_PART_TYPEID]: {
+    part: REFS,
   },
   // codicology
   [COD_BINDINGS_PART_TYPEID]: {
@@ -116,12 +134,12 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
     part: ITINERA,
   },
   [REFERENCED_TEXTS_PART_TYPEID]: {
-    part: ITINERA
+    part: ITINERA,
   },
   [RELATED_PERSONS_PART_TYPEID]: {
-    part: ITINERA
+    part: ITINERA,
   },
   [WITNESSES_PART_TYPEID]: {
-    part: ITINERA
-  }
+    part: ITINERA,
+  },
 };
