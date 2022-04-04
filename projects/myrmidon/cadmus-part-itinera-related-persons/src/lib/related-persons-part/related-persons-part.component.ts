@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
 import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
@@ -17,7 +17,7 @@ import {
 /**
  * RelatedPersonsPart editor component.
  * Thesauri: related-person-types, assertion-tags, doc-reference-types,
- * doc-reference-tags (all optional).
+ * doc-reference-tags, external-id-scopes (all optional).
  */
 @Component({
   selector: 'cadmus-related-persons-part',
@@ -35,6 +35,8 @@ export class RelatedPersonsPartComponent
 
   // related-person-types
   public prsTypeEntries: ThesaurusEntry[] | undefined;
+  // external-id-scopes
+  public scopeEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   public assTagEntries: ThesaurusEntry[] | undefined;
   // doc-reference-types
@@ -86,6 +88,12 @@ export class RelatedPersonsPartComponent
     } else {
       this.prsTypeEntries = undefined;
     }
+    key = 'external-id-scopes';
+    if (this.thesauri && this.thesauri[key]) {
+      this.scopeEntries = this.thesauri[key].entries;
+    } else {
+      this.scopeEntries = undefined;
+    }
     key = 'assertion-tags';
     if (this.thesauri && this.thesauri[key]) {
       this.assTagEntries = this.thesauri[key].entries;
@@ -128,8 +136,7 @@ export class RelatedPersonsPartComponent
   public addPerson(): void {
     const person: RelatedPerson = {
       type: this.prsTypeEntries?.length ? this.prsTypeEntries[0].id : '',
-      name: '',
-      targetId: '',
+      name: ''
     };
     this.persons.setValue([...this.persons.value, person]);
     this.persons.updateValueAndValidity();

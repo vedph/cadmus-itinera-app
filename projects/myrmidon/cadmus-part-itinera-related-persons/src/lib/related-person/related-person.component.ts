@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { Assertion } from '@myrmidon/cadmus-refs-assertion';
+import { ExternalId } from '@myrmidon/cadmus-refs-external-ids';
 
 import { RelatedPerson } from '../related-persons-part';
 
@@ -30,6 +30,9 @@ export class RelatedPersonComponent implements OnInit {
   // related-person-types
   @Input()
   public prsTypeEntries: ThesaurusEntry[] | undefined;
+  // external-id-scopes
+  @Input()
+  public scopeEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   @Input()
   public assTagEntries: ThesaurusEntry[] | undefined;
@@ -47,12 +50,10 @@ export class RelatedPersonComponent implements OnInit {
 
   public type: FormControl;
   public name: FormControl;
-  public targetId: FormControl;
-  public hasAssertion: FormControl;
-  public assertion: FormControl;
+  public ids: FormControl;
   public form: FormGroup;
 
-  public initialAssertion?: Assertion;
+  public initialIds?: ExternalId[];
 
   constructor(formBuilder: FormBuilder) {
     this.personChange = new EventEmitter<RelatedPerson>();
@@ -66,18 +67,11 @@ export class RelatedPersonComponent implements OnInit {
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.targetId = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(500),
-    ]);
-    this.hasAssertion = formBuilder.control(false);
-    this.assertion = formBuilder.control(null);
+    this.ids = formBuilder.control([]);
     this.form = formBuilder.group({
       type: this.type,
       name: this.name,
-      targetId: this.targetId,
-      hasAssertion: this.hasAssertion,
-      assertion: this.assertion,
+      ids: this.ids,
     });
   }
 
@@ -91,9 +85,7 @@ export class RelatedPersonComponent implements OnInit {
 
     this.type.setValue(model.type);
     this.name.setValue(model.name);
-    this.targetId.setValue(model.targetId);
-    this.hasAssertion.setValue(model.assertion ? true : false);
-    this.initialAssertion = model.assertion;
+    this.initialIds = model.ids || [];
     this.form.markAsPristine();
   }
 
@@ -101,15 +93,14 @@ export class RelatedPersonComponent implements OnInit {
     return {
       type: this.type.value?.trim(),
       name: this.name.value?.trim(),
-      targetId: this.targetId.value?.trim(),
-      assertion: this.hasAssertion.value ? this.assertion.value : undefined,
+      ids: this.ids.value?.length? this.ids.value : undefined,
     };
   }
 
-  public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion);
-    this.assertion.updateValueAndValidity();
-    setTimeout(() => this.assertion.markAsDirty(), 0);
+  public onIdsChange(ids: ExternalId[]): void {
+    this.ids.setValue(ids);
+    this.ids.updateValueAndValidity();
+    this.ids.markAsDirty();
   }
 
   public cancel(): void {

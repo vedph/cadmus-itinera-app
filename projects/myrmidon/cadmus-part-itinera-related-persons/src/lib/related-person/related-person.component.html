@@ -39,39 +39,15 @@
     </mat-form-field>
   </div>
 
-  <div>
-    <!-- target ID -->
-    <mat-form-field class="long-text">
-      <input matInput [formControl]="targetId" placeholder="target ID" />
-      <mat-error
-        *ngIf="
-          $any(targetId).errors?.required &&
-          (targetId.dirty || targetId.touched)
-        "
-        >target ID required</mat-error
-      >
-      <mat-error
-        *ngIf="
-          $any(targetId).errors?.maxLength &&
-          (targetId.dirty || targetId.touched)
-        "
-        >target ID too long</mat-error
-      >
-    </mat-form-field>
-  </div>
-
-  <!-- assertion -->
-  <div>
-    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
-    <cadmus-refs-assertion
-      *ngIf="hasAssertion.value"
-      [assTagEntries]="assTagEntries"
-      [refTagEntries]="refTagEntries"
-      [refTypeEntries]="refTypeEntries"
-      [assertion]="initialAssertion"
-      (assertionChange)="onAssertionChange($event)"
-    ></cadmus-refs-assertion>
-  </div>
+  <fieldset>
+    <legend>IDs</legend>
+    <cadmus-refs-external-ids
+      [ids]="initialIds || []"
+      [scopeEntries]="scopeEntries"
+      [tagEntries]="assTagEntries"
+      (idsChange)="onIdsChange($event)"
+    ></cadmus-refs-external-ids>
+  </fieldset>
 
   <!-- buttons -->
   <div>
