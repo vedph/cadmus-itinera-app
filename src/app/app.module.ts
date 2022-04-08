@@ -27,6 +27,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -67,6 +68,8 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
+// for tools
+import { CadmusPartCodicologySheetLabelsModule } from '@myrmidon/cadmus-part-codicology-sheet-labels';
 
 // locals
 import { AppRoutingModule } from './app-routing.module';
@@ -119,6 +122,7 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
+    MatSidenavModule,
     MatSlideToggleModule,
     MatSliderModule,
     MatSnackBarModule,
@@ -145,6 +149,7 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     CadmusRefsExternalIdsModule,
     CadmusCodLocationModule,
     CadmusCodicologyUiModule,
+    CadmusPartCodicologySheetLabelsModule,
     // cadmus
     CadmusApiModule,
     CadmusCoreModule,

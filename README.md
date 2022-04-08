@@ -29,6 +29,7 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-04-08: upgraded Angular (13.3.2) and codicology packages; added sidenav tools.
 - 2022-04-04: refactored related person part.
 
 ### 2.0.1
