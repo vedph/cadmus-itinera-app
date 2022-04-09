@@ -12,7 +12,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`
 2. update version in `env.js` and `ng build --configuration production`
-3. `docker build . -t vedph2020/cadmus-itinera-app:2.0.2 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:2.0.3 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -25,9 +25,11 @@ window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.0.1-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.0.3-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 2.0.3
 
 - 2022-04-08: upgraded Angular (13.3.2) and codicology packages; added sidenav tools.
 - 2022-04-04: refactored related person part.
