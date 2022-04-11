@@ -104,16 +104,6 @@ export class CodPoemRangesPartComponent
 
   public ngOnInit(): void {
     this.initEditor();
-    // when a preset is picked, set the adder to it
-    this.addedPresets.valueChanges.subscribe((value) => {
-      if (value !== undefined) {
-        this.addedRanges.setValue(this._presets[value]);
-        this.addedRanges.updateValueAndValidity();
-        setTimeout(() => {
-          this.adderRef?.nativeElement.focus();
-        }, 0);
-      }
-    });
   }
 
   private updateForm(model: CodPoemRangesPart): void {
@@ -174,6 +164,31 @@ export class CodPoemRangesPartComponent
     part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
     return part;
+  }
+
+  public setAdderToPreset(intersect: boolean) {
+    if (
+      this.addedPresets.value === null ||
+      this.addedPresets.value === undefined
+    ) {
+      return;
+    }
+    if (intersect) {
+      const a = this._alnumService.parseRanges(
+        this._presets[+this.addedPresets.value]
+      );
+      const layouts: CodPoemLayout[] = this.layouts.value || [];
+      const b = [...layouts.map(l => l.range)];
+      const i = this._alnumService.intersectRanges(a, b);
+      this.addedRanges.setValue(this._alnumService.rangesToString(i));
+    } else {
+      this.addedRanges.setValue(this._presets[+this.addedPresets.value]);
+    }
+
+    this.addedRanges.updateValueAndValidity();
+    setTimeout(() => {
+      this.adderRef?.nativeElement.focus();
+    }, 0);
   }
 
   public addRanges(): void {
