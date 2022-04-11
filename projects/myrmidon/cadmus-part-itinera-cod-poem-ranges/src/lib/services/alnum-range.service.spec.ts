@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { Alnum } from './alnum';
 
 import { AlnumRangeService } from './alnum-range.service';
 
-describe('AlnumRangeService', () => {
+fdescribe('AlnumRangeService', () => {
   let service: AlnumRangeService;
 
   beforeEach(() => {
@@ -110,5 +111,38 @@ describe('AlnumRangeService', () => {
 
     expect(ranges[4].a).toBe('9a');
     expect(ranges[4].b).toBe('9a');
+  });
+
+  it('alnumToRanges 1 2 3 4a 5 6 8 to 1-3 4a 5-6 8', () => {
+    const a: Alnum[] = [
+      Alnum.parse('1')!,
+      Alnum.parse('2')!,
+      Alnum.parse('3')!,
+      Alnum.parse('4a')!,
+      Alnum.parse('5')!,
+      Alnum.parse('6')!,
+      Alnum.parse('8')!,
+    ];
+    const ranges = service.alnumToRanges(a);
+    expect(ranges.length).toBe(4);
+    // 1-3
+    expect(ranges[0].a).toBe('1');
+    expect(ranges[0].b).toBe('3');
+    // 4a
+    expect(ranges[1].a).toBe('4a');
+    expect(ranges[1].b).toBeFalsy();
+    // 5-6
+    expect(ranges[2].a).toBe('5');
+    expect(ranges[2].b).toBe('6');
+    // 8
+    expect(ranges[3].a).toBe('8');
+    expect(ranges[3].b).toBeFalsy();
+  });
+
+  it('intersectRanges 1-3 4a 4b 5-6 with 3 4b 5-8 = 3 4b 5-6', () => {
+    const a = service.parseRanges('1-3 4a 4b 5-6');
+    const b = service.parseRanges('3 4b 5-8');
+    const i = service.intersectRanges(a, b);
+    expect(service.rangesToString(i)).toBe('3 4b 5-6');
   });
 });

@@ -131,4 +131,47 @@ export class AlnumRangeService {
 
     return expanded;
   }
+
+  public alnumToRanges(a: Alnum[]): AlnumRange[] {
+    const ranges: AlnumRange[] = [];
+    let i = 0;
+    while (i < a.length - 1) {
+      // just copy if has alpha
+      if (a[i].a) {
+        ranges.push({
+          a: Alnum.toString(a[i++]),
+        });
+        continue;
+      }
+      // try building a range
+      let j = i + 1;
+      while (j < a.length && !a[j].a && a[j].n - 1 === a[j - 1].n) {
+        j++;
+      }
+      if (j - i > 1) {
+        ranges.push({
+          a: Alnum.toString(a[i]),
+          b: Alnum.toString(a[j - 1]),
+        });
+        i = j;
+        continue;
+      } else {
+        ranges.push({
+          a: Alnum.toString(a[i++]),
+        });
+      }
+    }
+    if (i < a.length) {
+      ranges.push({ a: Alnum.toString(a[i]) });
+    }
+    return ranges;
+  }
+
+  public intersectRanges(a: AlnumRange[], b: AlnumRange[]): AlnumRange[] {
+    const expA: string[] = this.expandRanges(a);
+    const expB: string[] = this.expandRanges(b);
+    const common = expA.filter((x) => expB.includes(x));
+    const ab: Alnum[] = common.map((s) => Alnum.parse(s)!);
+    return this.alnumToRanges(ab);
+  }
 }
