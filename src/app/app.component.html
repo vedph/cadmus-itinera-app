@@ -100,11 +100,20 @@
     <mat-sidenav
       mode="side"
       [opened]="snavToggle?.value"
-      style="min-height: 400px; width: 250px"
+      style="min-height: 400px; width: 270px; padding: 4px"
     >
       <fieldset>
         <legend>cod location</legend>
         <cadmus-cod-location-converter></cadmus-cod-location-converter>
+      </fieldset>
+      <fieldset>
+        <legend>VIAF</legend>
+        <cadmus-ref-lookup
+          [service]="viafService"
+          linkTemplate="http://www.viaf.org/viaf/{viafid}"
+          label="VIAF"
+          (itemChange)="onViafItemChange($event)"
+        ></cadmus-ref-lookup>
       </fieldset>
     </mat-sidenav>
     <mat-sidenav-content>

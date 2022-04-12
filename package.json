@@ -77,6 +77,7 @@
     "@myrmidon/cadmus-refs-historical-date": "^0.1.2",
     "@myrmidon/cadmus-refs-lookup": "^0.0.7",
     "@myrmidon/cadmus-refs-proper-name": "0.0.4",
+    "@myrmidon/cadmus-refs-viaf-lookup": "^0.0.1",
     "@myrmidon/cadmus-state": "^1.0.2",
     "@myrmidon/cadmus-thesaurus-editor": "^1.0.0",
     "@myrmidon/cadmus-thesaurus-list": "^1.0.0",

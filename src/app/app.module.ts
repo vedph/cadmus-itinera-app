@@ -37,6 +37,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // akita
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
@@ -59,6 +60,8 @@ import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
 import { CadmusRefsDocReferencesModule } from '@myrmidon/cadmus-refs-doc-references';
 import { CadmusRefsHistoricalDateModule } from '@myrmidon/cadmus-refs-historical-date';
 import { CadmusRefsExternalIdsModule } from '@myrmidon/cadmus-refs-external-ids';
+import { CadmusRefsLookupModule } from '@myrmidon/cadmus-refs-lookup';
+import { CadmusRefsViafLookupModule } from '@myrmidon/cadmus-refs-viaf-lookup';
 
 // cadmus libs
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
@@ -132,6 +135,7 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     MatToolbarModule,
     MatTreeModule,
     FlexLayoutModule,
+    ClipboardModule,
     // akita
     AkitaNgDevtools.forRoot(),
     // monaco
@@ -147,9 +151,11 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     CadmusRefsDocReferencesModule,
     CadmusRefsHistoricalDateModule,
     CadmusRefsExternalIdsModule,
+    CadmusRefsLookupModule,
     CadmusCodLocationModule,
     CadmusCodicologyUiModule,
     CadmusPartCodicologySheetLabelsModule,
+    CadmusRefsViafLookupModule,
     // cadmus
     CadmusApiModule,
     CadmusCoreModule,

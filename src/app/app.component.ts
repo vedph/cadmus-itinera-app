@@ -3,6 +3,8 @@ import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AppService, AppQuery } from '@myrmidon/cadmus-state';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   AuthJwtService,
   GravatarService,
@@ -10,6 +12,8 @@ import {
 } from '@myrmidon/auth-jwt-login';
 import { EnvService } from '@myrmidon/ng-tools';
 import { FormBuilder, FormControl } from '@angular/forms';
+
+import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +35,9 @@ export class AppComponent implements OnInit {
     private _appService: AppService,
     private _appQuery: AppQuery,
     private _router: Router,
+    public viafService: ViafRefLookupService,
+    private _clipboard: Clipboard,
+    private _snackbar: MatSnackBar,
     env: EnvService,
     formBuilder: FormBuilder
   ) {
@@ -76,5 +83,14 @@ export class AppComponent implements OnInit {
       .subscribe((_) => {
         this._router.navigate(['/home']);
       });
+  }
+
+  public onViafItemChange(item: any | undefined): void {
+    if (item?.viafid) {
+      this._clipboard.copy(item.viafid);
+      this._snackbar.open('VIAF ID copied', 'OK', {
+        duration: 1500,
+      });
+    }
   }
 }
