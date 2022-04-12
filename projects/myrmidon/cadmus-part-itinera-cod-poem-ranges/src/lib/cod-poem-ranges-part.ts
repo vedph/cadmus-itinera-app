@@ -16,6 +16,7 @@ export interface CodPoemRangesPart extends Part {
   sortType: string;
   ranges?: AlnumRange[];
   layouts?: CodPoemLayout[];
+  note?: string;
 }
 
 /**
@@ -126,5 +127,8 @@ export const COD_POEM_RANGES_PART_SCHEMA = {
         ],
       },
     },
+    note: {
+      type: 'string'
+    }
   },
 };

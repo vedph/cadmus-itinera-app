@@ -181,6 +181,24 @@
             (layoutsChange)="onLayoutsChange($event)"
           ></cadmus-cod-poem-range-layouts>
         </mat-tab>
+
+        <!-- NOTE -->
+        <mat-tab label="note">
+          <mat-form-field class="long-text">
+            <textarea
+              rows="4"
+              matInput
+              [formControl]="note"
+              placeholder="note"
+            ></textarea>
+            <mat-error
+              *ngIf="
+                $any(note).errors?.maxLength && (note.dirty || note.touched)
+              "
+              >note too long</mat-error
+            >
+          </mat-form-field>
+        </mat-tab>
       </mat-tab-group>
     </mat-card-content>
     <mat-card-actions>

@@ -52,6 +52,7 @@
       *ngFor="let row of rows$ | async; let i = index"
       [style.background-color]="row.checked ? '#ace0fa' : 'transparent'"
       class="form-row"
+      style="gap: 2px"
     >
       <button
         mat-icon-button

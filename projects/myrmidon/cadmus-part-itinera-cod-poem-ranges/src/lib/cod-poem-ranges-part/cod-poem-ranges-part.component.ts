@@ -53,6 +53,7 @@ export class CodPoemRangesPartComponent
   public sortType: FormControl;
   public ranges: FormControl;
   public layouts: FormControl;
+  public note: FormControl;
 
   public initialRanges: AlnumRange[];
   public initialLayouts: CodPoemLayout[];
@@ -86,10 +87,12 @@ export class CodPoemRangesPartComponent
     ]);
     this.ranges = formBuilder.control([]);
     this.layouts = formBuilder.control([]);
+    this.note = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
       sortType: this.sortType,
       ranges: this.ranges,
       layouts: this.layouts,
+      note: this.note
     });
     this.addedRanges = formBuilder.control(null, [
       Validators.required,
@@ -120,6 +123,7 @@ export class CodPoemRangesPartComponent
     );
     this.ranges.setValue(model.ranges || []);
     this.layouts.setValue(model.layouts || []);
+    this.note.setValue(model.note);
     // for layouts control
     this.initialRanges = this.ranges.value;
     this.initialLayouts = this.layouts.value;
@@ -163,6 +167,7 @@ export class CodPoemRangesPartComponent
     part.sortType = this.sortType.value;
     part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
+    part.note = this.note.value?.trim();
     return part;
   }
 
@@ -178,7 +183,7 @@ export class CodPoemRangesPartComponent
         this._presets[+this.addedPresets.value]
       );
       const layouts: CodPoemLayout[] = this.layouts.value || [];
-      const b = [...layouts.map(l => l.range)];
+      const b = [...layouts.map((l) => l.range)];
       const i = this._alnumService.intersectRanges(a, b);
       this.addedRanges.setValue(this._alnumService.rangesToString(i));
     } else {

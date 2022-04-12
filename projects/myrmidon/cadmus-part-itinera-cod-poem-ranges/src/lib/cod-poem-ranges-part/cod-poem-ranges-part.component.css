@@ -17,3 +17,7 @@ th {
   font-weight: normal;
   color: silver;
 }
+.long-text {
+  width: 100%;
+  max-width: 800px;
+}
