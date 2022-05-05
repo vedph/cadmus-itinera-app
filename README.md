@@ -29,6 +29,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-05-05: updated packages.
+
 ### 2.0.5
 
 - 2022-04-29: upgraded Angular (13.3.5).
