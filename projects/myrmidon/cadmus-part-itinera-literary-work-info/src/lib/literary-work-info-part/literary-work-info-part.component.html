@@ -10,6 +10,20 @@
       <mat-tab-group>
         <!-- GENERAL -->
         <mat-tab label="general">
+          <!-- author -->
+          <div>
+            <mat-form-field>
+              <input matInput [formControl]="author" placeholder="author" />
+              <mat-error
+                *ngIf="
+                  $any(author).errors?.maxLength &&
+                  (author.dirty || author.touched)
+                "
+                >author too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
           <!-- titles -->
           <fieldset>
             <legend>titles</legend>

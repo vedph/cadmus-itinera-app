@@ -39,6 +39,7 @@ export class LiteraryWorkInfoPartComponent
   public metres: FormControl;
   public strophes: FormControl;
   public isLost: FormControl;
+  public author: FormControl;
   public titles: FormControl;
   public note: FormControl;
 
@@ -85,6 +86,7 @@ export class LiteraryWorkInfoPartComponent
     this.metres = formBuilder.control([]);
     this.strophes = formBuilder.control(null);
     this.isLost = formBuilder.control(false);
+    this.author = formBuilder.control(null, Validators.maxLength(300));
     this.titles = formBuilder.control(
       [],
       NgToolsValidators.strictMinLengthValidator(1)
@@ -96,6 +98,7 @@ export class LiteraryWorkInfoPartComponent
       metres: this.metres,
       strophes: this.strophes,
       isLost: this.isLost,
+      author: this.author,
       titles: this.titles,
       note: this.note,
     });
@@ -119,6 +122,7 @@ export class LiteraryWorkInfoPartComponent
       model.strophes?.length ? model.strophes.join('\n') : ''
     );
     this.isLost.setValue(model.isLost ? true : false);
+    this.author.setValue(model.author);
     this.titles.setValue(model.titles || []);
     this.note.setValue(model.note);
     this.form!.markAsPristine();
@@ -218,6 +222,7 @@ export class LiteraryWorkInfoPartComponent
     part.metres = this.metres.value?.length ? this.metres.value : undefined;
     part.strophes = this.parseStrophes(this.strophes.value);
     part.isLost = this.isLost.value ? true : undefined;
+    part.author = this.author.value?.trim();
     part.titles = this.titles.value || [];
     part.note = this.note.value?.trim();
 

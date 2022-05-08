@@ -16,6 +16,7 @@ export interface LiteraryWorkInfoPart extends Part {
   metres?: string[];
   strophes?: string[];
   isLost?: boolean;
+  author?: string;
   titles: AssertedTitle[];
   note?: string;
 }
@@ -116,6 +117,9 @@ export const LITERARY_WORK_INFO_PART_SCHEMA = {
     },
     isLost: {
       type: 'boolean',
+    },
+    author: {
+      type: 'string',
     },
     titles: {
       type: 'array',
