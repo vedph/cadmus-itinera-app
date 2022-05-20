@@ -91,7 +91,7 @@ describe('PoemLayoutTable', () => {
     }
   });
 
-  it('setCheck with no check should check one', () => {
+  it('setCheck(single) with no check should check one', () => {
     const table = new PoemLayoutTable();
     table.setRows([
       {
@@ -99,7 +99,7 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setCheck(1);
+    table.setChecked(1, 'single');
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -108,47 +108,77 @@ describe('PoemLayoutTable', () => {
     expect(rows[2].checked).toBeUndefined();
   });
 
-  it('setCheck with 1 check below should check range', () => {
+  it('setCheck(single) with other checks should clear except target', () => {
     const table = new PoemLayoutTable();
     table.setRows([
       {
         a: '1',
-        b: '5',
+        b: '3',
       },
     ]);
-    table.setCheck(1);
-    table.setCheck(3);
+    table.setChecked(0, 'single');
+    table.setChecked(1, 'single')
 
     const rows = table.getRows();
-    expect(rows.length).toBe(5);
+    expect(rows.length).toBe(3);
     expect(rows[0].checked).toBeUndefined();
-    for (let i = 1; i <= 3; i++) {
-      expect(rows[1].checked).toBeTrue();
-    }
-    expect(rows[4].checked).toBeUndefined();
+    expect(rows[1].checked).toBeTrue();
+    expect(rows[2].checked).toBeUndefined();
   });
 
-  it('setCheck with 1 check above should check range', () => {
+  it('setCheck(add) with no check should check one', () => {
     const table = new PoemLayoutTable();
     table.setRows([
       {
         a: '1',
-        b: '5',
+        b: '3',
       },
     ]);
-    table.setCheck(3);
-    table.setCheck(1);
+    table.setChecked(1, 'add');
 
     const rows = table.getRows();
-    expect(rows.length).toBe(5);
+    expect(rows.length).toBe(3);
     expect(rows[0].checked).toBeUndefined();
-    for (let i = 1; i <= 3; i++) {
-      expect(rows[1].checked).toBeTrue();
-    }
-    expect(rows[4].checked).toBeUndefined();
+    expect(rows[1].checked).toBeTrue();
+    expect(rows[2].checked).toBeUndefined();
   });
 
-  it('setCheck with many checks should uncheck and check new', () => {
+  it('setCheck(add) with existing check should check both', () => {
+    const table = new PoemLayoutTable();
+    table.setRows([
+      {
+        a: '1',
+        b: '3',
+      },
+    ]);
+    table.setChecked(1, 'single');
+    table.setChecked(2, 'add');
+
+    const rows = table.getRows();
+    expect(rows.length).toBe(3);
+    expect(rows[0].checked).toBeUndefined();
+    expect(rows[1].checked).toBeTrue();
+    expect(rows[2].checked).toBeTrue();
+  });
+
+  it('setCheck(range) with no check should check one', () => {
+    const table = new PoemLayoutTable();
+    table.setRows([
+      {
+        a: '1',
+        b: '3',
+      },
+    ]);
+    table.setChecked(1, 'range');
+
+    const rows = table.getRows();
+    expect(rows.length).toBe(3);
+    expect(rows[0].checked).toBeUndefined();
+    expect(rows[1].checked).toBeTrue();
+    expect(rows[2].checked).toBeUndefined();
+  });
+
+  it('setCheck(range) with existing checks should check range', () => {
     const table = new PoemLayoutTable();
     table.setRows([
       {
@@ -156,19 +186,17 @@ describe('PoemLayoutTable', () => {
         b: '5',
       },
     ]);
-    table.setCheck(1);
-    table.setCheck(3);
-    table.setCheck(2);
+    table.setChecked(0, 'add');
+    table.setChecked(4, 'add');
+    table.setChecked(2, 'range');
 
     const rows = table.getRows();
     expect(rows.length).toBe(5);
-    for (let i = 0; i < rows.length; i++) {
-      if (i === 2) {
-        expect(rows[i].checked).toBeTrue();
-      } else {
-        expect(rows[i].checked).toBeUndefined();
-      }
-    }
+    expect(rows[0].checked).toBeTrue();
+    expect(rows[1].checked).toBeUndefined();
+    expect(rows[2].checked).toBeTrue();
+    expect(rows[3].checked).toBeTrue();
+    expect(rows[4].checked).toBeTrue();
   });
 
   it('setCheckedLayout should set checked rows layout', () => {
@@ -179,8 +207,8 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setCheck(1);
-    table.setCheck(2);
+    table.setChecked(1, 'add');
+    table.setChecked(2, 'add');
     table.setCheckedLayout('x');
 
     const rows = table.getRows();

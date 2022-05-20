@@ -42,6 +42,16 @@ export class PoemLayoutTable {
   }
 
   /**
+   * Get the index of the specified row.
+   *
+   * @param row The row to find the index of.
+   * @returns The index or -1.
+   */
+  public getRowIndex(row: PoemLayoutRow): number {
+    return this._rows$.value.findIndex((r) => r.nr.compare(row.nr) === 0);
+  }
+
+  /**
    * Sets the rows defined by expanding the specified ranges.
    *
    * @param ranges The ranges.
@@ -56,6 +66,18 @@ export class PoemLayoutTable {
         });
       }
     });
+    this._rows$.next(rows);
+  }
+
+  /**
+   * Set the row at the specified index.
+   *
+   * @param index The index.
+   * @param row The row.
+   */
+  public setRow(index: number, row: PoemLayoutRow): void {
+    const rows = [...this._rows$.value];
+    rows[index] = row;
     this._rows$.next(rows);
   }
 
@@ -115,60 +137,69 @@ export class PoemLayoutTable {
     this._rows$.next(rows);
   }
 
-  private getCheckBounds(rows: PoemLayoutRow[]): number[] {
-    let a = 0;
-    while (a < rows.length && !rows[a].checked) {
-      a++;
+  private getSelectionRange(rows: PoemLayoutRow[], target: number): number[] {
+    // find the nearest checked to the right
+    let i = target + 1;
+    while (i < rows.length && !rows[i].checked) {
+      i++;
     }
-    if (a === rows.length) {
-      return [];
+    if (i < rows.length) {
+      return [target, i];
     }
-    let b = a + 1;
-    while (b < rows.length && rows[b].checked) {
-      b++;
+
+    // if not found, found the nearest checked to the left
+    i = target - 1;
+    while (i > -1 && !rows[i].checked) {
+      i--;
     }
-    return b === a + 1 ? [a] : [a, b - 1];
+    if (i > -1) {
+      return [i, target];
+    }
+
+    // nothing checked
+    return [target, target];
   }
 
   /**
-   * Check the row at the specified index. This has different effects according
-   * to the check state: when 2 or more rows are checked, they get all unchecked
-   * and then the row at the specified index is checked; when a single row is
-   * checked, all the rows comprised between the new one and the existing one
-   * are checked; if none is checked, the new one is checked.
+   * Check the row at the specified index.
+   * With mode=single, the target row is toggled; if this results in being
+   * checked, all the other are unchecked.
+   * With mode=range, if nothing is selected it's equivalent to single;
+   * else, an added selection will extend from the previously selected
+   * row to the newly selected row.
+   * With mode=add, the target row is toggled, while preserving the rest
+   * of the selection.
    *
    * @param index The index of the row to check.
    */
-  public setCheck(index: number): void {
+  public setChecked(index: number, mode: CodPoemLayoutCheckMode): void {
     const rows = [...this._rows$.value];
-    const ab = this.getCheckBounds(rows);
 
-    switch (ab.length) {
-      // many checked rows: uncheck all and set A
-      case 2:
+    switch (mode) {
+      case CodPoemLayoutCheckMode.Range:
+        // range: check range
+        const ab = this.getSelectionRange(rows, index);
         for (let i = ab[0]; i <= ab[1]; i++) {
-          rows[i].checked = undefined;
+          rows[i].checked = true;
         }
-        rows[index].checked = true;
         break;
-      case 1:
-        // single checked row: check rows between
-        if (index <= ab[0]) {
-          for (let i = index; i <= ab[0]; i++) {
-            rows[i].checked = true;
-          }
-        } else {
-          for (let i = ab[0]; i <= index; i++) {
-            rows[i].checked = true;
-          }
-        }
+      case CodPoemLayoutCheckMode.Add:
+        // add: toggle
+        rows[index].checked = rows[index].checked ? undefined : true;
         break;
       default:
-        // no checked row: set A
-        rows[index].checked = true;
+        // single: if checked, uncheck it
+        if (rows[index].checked) {
+          rows[index].checked = undefined;
+        } else {
+          // if not checked, check it unchecking all the others
+          for (let i = 0; i < rows.length; i++) {
+            rows[i].checked = false;
+          }
+          rows[index].checked = true;
+        }
         break;
     }
-
     this._rows$.next(rows);
   }
 
@@ -178,12 +209,10 @@ export class PoemLayoutTable {
    */
   public setCheckedLayout(layout: string | null | undefined): void {
     const rows = [...this._rows$.value];
-    const ab = this.getCheckBounds(rows);
-    if (!ab.length) {
-      return;
-    }
-    for (let i = ab[0]; i <= ab[1]; i++) {
-      rows[i].layout = layout ? layout : undefined;
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].checked) {
+        rows[i].layout = layout ? layout : undefined;
+      }
     }
     this._rows$.next(rows);
   }
@@ -216,7 +245,7 @@ export class PoemLayoutTable {
             b: start + 1 === i ? undefined : Alnum.toString(rows[i - 1].nr),
           },
           layout: rows[start].layout!,
-          note: rows[start].note
+          note: rows[start].note,
         });
       } else {
         i++;
@@ -224,4 +253,10 @@ export class PoemLayoutTable {
     }
     return layouts;
   }
+}
+
+export enum CodPoemLayoutCheckMode {
+  Single,
+  Range,
+  Add
 }

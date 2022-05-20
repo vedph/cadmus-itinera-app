@@ -5,7 +5,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { PoemLayoutRow } from '../services/poem-layout-table';
+import {
+  CodPoemLayoutCheckMode,
+  PoemLayoutRow,
+} from '../services/poem-layout-table';
 
 /**
  * An editable poem range layout.
@@ -28,7 +31,10 @@ export class CodPoemRangesLayoutComponent implements OnInit {
   }
 
   @Output()
-  public layoutCheck: EventEmitter<PoemLayoutRow>;
+  public layoutCheck: EventEmitter<{
+    layout: PoemLayoutRow;
+    mode: CodPoemLayoutCheckMode;
+  }>;
   @Output()
   public layoutSave: EventEmitter<PoemLayoutRow>;
 
@@ -38,7 +44,10 @@ export class CodPoemRangesLayoutComponent implements OnInit {
 
   constructor(formBuilder: FormBuilder) {
     // events
-    this.layoutCheck = new EventEmitter<PoemLayoutRow>();
+    this.layoutCheck = new EventEmitter<{
+      layout: PoemLayoutRow;
+      mode: CodPoemLayoutCheckMode;
+    }>();
     this.layoutSave = new EventEmitter<PoemLayoutRow>();
     // form
     this.note = formBuilder.control(null, Validators.maxLength(500));
@@ -59,11 +68,17 @@ export class CodPoemRangesLayoutComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  public setCheck(): void {
+  public setCheck(event: MouseEvent): void {
     if (!this._layout) {
       return;
     }
-    this.layoutCheck.emit(this._layout);
+    let mode = CodPoemLayoutCheckMode.Single;
+    if (event.shiftKey) {
+      mode = CodPoemLayoutCheckMode.Range;
+    } else if (event.metaKey) {
+      mode = CodPoemLayoutCheckMode.Add;
+    }
+    this.layoutCheck.emit({ layout: this._layout, mode: mode });
   }
 
   public clearLayout(): void {

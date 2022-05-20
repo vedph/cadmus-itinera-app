@@ -10,7 +10,11 @@ import { Observable } from 'rxjs';
 
 import { CodPoemLayout } from '../cod-poem-ranges-part';
 import { AlnumRange } from '../services/alnum-range.service';
-import { PoemLayoutRow, PoemLayoutTable } from '../services/poem-layout-table';
+import {
+  CodPoemLayoutCheckMode,
+  PoemLayoutRow,
+  PoemLayoutTable,
+} from '../services/poem-layout-table';
 
 /**
  * Poem ranges layouts editor. This displays all the poem ranges in their
@@ -88,19 +92,28 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
     this._table.setLayouts(this._layouts);
   }
 
+  public onLayoutCheck(event: {
+    layout: PoemLayoutRow;
+    mode: CodPoemLayoutCheckMode;
+  }): void {
+    const i = this._table.getRowIndex(event.layout);
+    if (i > -1) {
+      this._table.setChecked(i, event.mode);
+    }
+  }
+
+  public onLayoutSave(row: PoemLayoutRow): void {
+    const i = this._table.getRowIndex(row);
+    if (i > -1) {
+      this._table.setRow(i, row);
+    }
+  }
+
   public applyLayout(): void {
     if (this.form.invalid) {
       return;
     }
     this._table.setCheckedLayout(this.layout.value);
-  }
-
-  public setCheck(index: number): void {
-    this._table.setCheck(index);
-  }
-
-  public clearLayout(index: number): void {
-    this._table.setLayout(index, null);
   }
 
   public selectAllPoems(): void {

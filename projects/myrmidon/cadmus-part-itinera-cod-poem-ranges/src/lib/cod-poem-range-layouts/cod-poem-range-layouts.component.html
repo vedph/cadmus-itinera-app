@@ -51,6 +51,8 @@
     <cadmus-cod-poem-ranges-layout
       *ngFor="let row of rows$ | async"
       [layout]="row"
+      (layoutCheck)="onLayoutCheck($event)"
+      (layoutSave)="onLayoutSave($event)"
     ></cadmus-cod-poem-ranges-layout>
   </div>
 
