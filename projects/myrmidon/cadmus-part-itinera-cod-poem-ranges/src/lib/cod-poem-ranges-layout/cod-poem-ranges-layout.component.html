@@ -1,8 +1,62 @@
-<div>
-  <div>TODO indicators</div>
+<div
+  [style.background-color]="layout?.checked ? '#ace0fa' : 'transparent'"
+  class="layout"
+  *ngIf="layout"
+>
+  <!-- toolbar -->
+  <div class="form-row" style="gap: 0" *ngIf="!editingNote">
+    <!-- buttons -->
+    <div>
+      <button
+        mat-icon-button
+        type="button"
+        color="primary"
+        (click)="setCheck()"
+        matTooltip="Check this layout"
+      >
+        <mat-icon>task_alt</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        type="button"
+        color="warn"
+        (click)="clearLayout()"
+        matTooltip="Clear this layout"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        type="button"
+        (click)="editNote()"
+        matTooltip="Edit note for this layout"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <!-- indicators -->
+    <div class="form-row" matTooltip="{{layout.note || undefined}}">
+      <span class="poem-nr" [class.annotated]="layout.note">{{
+        layout.nr.n + (layout.nr.a || "")
+      }}</span>
+      <span class="poem-layout">{{ layout.layout }}</span>
+    </div>
+  </div>
+  <!-- note editor -->
   <div *ngIf="editingNote">
     <mat-form-field>
-      <input matInput [formControl]="note" placeholder="note" />
+      <input
+        matInput
+        [formControl]="note"
+        placeholder="note"
+        (keydown.esc)="cancelNote()"
+      />
+      <button mat-icon-button matSuffix (click)="cancelNote()" color="warn">
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button mat-icon-button matSuffix (click)="saveNote()" color="primary">
+        <mat-icon>check_circle</mat-icon>
+      </button>
       <mat-error
         *ngIf="$any(note).errors?.maxLength && (note.dirty || note.touched)"
         >note too long</mat-error

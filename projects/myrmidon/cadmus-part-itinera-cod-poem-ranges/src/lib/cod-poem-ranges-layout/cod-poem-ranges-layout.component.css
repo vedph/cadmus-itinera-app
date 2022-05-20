@@ -1,0 +1,33 @@
+.poem-nr {
+  font-size: 1.25rem;
+}
+.poem-layout {
+  background-color: #e0f0e0;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.annotated {
+  border-bottom: 3px solid #80f080;
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.form-row * {
+  flex: 0 0 auto;
+}
+div.layout {
+  flex: 0 0 auto;
+  border: 1px solid silver;
+  border-radius: 6px;
+  padding: 6px;
+  margin: 0 8px;
+}
+div.layout button {
+  opacity: 0.3;
+}
+div.layout:hover button {
+  opacity: 1;
+}

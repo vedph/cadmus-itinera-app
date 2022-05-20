@@ -47,32 +47,11 @@
       <mat-icon>remove_done</mat-icon>
     </button>
   </form>
-  <div class="poems">
-    <div
-      *ngFor="let row of rows$ | async; let i = index"
-      [style.background-color]="row.checked ? '#ace0fa' : 'transparent'"
-      class="form-row"
-      style="gap: 2px"
-    >
-      <button
-        mat-icon-button
-        type="button"
-        color="primary"
-        (click)="setCheck(i)"
-      >
-        <mat-icon>task_alt</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        type="button"
-        color="warn"
-        (click)="clearLayout(i)"
-      >
-        <mat-icon>clear</mat-icon>
-      </button>
-      <span class="poem-nr">{{ row.nr.n + (row.nr.a || "") }}</span>
-      <span class="poem-layout">{{ row.layout }}</span>
-    </div>
+  <div class="layouts">
+    <cadmus-cod-poem-ranges-layout
+      *ngFor="let row of rows$ | async"
+      [layout]="row"
+    ></cadmus-cod-poem-ranges-layout>
   </div>
 
   <div style="margin-top: 12px">

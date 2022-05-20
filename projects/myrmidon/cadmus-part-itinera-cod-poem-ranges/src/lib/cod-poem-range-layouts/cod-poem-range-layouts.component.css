@@ -11,30 +11,9 @@ th {
   color: silver;
   text-align: left;
 }
-.poems {
+.layouts {
   display: flex;
   flex-flow: row wrap;
   row-gap: 8px;
-  justify-content: space-between;
-}
-.poems div {
-  flex: 0 0 auto;
-  border: 1px solid silver;
-  border-radius: 6px;
-  padding: 6px;
-  margin: 0 8px;
-}
-.poems div button {
-  opacity: 0.3;
-}
-.poems div button:hover {
-  opacity: 1;
-}
-.poem-nr {
-  font-size: 1.25rem;
-}
-.poem-layout {
-  background-color: #e0e0e0;
-  padding: 0 4px;
-  border-radius: 4px;
+  justify-content: flex-start;
 }
