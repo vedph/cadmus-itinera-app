@@ -22,13 +22,15 @@ import { CodPoemRangesPartComponent } from './cod-poem-ranges-part/cod-poem-rang
 import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts/cod-poem-range-layouts.component';
 import { AlnumRangePipe } from './pipes/alnum-range.pipe';
 import { CodPoemRangesPartFeatureComponent } from './cod-poem-ranges-part-feature/cod-poem-ranges-part-feature.component';
+import { CodPoemRangesLayoutComponent } from './cod-poem-ranges-layout/cod-poem-ranges-layout.component';
 
 @NgModule({
   declarations: [
     CodPoemRangesPartComponent,
     CodPoemRangeLayoutsComponent,
     AlnumRangePipe,
-    CodPoemRangesPartFeatureComponent
+    CodPoemRangesPartFeatureComponent,
+    CodPoemRangesLayoutComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +56,8 @@ import { CodPoemRangesPartFeatureComponent } from './cod-poem-ranges-part-featur
     CodPoemRangesPartComponent,
     CodPoemRangeLayoutsComponent,
     AlnumRangePipe,
-    CodPoemRangesPartFeatureComponent
+    CodPoemRangesPartFeatureComponent,
+    CodPoemRangesLayoutComponent
   ],
 })
 export class CadmusPartItineraCodPoemRangesModule {}

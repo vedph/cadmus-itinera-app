@@ -7,6 +7,7 @@ import { AlnumRange } from './services/alnum-range.service';
 export interface CodPoemLayout {
   range: AlnumRange;
   layout: string;
+  note?: string;
 }
 
 /**
@@ -122,13 +123,16 @@ export const COD_POEM_RANGES_PART_SCHEMA = {
               layout: {
                 type: 'string',
               },
+              note: {
+                type: 'string',
+              },
             },
           },
         ],
       },
     },
     note: {
-      type: 'string'
-    }
+      type: 'string',
+    },
   },
 };

@@ -12,6 +12,7 @@ export interface PoemLayoutRow {
   nr: Alnum;
   layout?: string;
   checked?: boolean;
+  note?: string;
 }
 
 /**
@@ -66,6 +67,17 @@ export class PoemLayoutTable {
   public setLayout(index: number, layout: string | null | undefined): void {
     const rows = [...this._rows$.value];
     rows[index].layout = layout ? layout : undefined;
+    this._rows$.next(rows);
+  }
+
+  /**
+   * Set the note of the row at the specified index in this table.
+   * @param index The row index.
+   * @param note The note to set.
+   */
+  public setNote(index: number, note: string | null | undefined): void {
+    const rows = [...this._rows$.value];
+    rows[index].note = note ? note : undefined;
     this._rows$.next(rows);
   }
 
@@ -204,6 +216,7 @@ export class PoemLayoutTable {
             b: start + 1 === i ? undefined : Alnum.toString(rows[i - 1].nr),
           },
           layout: rows[start].layout!,
+          note: rows[start].note
         });
       } else {
         i++;

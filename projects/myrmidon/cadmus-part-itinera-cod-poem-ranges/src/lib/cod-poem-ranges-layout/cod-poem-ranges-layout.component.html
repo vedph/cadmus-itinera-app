@@ -1,0 +1,12 @@
+<div>
+  <div>TODO indicators</div>
+  <div *ngIf="editingNote">
+    <mat-form-field>
+      <input matInput [formControl]="note" placeholder="note" />
+      <mat-error
+        *ngIf="$any(note).errors?.maxLength && (note.dirty || note.touched)"
+        >note too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+</div>
