@@ -75,7 +75,9 @@
                     <mat-icon>remove_circle</mat-icon>
                   </button>
                 </td>
-                <td>{{ text.type }}</td>
+                <td>
+                  {{ text.type | flatLookup: txtTypeEntries:"id":"value" }}
+                </td>
                 <td>{{ text.targetId }}</td>
                 <td>{{ text.targetCitation }}</td>
               </tr>

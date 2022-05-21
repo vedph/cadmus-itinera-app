@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { NgToolsModule } from '@myrmidon/ng-tools';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusRefsExternalIdsModule } from '@myrmidon/cadmus-refs-external-ids';
@@ -44,6 +45,7 @@ import { RelatedPersonsPartFeatureComponent } from './related-persons-part-featu
     NgMatToolsModule,
     MonacoEditorModule,
     // Cadmus
+    NgToolsModule,
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,

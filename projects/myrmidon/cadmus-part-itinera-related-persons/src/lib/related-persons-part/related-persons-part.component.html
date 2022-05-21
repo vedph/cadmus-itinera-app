@@ -75,7 +75,9 @@
                     <mat-icon>remove_circle</mat-icon>
                   </button>
                 </td>
-                <td>{{ person.type }}</td>
+                <td>
+                  {{ person.type | flatLookup: prsTypeEntries:"id":"value" }}
+                </td>
                 <td>{{ person.name }}</td>
                 <td>{{ person.ids?.length || 0 }}</td>
               </tr>
