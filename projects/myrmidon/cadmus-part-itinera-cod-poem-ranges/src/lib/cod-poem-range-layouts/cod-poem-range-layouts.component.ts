@@ -9,12 +9,26 @@ import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { Observable } from 'rxjs';
 
 import { CodPoemLayout } from '../cod-poem-ranges-part';
-import { AlnumRange } from '../services/alnum-range.service';
+import { Alnum } from '../services/alnum';
+import { AlnumRange, AlnumRangeService } from '../services/alnum-range.service';
 import {
   CodPoemLayoutCheckMode,
   PoemLayoutRow,
   PoemLayoutTable,
 } from '../services/poem-layout-table';
+
+const PRESETS = [
+  // sonetto
+  '1-10 12-13 15-21 24-27 31-36 38-49 51 56-58 60-62 64-65 67-69 74-79 81-104 107-118 120 122-124 130-134 136-141 143-148 150-205 208-213 215-236 238 240-263 265-267 269 271-322 326-330 333-358 361-365',
+  // canzone
+  '23 28-29 37 50 53 70-73 105 119 125-129 135 206-207 264 268 270 323 325 331 359 360 366',
+  // ballata
+  '11 14 55 59 63 149 324',
+  // madrigale
+  '52 54 106 121',
+  // sestina
+  '22 30 66 80 142 214 237 239 332',
+];
 
 /**
  * Poem ranges layouts editor. This displays all the poem ranges in their
@@ -34,6 +48,7 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
   public rows$: Observable<PoemLayoutRow[]>;
 
   public layout: FormControl;
+  public presets: FormControl;
   public form: FormGroup;
 
   /**
@@ -72,7 +87,10 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
   @Output()
   public layoutsChange: EventEmitter<CodPoemLayout[]>;
 
-  constructor(formBuilder: FormBuilder) {
+  constructor(
+    formBuilder: FormBuilder,
+    private _alnumService: AlnumRangeService
+  ) {
     this._table = new PoemLayoutTable();
     this._ranges = [];
     this._layouts = [];
@@ -80,8 +98,10 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
     this.layoutsChange = new EventEmitter<CodPoemLayout[]>();
     // form
     this.layout = formBuilder.control(null, Validators.maxLength(50));
+    this.presets = formBuilder.control(null);
     this.form = formBuilder.group({
       layout: this.layout,
+      presets: this.presets,
     });
   }
 
@@ -116,12 +136,25 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
     this._table.setCheckedLayout(this.layout.value);
   }
 
-  public selectAllPoems(): void {
+  public checkAllPoems(): void {
     this._table.toggleAllCheck(true);
   }
 
-  public deselectAllPoems(): void {
+  public uncheckAllPoems(): void {
     this._table.toggleAllCheck(false);
+  }
+
+  public checkPreset(checked = true): void {
+    if (!this.presets.value) {
+      return;
+    }
+    const ranges = this._alnumService.parseRanges(
+      PRESETS[+this.presets.value - 1]
+    );
+    const numbers: Alnum[] = this._alnumService
+      .expandRanges(ranges)
+      .map((s) => Alnum.parse(s)!);
+    this._table.setCheckedGroup(numbers, checked);
   }
 
   public save(): void {

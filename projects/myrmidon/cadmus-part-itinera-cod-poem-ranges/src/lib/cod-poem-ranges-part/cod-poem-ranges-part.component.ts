@@ -38,18 +38,6 @@ export class CodPoemRangesPartComponent
   extends ModelEditorComponentBase<CodPoemRangesPart>
   implements OnInit
 {
-  private readonly _presets = [
-    // sonetto
-    '1-10 12-13 15-21 24-27 31-36 38-49 51 56-58 60-62 64-65 67-69 74-79 81-104 107-118 120 122-124 130-134 136-141 143-148 150-205 208-213 215-236 238 240-263 265-267 269 271-322 326-330 333-358 361-365',
-    // canzone
-    '23 28-29 37 50 53 70-73 105 119 125-129 135 206-207 264 268 270 323 325 331 359 360 366',
-    // ballata
-    '11 14 55 59 63 149 324',
-    // madrigale
-    '52 54 106 121',
-    // sestina
-    '22 30 66 80 142 214 237 239 332',
-  ];
   public sortType: FormControl;
   public ranges: FormControl;
   public layouts: FormControl;
@@ -60,7 +48,6 @@ export class CodPoemRangesPartComponent
 
   // sub-form
   public addedRanges: FormControl;
-  public addedPresets: FormControl;
   public addForm: FormGroup;
 
   @ViewChild('adder')
@@ -92,16 +79,14 @@ export class CodPoemRangesPartComponent
       sortType: this.sortType,
       ranges: this.ranges,
       layouts: this.layouts,
-      note: this.note
+      note: this.note,
     });
     this.addedRanges = formBuilder.control(null, [
       Validators.required,
       Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN, 'g')),
     ]);
-    this.addedPresets = formBuilder.control(null);
     this.addForm = formBuilder.group({
       addedRanges: this.addedRanges,
-      addedPresets: this.addedPresets,
     });
   }
 
@@ -169,31 +154,6 @@ export class CodPoemRangesPartComponent
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
     part.note = this.note.value?.trim();
     return part;
-  }
-
-  public setAdderToPreset(intersect: boolean) {
-    if (
-      this.addedPresets.value === null ||
-      this.addedPresets.value === undefined
-    ) {
-      return;
-    }
-    if (intersect) {
-      const a = this._alnumService.parseRanges(
-        this._presets[+this.addedPresets.value]
-      );
-      const layouts: CodPoemLayout[] = this.layouts.value || [];
-      const b = [...layouts.map((l) => l.range)];
-      const i = this._alnumService.intersectRanges(a, b);
-      this.addedRanges.setValue(this._alnumService.rangesToString(i));
-    } else {
-      this.addedRanges.setValue(this._presets[+this.addedPresets.value]);
-    }
-
-    this.addedRanges.updateValueAndValidity();
-    setTimeout(() => {
-      this.adderRef?.nativeElement.focus();
-    }, 0);
   }
 
   public addRanges(): void {

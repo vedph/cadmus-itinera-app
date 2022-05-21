@@ -204,6 +204,22 @@ export class PoemLayoutTable {
   }
 
   /**
+   * Set a group of rows to the specified checked value.
+   *
+   * @param numbers The numbers of the rows to set.
+   * @param checked The checked value to set.
+   */
+  public setCheckedGroup(numbers: Alnum[], checked = true): void {
+    const rows = [...this._rows$.value];
+    for (let i = 0; i < rows.length; i++) {
+      if (numbers.find(nr => nr.compare(rows[i].nr) === 0)) {
+        rows[i].checked = checked;
+      }
+    }
+    this._rows$.next(rows);
+  }
+
+  /**
    * Set the layout for all the checked rows, if any.
    * @param layout The layout to set.
    */

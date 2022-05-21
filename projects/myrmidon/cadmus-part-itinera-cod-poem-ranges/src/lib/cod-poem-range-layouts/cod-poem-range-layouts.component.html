@@ -33,7 +33,7 @@
       mat-icon-button
       type="button"
       matTooltip="Select all"
-      (click)="selectAllPoems()"
+      (click)="checkAllPoems()"
     >
       <mat-icon>done_all</mat-icon>
     </button>
@@ -42,9 +42,38 @@
       type="button"
       matTooltip="Deselect all"
       color="warn"
-      (click)="deselectAllPoems()"
+      (click)="uncheckAllPoems()"
     >
       <mat-icon>remove_done</mat-icon>
+    </button>
+
+    <!-- presets -->
+    <mat-form-field>
+      <mat-select [formControl]="presets" placeholder="presets">
+        <mat-option [value]="1">sonetto</mat-option>
+        <mat-option [value]="2">canzone</mat-option>
+        <mat-option [value]="3">ballata</mat-option>
+        <mat-option [value]="4">madrigale</mat-option>
+        <mat-option [value]="5">sestina</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      [disabled]="!presets.value"
+      mat-icon-button
+      type="button"
+      matTooltip="Select preset"
+      (click)="checkPreset(true)"
+    >
+      <mat-icon>check_circle_outline</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [disabled]="!presets.value"
+      type="button"
+      matTooltip="Deselect preset"
+      (click)="checkPreset(false)"
+    >
+      <mat-icon>highlight_off</mat-icon>
     </button>
   </form>
   <div class="layouts">

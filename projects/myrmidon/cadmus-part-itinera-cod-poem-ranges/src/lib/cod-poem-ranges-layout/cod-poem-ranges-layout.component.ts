@@ -35,8 +35,12 @@ export class CodPoemRangesLayoutComponent implements OnInit {
     layout: PoemLayoutRow;
     mode: CodPoemLayoutCheckMode;
   }>;
+
   @Output()
   public layoutSave: EventEmitter<PoemLayoutRow>;
+
+  @Output()
+  public numbersCheck: EventEmitter<{ numbers: string[]; checked: boolean }>;
 
   public editingNote?: boolean;
   public note: FormControl;
@@ -49,6 +53,10 @@ export class CodPoemRangesLayoutComponent implements OnInit {
       mode: CodPoemLayoutCheckMode;
     }>();
     this.layoutSave = new EventEmitter<PoemLayoutRow>();
+    this.numbersCheck = new EventEmitter<{
+      numbers: string[];
+      checked: boolean;
+    }>();
     // form
     this.note = formBuilder.control(null, Validators.maxLength(500));
     this.form = formBuilder.group({
