@@ -29,6 +29,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-05-21: updated packages and minor fixes.
+
 ### 2.0.6
 
 - 2022-05-08: added author to literary work info part.
