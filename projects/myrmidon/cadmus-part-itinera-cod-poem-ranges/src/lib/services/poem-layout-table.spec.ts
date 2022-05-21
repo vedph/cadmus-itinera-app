@@ -1,4 +1,4 @@
-import { PoemLayoutTable } from './poem-layout-table';
+import { CodPoemLayoutCheckMode, PoemLayoutTable } from './poem-layout-table';
 
 describe('PoemLayoutTable', () => {
   it('setRows should set rows (no expand)', () => {
@@ -99,7 +99,7 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(1, 'single');
+    table.setChecked(1, CodPoemLayoutCheckMode.Single);
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -116,8 +116,8 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(0, 'single');
-    table.setChecked(1, 'single')
+    table.setChecked(0, CodPoemLayoutCheckMode.Single);
+    table.setChecked(1, CodPoemLayoutCheckMode.Single)
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -134,7 +134,7 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(1, 'add');
+    table.setChecked(1, CodPoemLayoutCheckMode.Add);
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -151,8 +151,8 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(1, 'single');
-    table.setChecked(2, 'add');
+    table.setChecked(1, CodPoemLayoutCheckMode.Single);
+    table.setChecked(2, CodPoemLayoutCheckMode.Add);
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -169,7 +169,7 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(1, 'range');
+    table.setChecked(1, CodPoemLayoutCheckMode.Range);
 
     const rows = table.getRows();
     expect(rows.length).toBe(3);
@@ -186,9 +186,9 @@ describe('PoemLayoutTable', () => {
         b: '5',
       },
     ]);
-    table.setChecked(0, 'add');
-    table.setChecked(4, 'add');
-    table.setChecked(2, 'range');
+    table.setChecked(0, CodPoemLayoutCheckMode.Add);
+    table.setChecked(4, CodPoemLayoutCheckMode.Add);
+    table.setChecked(2, CodPoemLayoutCheckMode.Range);
 
     const rows = table.getRows();
     expect(rows.length).toBe(5);
@@ -207,8 +207,8 @@ describe('PoemLayoutTable', () => {
         b: '3',
       },
     ]);
-    table.setChecked(1, 'add');
-    table.setChecked(2, 'add');
+    table.setChecked(1, CodPoemLayoutCheckMode.Add);
+    table.setChecked(2, CodPoemLayoutCheckMode.Add);
     table.setCheckedLayout('x');
 
     const rows = table.getRows();

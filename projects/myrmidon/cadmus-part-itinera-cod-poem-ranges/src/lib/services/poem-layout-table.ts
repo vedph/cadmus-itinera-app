@@ -194,7 +194,7 @@ export class PoemLayoutTable {
         } else {
           // if not checked, check it unchecking all the others
           for (let i = 0; i < rows.length; i++) {
-            rows[i].checked = false;
+            rows[i].checked = undefined;
           }
           rows[index].checked = true;
         }
