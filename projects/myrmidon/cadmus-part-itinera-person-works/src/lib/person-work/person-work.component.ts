@@ -42,10 +42,10 @@ export class PersonWorkComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public eid: FormControl;
-  public title: FormControl;
-  public hasAssertion: FormControl;
-  public assertion: FormControl;
+  public eid: FormControl<string | null>;
+  public title: FormControl<string | null>;
+  public hasAssertion: FormControl<boolean>;
+  public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
   public initialAssertion?: Assertion;
@@ -59,7 +59,7 @@ export class PersonWorkComponent implements OnInit {
       Validators.required,
       Validators.maxLength(100),
     ]);
-    this.hasAssertion = formBuilder.control(false);
+    this.hasAssertion = formBuilder.control(false, { nonNullable: true });
     this.assertion = formBuilder.control(null);
     this.form = formBuilder.group({
       eid: this.eid,
@@ -77,7 +77,7 @@ export class PersonWorkComponent implements OnInit {
       return;
     }
 
-    this.eid.setValue(model.eid);
+    this.eid.setValue(model.eid || null);
     this.title.setValue(model.title);
     this.initialAssertion = model.assertion;
     this.hasAssertion.setValue(model.assertion ? true : false);
@@ -87,13 +87,15 @@ export class PersonWorkComponent implements OnInit {
   private getModel(): PersonWork {
     return {
       eid: this.eid.value?.trim(),
-      title: this.title.value?.trim(),
-      assertion: this.hasAssertion.value ? this.assertion.value : undefined,
+      title: this.title.value?.trim() || '',
+      assertion: this.hasAssertion.value
+        ? this.assertion.value || undefined
+        : undefined,
     };
   }
 
   public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion);
+    this.assertion.setValue(assertion || null);
     this.assertion.updateValueAndValidity();
     this.assertion.markAsDirty();
   }

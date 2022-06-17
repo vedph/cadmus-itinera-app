@@ -44,7 +44,7 @@ export class RelatedPersonsPartComponent
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
 
-  public persons: FormControl;
+  public persons: FormControl<RelatedPerson[]>;
 
   constructor(
     authService: AuthJwtService,
@@ -55,10 +55,10 @@ export class RelatedPersonsPartComponent
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
-    this.persons = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.persons = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       entries: this.persons,
     });
@@ -136,7 +136,7 @@ export class RelatedPersonsPartComponent
   public addPerson(): void {
     const person: RelatedPerson = {
       type: this.prsTypeEntries?.length ? this.prsTypeEntries[0].id : '',
-      name: ''
+      name: '',
     };
     this.persons.setValue([...this.persons.value, person]);
     this.persons.updateValueAndValidity();

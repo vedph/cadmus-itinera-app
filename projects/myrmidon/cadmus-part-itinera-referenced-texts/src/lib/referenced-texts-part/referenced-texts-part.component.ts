@@ -42,7 +42,7 @@ export class ReferencedTextsPartComponent
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
 
-  public texts: FormControl;
+  public texts: FormControl<ReferencedText[]>;
 
   constructor(
     authService: AuthJwtService,
@@ -53,10 +53,10 @@ export class ReferencedTextsPartComponent
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
-    this.texts = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.texts = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       entries: this.texts,
     });
@@ -190,7 +190,7 @@ export class ReferencedTextsPartComponent
     this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
     this.texts.markAsDirty();
-}
+  }
 
   public moveTextDown(index: number): void {
     if (index + 1 >= this.texts.value.length) {
@@ -203,5 +203,5 @@ export class ReferencedTextsPartComponent
     this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
     this.texts.markAsDirty();
-}
+  }
 }

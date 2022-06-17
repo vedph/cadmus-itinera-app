@@ -16,7 +16,7 @@ import { AuthJwtAccountService } from '@myrmidon/auth-jwt-admin';
 export class ResetPasswordComponent {
   public busy: boolean | undefined;
   public form: FormGroup;
-  public email: FormControl;
+  public email: FormControl<string | null>;
 
   constructor(
     private _snackbar: MatSnackBar,
@@ -33,7 +33,7 @@ export class ResetPasswordComponent {
   }
 
   public reset(): void {
-    if (this.busy) {
+    if (this.busy || !this.email.value) {
       return;
     }
 

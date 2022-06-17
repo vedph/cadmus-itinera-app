@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CodLocationRange } from '@myrmidon/cadmus-cod-location';
+import { CadmusValidators } from '@myrmidon/cadmus-core';
 
 import { Witness } from '../witnesses-part';
 
@@ -31,8 +32,8 @@ export class WitnessComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public id: FormControl;
-  public range: FormControl;
+  public id: FormControl<string | null>;
+  public range: FormControl<CodLocationRange[]>;
   public form: FormGroup;
 
   public initialRanges: CodLocationRange[];
@@ -46,7 +47,10 @@ export class WitnessComponent implements OnInit {
       Validators.required,
       Validators.maxLength(500),
     ]);
-    this.range = formBuilder.control(null, Validators.required);
+    this.range = formBuilder.control([], {
+      validators: CadmusValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       id: this.id,
       range: this.range,
@@ -78,8 +82,8 @@ export class WitnessComponent implements OnInit {
 
   private getModel(): Witness {
     return {
-      id: this.id.value?.trim(),
-      range: this.range.value.length ? this.range.value[0] : null,
+      id: this.id.value?.trim() || '',
+      range: this.range.value.length ? this.range.value[0] : (null as any),
     };
   }
 

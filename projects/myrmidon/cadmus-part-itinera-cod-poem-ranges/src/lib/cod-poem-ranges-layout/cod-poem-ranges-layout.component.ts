@@ -43,7 +43,7 @@ export class CodPoemRangesLayoutComponent implements OnInit {
   public numbersCheck: EventEmitter<{ numbers: string[]; checked: boolean }>;
 
   public editingNote?: boolean;
-  public note: FormControl;
+  public note: FormControl<string | null>;
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
@@ -72,7 +72,7 @@ export class CodPoemRangesLayoutComponent implements OnInit {
       this.form.reset();
       return;
     }
-    this.note.setValue(layout.note);
+    this.note.setValue(layout.note || null);
     this.form.markAsPristine();
   }
 

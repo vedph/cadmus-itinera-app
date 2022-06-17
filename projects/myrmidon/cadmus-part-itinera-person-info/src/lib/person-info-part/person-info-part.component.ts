@@ -20,8 +20,8 @@ export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>
   implements OnInit
 {
-  public sex: FormControl;
-  public bio: FormControl;
+  public sex: FormControl<string | null>;
+  public bio: FormControl<string | null>;
 
   public editorOptions = {
     theme: 'vs-light',
@@ -58,7 +58,7 @@ export class PersonInfoPartComponent
       return;
     }
     this.sex.setValue(model.sex);
-    this.bio.setValue(model.bio);
+    this.bio.setValue(model.bio || null);
     this.form!.markAsPristine();
   }
 
@@ -90,7 +90,7 @@ export class PersonInfoPartComponent
         sex: '-',
       };
     }
-    part.sex = this.sex.value?.trim();
+    part.sex = this.sex.value?.trim() || '';
     part.bio = this.bio.value?.trim();
     return part;
   }

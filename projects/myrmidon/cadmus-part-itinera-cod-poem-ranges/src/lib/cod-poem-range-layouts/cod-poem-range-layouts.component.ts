@@ -47,8 +47,8 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
 
   public rows$: Observable<PoemLayoutRow[]>;
 
-  public layout: FormControl;
-  public presets: FormControl;
+  public layout: FormControl<string | null>;
+  public presets: FormControl<number | null>;
   public form: FormGroup;
 
   /**

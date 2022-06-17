@@ -45,10 +45,10 @@ export class AssertedTitleComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public language: FormControl;
-  public value: FormControl;
-  public hasAssertion: FormControl;
-  public assertion: FormControl;
+  public language: FormControl<string | null>;
+  public value: FormControl<string | null>;
+  public hasAssertion: FormControl<boolean>;
+  public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
   public initialAssertion?: Assertion;
@@ -65,7 +65,7 @@ export class AssertedTitleComponent implements OnInit {
       Validators.required,
       Validators.maxLength(100),
     ]);
-    this.hasAssertion = formBuilder.control(false);
+    this.hasAssertion = formBuilder.control(false, { nonNullable: true });
     this.assertion = formBuilder.control(null);
     this.form = formBuilder.group({
       language: this.language,
@@ -96,14 +96,16 @@ export class AssertedTitleComponent implements OnInit {
 
   private getModel(): AssertedTitle {
     return {
-      language: this.language.value?.trim(),
-      value: this.value.value?.trim(),
-      assertion: this.hasAssertion.value ? this.assertion.value : undefined,
+      language: this.language.value?.trim() || '',
+      value: this.value.value?.trim() || '',
+      assertion: this.hasAssertion.value
+        ? this.assertion.value || undefined
+        : undefined,
     };
   }
 
   public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion);
+    this.assertion.setValue(assertion || null);
     this.assertion.updateValueAndValidity();
     setTimeout(() => this.assertion.markAsDirty(), 0);
   }

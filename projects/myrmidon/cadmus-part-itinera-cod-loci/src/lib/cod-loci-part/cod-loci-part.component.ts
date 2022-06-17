@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
 import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
@@ -31,7 +31,7 @@ export class CodLociPartComponent
   // cod-image-types
   public imgTypeEntries: ThesaurusEntry[] | undefined;
 
-  public loci: FormControl;
+  public loci: FormControl<CodLocus[]>;
 
   constructor(
     authService: AuthJwtService,
@@ -42,10 +42,10 @@ export class CodLociPartComponent
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
-    this.loci = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.loci = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       loci: this.loci,
     });
@@ -100,7 +100,7 @@ export class CodLociPartComponent
     const entry: CodLocus = {
       citation: '',
       range: { start: { n: 0 }, end: { n: 0 } },
-      text: ''
+      text: '',
     };
     this.loci.setValue([...this.loci.value, entry]);
     this.editLocus(this.loci.value.length - 1);
@@ -146,7 +146,7 @@ export class CodLociPartComponent
           this.loci.setValue(entries);
           this.loci.updateValueAndValidity();
           this.loci.markAsDirty();
-              }
+        }
       });
   }
 

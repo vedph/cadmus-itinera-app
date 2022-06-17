@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   public logged?: boolean;
   public itemBrowsers?: ThesaurusEntry[];
   public version: string;
-  public snavToggle: FormControl;
+  public snavToggle: FormControl<boolean>;
 
   constructor(
     @Inject('itemBrowserKeys')
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
     formBuilder: FormBuilder
   ) {
     this.version = env.get('version') || '';
-    this.snavToggle = formBuilder.control(false);
+    this.snavToggle = formBuilder.control(false, { nonNullable: true });
   }
 
   ngOnInit(): void {

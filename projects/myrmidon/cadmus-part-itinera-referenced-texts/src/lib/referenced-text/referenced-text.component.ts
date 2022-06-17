@@ -44,12 +44,12 @@ export class ReferencedTextComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public type: FormControl;
-  public targetId: FormControl;
-  public targetCitation: FormControl;
-  public sourceCitations: FormControl;
-  public hasAssertion: FormControl;
-  public assertion: FormControl;
+  public type: FormControl<string | null>;
+  public targetId: FormControl<string | null>;
+  public targetCitation: FormControl<string | null>;
+  public sourceCitations: FormControl<string | null>;
+  public hasAssertion: FormControl<boolean>;
+  public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
   public initialAssertion?: Assertion;
@@ -71,7 +71,7 @@ export class ReferencedTextComponent implements OnInit {
       null,
       Validators.maxLength(1000)
     );
-    this.hasAssertion = formBuilder.control(false);
+    this.hasAssertion = formBuilder.control(false, { nonNullable: true });
     this.assertion = formBuilder.control(null);
     this.form = formBuilder.group({
       type: this.type,
@@ -93,16 +93,16 @@ export class ReferencedTextComponent implements OnInit {
 
     this.type.setValue(model.type);
     this.targetId.setValue(model.targetId);
-    this.targetCitation.setValue(model.targetCitation);
+    this.targetCitation.setValue(model.targetCitation || null);
     this.sourceCitations.setValue(
-      model.sourceCitations?.length ? model.sourceCitations.join('\n') : []
+      model.sourceCitations?.length ? model.sourceCitations.join('\n') : ''
     );
     this.hasAssertion.setValue(model.assertion ? true : false);
     this.initialAssertion = model.assertion;
     this.form.markAsPristine();
   }
 
-  private parseCitations(text: string): string[] | undefined {
+  private parseCitations(text: string | null): string[] | undefined {
     if (!text) {
       return undefined;
     }
@@ -119,16 +119,18 @@ export class ReferencedTextComponent implements OnInit {
 
   private getModel(): ReferencedText {
     return {
-      type: this.type.value?.trim(),
-      targetId: this.targetId.value?.trim(),
+      type: this.type.value?.trim() || '',
+      targetId: this.targetId.value?.trim() || '',
       targetCitation: this.targetCitation.value?.trim(),
       sourceCitations: this.parseCitations(this.sourceCitations.value),
-      assertion: this.hasAssertion.value ? this.assertion.value : undefined,
+      assertion: this.hasAssertion.value
+        ? this.assertion.value || undefined
+        : undefined,
     };
   }
 
   public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion);
+    this.assertion.setValue(assertion || null);
     this.assertion.updateValueAndValidity();
     setTimeout(() => this.assertion.markAsDirty(), 0);
   }

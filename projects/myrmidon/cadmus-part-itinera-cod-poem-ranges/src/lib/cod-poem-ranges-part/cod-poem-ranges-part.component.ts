@@ -38,16 +38,16 @@ export class CodPoemRangesPartComponent
   extends ModelEditorComponentBase<CodPoemRangesPart>
   implements OnInit
 {
-  public sortType: FormControl;
-  public ranges: FormControl;
-  public layouts: FormControl;
-  public note: FormControl;
+  public sortType: FormControl<string | null>;
+  public ranges: FormControl<AlnumRange[]>;
+  public layouts: FormControl<CodPoemLayout[]>;
+  public note: FormControl<string | null>;
 
   public initialRanges: AlnumRange[];
   public initialLayouts: CodPoemLayout[];
 
   // sub-form
-  public addedRanges: FormControl;
+  public addedRanges: FormControl<string | null>;
   public addForm: FormGroup;
 
   @ViewChild('adder')
@@ -72,8 +72,8 @@ export class CodPoemRangesPartComponent
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.ranges = formBuilder.control([]);
-    this.layouts = formBuilder.control([]);
+    this.ranges = formBuilder.control([], { nonNullable: true });
+    this.layouts = formBuilder.control([], { nonNullable: true });
     this.note = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
       sortType: this.sortType,
@@ -108,7 +108,7 @@ export class CodPoemRangesPartComponent
     );
     this.ranges.setValue(model.ranges || []);
     this.layouts.setValue(model.layouts || []);
-    this.note.setValue(model.note);
+    this.note.setValue(model.note || null);
     // for layouts control
     this.initialRanges = this.ranges.value;
     this.initialLayouts = this.layouts.value;
@@ -149,7 +149,7 @@ export class CodPoemRangesPartComponent
         sortType: '',
       };
     }
-    part.sortType = this.sortType.value;
+    part.sortType = this.sortType.value || '';
     part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
     part.note = this.note.value?.trim();

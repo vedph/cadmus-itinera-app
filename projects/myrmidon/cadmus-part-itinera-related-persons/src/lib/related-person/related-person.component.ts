@@ -48,9 +48,9 @@ export class RelatedPersonComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public type: FormControl;
-  public name: FormControl;
-  public ids: FormControl;
+  public type: FormControl<string | null>;
+  public name: FormControl<string | null>;
+  public ids: FormControl<ExternalId[]>;
   public form: FormGroup;
 
   public initialIds?: ExternalId[];
@@ -67,7 +67,7 @@ export class RelatedPersonComponent implements OnInit {
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.ids = formBuilder.control([]);
+    this.ids = formBuilder.control([], { nonNullable: true });
     this.form = formBuilder.group({
       type: this.type,
       name: this.name,
@@ -91,9 +91,9 @@ export class RelatedPersonComponent implements OnInit {
 
   private getModel(): RelatedPerson {
     return {
-      type: this.type.value?.trim(),
-      name: this.name.value?.trim(),
-      ids: this.ids.value?.length? this.ids.value : undefined,
+      type: this.type.value?.trim() || '',
+      name: this.name.value?.trim() || '',
+      ids: this.ids.value?.length ? this.ids.value : undefined,
     };
   }
 

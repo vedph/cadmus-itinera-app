@@ -38,10 +38,10 @@ export class CodLocusComponent implements OnInit {
   @Output()
   public editorClose: EventEmitter<any>;
 
-  public citation: FormControl;
-  public range: FormControl;
-  public text: FormControl;
-  public images: FormControl;
+  public citation: FormControl<string | null>;
+  public range: FormControl<CodLocationRange[]>;
+  public text: FormControl<string | null>;
+  public images: FormControl<CodImage[]>;
   public form: FormGroup;
 
   public initialImages: CodImage[];
@@ -57,18 +57,18 @@ export class CodLocusComponent implements OnInit {
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.range = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.range = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.text = formBuilder.control(null, Validators.maxLength(1000));
-    this.images = formBuilder.control([]);
+    this.images = formBuilder.control([], { nonNullable: true });
 
     this.form = formBuilder.group({
       citation: this.citation,
       range: this.range,
       text: this.text,
-      images: this.images
+      images: this.images,
     });
   }
 
@@ -93,10 +93,10 @@ export class CodLocusComponent implements OnInit {
 
   private getModel(): CodLocus {
     return {
-      citation: this.citation.value?.trim(),
-      range: this.range.value.length? this.range.value[0] : null,
-      text: this.text.value?.trim(),
-      images: this.images.value?.length? this.images.value : undefined
+      citation: this.citation.value?.trim() || '',
+      range: this.range.value.length ? this.range.value[0] : null as any,
+      text: this.text.value?.trim() || '',
+      images: this.images.value?.length ? this.images.value : undefined,
     };
   }
 
@@ -107,7 +107,7 @@ export class CodLocusComponent implements OnInit {
   }
 
   public onImagesChange(images: CodImage[] | undefined): void {
-    this.images.setValue(images);
+    this.images.setValue(images || []);
     this.images.updateValueAndValidity();
     this.images.markAsDirty();
   }

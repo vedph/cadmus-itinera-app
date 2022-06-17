@@ -39,7 +39,7 @@ export class PersonWorksPartComponent
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
 
-  public works: FormControl;
+  public works: FormControl<PersonWork[]>;
 
   constructor(
     authService: AuthJwtService,
@@ -50,10 +50,10 @@ export class PersonWorksPartComponent
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
-    this.works = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.works = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       entries: this.works,
     });

@@ -19,9 +19,9 @@ export class LetterInfoPartComponent
   extends ModelEditorComponentBase<LetterInfoPart>
   implements OnInit
 {
-  public subject: FormControl;
-  public header: FormControl;
-  public textDate: FormControl;
+  public subject: FormControl<string|null>;
+  public header: FormControl<string|null>;
+  public textDate: FormControl<string|null>;
 
   constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
     super(authService);
@@ -45,9 +45,9 @@ export class LetterInfoPartComponent
       this.form!.reset();
       return;
     }
-    this.subject.setValue(model.subject);
-    this.header.setValue(model.header);
-    this.textDate.setValue(model.textDate);
+    this.subject.setValue(model.subject || null);
+    this.header.setValue(model.header || null);
+    this.textDate.setValue(model.textDate || null);
     this.form!.markAsPristine();
   }
 

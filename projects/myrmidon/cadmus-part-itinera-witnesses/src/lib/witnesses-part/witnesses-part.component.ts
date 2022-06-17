@@ -30,7 +30,7 @@ export class WitnessesPartComponent
 
   public editedWitness: Witness | undefined;
 
-  public witnesses: FormControl;
+  public witnesses: FormControl<Witness[]>;
 
   constructor(
     authService: AuthJwtService,
@@ -40,10 +40,10 @@ export class WitnessesPartComponent
     super(authService);
     this._editedIndex = -1;
     // form
-    this.witnesses = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.witnesses = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.form = formBuilder.group({
       witnesses: this.witnesses,
     });

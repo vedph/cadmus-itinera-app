@@ -5,7 +5,10 @@ import { take } from 'rxjs';
 import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase, renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
+import {
+  ModelEditorComponentBase,
+  renderLabelFromLastColon,
+} from '@myrmidon/cadmus-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -34,14 +37,14 @@ export class LiteraryWorkInfoPartComponent
 
   public editedTitle: AssertedTitle | undefined;
 
-  public languages: FormControl;
-  public genre: FormControl;
-  public metres: FormControl;
-  public strophes: FormControl;
-  public isLost: FormControl;
-  public author: FormControl;
-  public titles: FormControl;
-  public note: FormControl;
+  public languages: FormControl<string[]>;
+  public genre: FormControl<string | null>;
+  public metres: FormControl<string[]>;
+  public strophes: FormControl<string | null>;
+  public isLost: FormControl<boolean>;
+  public author: FormControl<string | null>;
+  public titles: FormControl<AssertedTitle[]>;
+  public note: FormControl<string | null>;
 
   public langFlags: Flag[];
   public initialLanguages: string[];
@@ -75,22 +78,22 @@ export class LiteraryWorkInfoPartComponent
     this.initialMetres = [];
     this._editedIndex = -1;
     // form
-    this.languages = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.languages = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.genre = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(100),
     ]);
-    this.metres = formBuilder.control([]);
+    this.metres = formBuilder.control([], { nonNullable: true });
     this.strophes = formBuilder.control(null);
-    this.isLost = formBuilder.control(false);
+    this.isLost = formBuilder.control(false, { nonNullable: true });
     this.author = formBuilder.control(null, Validators.maxLength(300));
-    this.titles = formBuilder.control(
-      [],
-      NgToolsValidators.strictMinLengthValidator(1)
-    );
+    this.titles = formBuilder.control([], {
+      validators: NgToolsValidators.strictMinLengthValidator(1),
+      nonNullable: true,
+    });
     this.note = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
       languages: this.languages,
@@ -116,15 +119,17 @@ export class LiteraryWorkInfoPartComponent
     }
     this.initialLanguages = model.languages || [];
     this.genre.setValue(model.genre);
-    this.pickedGenre = this.genreEntries?.find(e => e.id === model.genre)?.value;
+    this.pickedGenre = this.genreEntries?.find(
+      (e) => e.id === model.genre
+    )?.value;
     this.initialMetres = model.metres || [];
     this.strophes.setValue(
       model.strophes?.length ? model.strophes.join('\n') : ''
     );
     this.isLost.setValue(model.isLost ? true : false);
-    this.author.setValue(model.author);
+    this.author.setValue(model.author || null);
     this.titles.setValue(model.titles || []);
-    this.note.setValue(model.note);
+    this.note.setValue(model.note || null);
     this.form!.markAsPristine();
   }
 
@@ -185,7 +190,7 @@ export class LiteraryWorkInfoPartComponent
       : [];
   }
 
-  private parseStrophes(text: string): string[] | undefined {
+  private parseStrophes(text: string | null): string[] | undefined {
     if (!text) {
       return undefined;
     }
@@ -218,7 +223,7 @@ export class LiteraryWorkInfoPartComponent
       };
     }
     part.languages = this.languages.value || [];
-    part.genre = this.genre.value?.trim();
+    part.genre = this.genre.value?.trim() || '';
     part.metres = this.metres.value?.length ? this.metres.value : undefined;
     part.strophes = this.parseStrophes(this.strophes.value);
     part.isLost = this.isLost.value ? true : undefined;
