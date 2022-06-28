@@ -29,6 +29,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-06-28: updated packages.
+
 ### 2.1.0
 
 - 2022-06-17: upgraded to Angular 14 and refactored forms to typed.
