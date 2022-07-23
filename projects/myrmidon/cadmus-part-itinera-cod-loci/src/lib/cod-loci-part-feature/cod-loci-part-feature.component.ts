@@ -41,6 +41,6 @@ export class CodLociPartFeatureComponent
   }
 
   public ngOnInit(): void {
-    this.initEditor(['cod-image-types']);
+    this.initEditor(['cod-loci', 'cod-image-types']);
   }
 }

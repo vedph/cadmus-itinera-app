@@ -29,6 +29,9 @@ export class CodLocusComponent implements OnInit {
     this.updateForm(value);
   }
 
+  // cod-loci
+  @Input()
+  public locEntries: ThesaurusEntry[] | undefined;
   // cod-image-types
   @Input()
   public imgTypeEntries: ThesaurusEntry[] | undefined;

@@ -12,7 +12,7 @@ import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
 
 /**
  * CodLociPart editor component.
- * Thesauri: cod-image-types (optional).
+ * Thesauri: cod-loci, cod-image-types (all optional).
  */
 @Component({
   selector: 'cadmus-cod-loci-part',
@@ -28,6 +28,8 @@ export class CodLociPartComponent
   public tabIndex: number;
   public editedLocus: CodLocus | undefined;
 
+  // cod-loci
+  public locEntries: ThesaurusEntry[] | undefined;
   // cod-image-types
   public imgTypeEntries: ThesaurusEntry[] | undefined;
 
@@ -69,7 +71,14 @@ export class CodLociPartComponent
   }
 
   protected override onThesauriSet(): void {
-    const key = 'cod-image-types';
+    let key = 'cod-loci';
+    if (this.thesauri && this.thesauri[key]) {
+      this.locEntries = this.thesauri[key].entries;
+    } else {
+      this.locEntries = undefined;
+    }
+
+    key = 'cod-image-types';
     if (this.thesauri && this.thesauri[key]) {
       this.imgTypeEntries = this.thesauri[key].entries;
     } else {

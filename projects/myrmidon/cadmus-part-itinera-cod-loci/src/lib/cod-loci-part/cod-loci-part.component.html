@@ -83,6 +83,7 @@
 
         <mat-tab label="locus" *ngIf="editedLocus">
           <cadmus-cod-locus
+            [locEntries]="locEntries"
             [imgTypeEntries]="imgTypeEntries"
             [locus]="editedLocus"
             (locusChange)="onLocusSave($event)"

@@ -1,7 +1,22 @@
 <form [formGroup]="form" (submit)="save()">
   <div class="form-row">
-    <!-- citation -->
-    <mat-form-field>
+    <!-- citation (bound) -->
+    <mat-form-field *ngIf="locEntries?.length">
+      <mat-select [formControl]="citation" placeholder="citation">
+        <mat-option *ngFor="let e of locEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          $any(citation).errors?.required &&
+          (citation.dirty || citation.touched)
+        "
+        >citation required</mat-error
+      >
+    </mat-form-field>
+    <!-- citation (free) -->
+    <mat-form-field *ngIf="!locEntries?.length">
       <input matInput [formControl]="citation" placeholder="citation" />
       <mat-error
         *ngIf="
