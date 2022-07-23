@@ -164,29 +164,6 @@ export class CodPoemRangesPartComponent
     if (newRanges.length) {
       const ranges: AlnumRange[] = [...this.ranges.value, ...newRanges];
 
-      // for (let i = 0; i < newRanges.length; i++) {
-      //   const add = Alnum.parse(newRanges[i].a);
-      //   if (!add) {
-      //     continue;
-      //   }
-      //   let j = 0;
-      //   while (j < ranges.length) {
-      //     const current = Alnum.parse(ranges[j].a);
-      //     const n = add.compare(current);
-      //     if (n === 0) {
-      //       break;
-      //     }
-      //     if (n < 0) {
-      //       ranges.splice(j, 0, newRanges[i]);
-      //       break;
-      //     }
-      //     j++;
-      //   }
-      //   if (j === ranges.length) {
-      //     ranges.push(newRanges[i]);
-      //   }
-      // }
-
       this.ranges.setValue(ranges);
       this.ranges.updateValueAndValidity();
       this.ranges.markAsDirty();

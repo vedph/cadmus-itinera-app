@@ -88,7 +88,7 @@ export class PoemLayoutTable {
    */
   public setLayout(index: number, layout: string | null | undefined): void {
     const rows = [...this._rows$.value];
-    rows[index].layout = layout ? layout : undefined;
+    rows[index].layout = layout ?? undefined;
     this._rows$.next(rows);
   }
 
@@ -99,7 +99,7 @@ export class PoemLayoutTable {
    */
   public setNote(index: number, note: string | null | undefined): void {
     const rows = [...this._rows$.value];
-    rows[index].note = note ? note : undefined;
+    rows[index].note = note ?? undefined;
     this._rows$.next(rows);
   }
 
@@ -117,6 +117,7 @@ export class PoemLayoutTable {
           const row = rows.find((r) => r.nr.n === an.n && r.nr.a == an.a);
           if (row) {
             row.layout = l.layout;
+            row.note = l.note
           }
         }
       });
@@ -227,7 +228,7 @@ export class PoemLayoutTable {
     const rows = [...this._rows$.value];
     for (let i = 0; i < rows.length; i++) {
       if (rows[i].checked) {
-        rows[i].layout = layout ? layout : undefined;
+        rows[i].layout = layout ?? undefined;
       }
     }
     this._rows$.next(rows);
