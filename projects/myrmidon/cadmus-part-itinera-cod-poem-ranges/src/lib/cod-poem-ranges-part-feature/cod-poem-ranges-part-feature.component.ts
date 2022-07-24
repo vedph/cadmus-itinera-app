@@ -41,6 +41,10 @@ export class CodPoemRangesPartFeatureComponent
   }
 
   public ngOnInit(): void {
-    this.initEditor(['cod-poem-range-sort-types', 'cod-poem-range-layouts']);
+    this.initEditor([
+      'cod-poem-range-sort-types',
+      'cod-poem-range-layouts',
+      'cod-poem-range-tags',
+    ]);
   }
 }

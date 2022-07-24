@@ -5,8 +5,10 @@ import {
   Validators,
   FormGroup,
 } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
@@ -21,13 +23,11 @@ import {
   AlnumRangeService,
   ALNUM_RANGE_PATTERN,
 } from '../services/alnum-range.service';
-import { Alnum } from '../services/alnum';
-import { DialogService } from '@myrmidon/ng-mat-tools';
-import { take } from 'rxjs';
 
 /**
  * CodPoemRanges part editor component.
- * Thesauri: cod-poem-range-sort-types, cod-poem-range-layouts (optional).
+ * Thesauri: cod-poem-range-sort-types, cod-poem-range-layouts, cod-poem-range-tags
+ * (all optional).
  */
 @Component({
   selector: 'cadmus-cod-poem-ranges-part',
@@ -41,6 +41,7 @@ export class CodPoemRangesPartComponent
   public sortType: FormControl<string | null>;
   public ranges: FormControl<AlnumRange[]>;
   public layouts: FormControl<CodPoemLayout[]>;
+  public tag: FormControl<string | null>;
   public note: FormControl<string | null>;
 
   public initialRanges: AlnumRange[];
@@ -57,6 +58,8 @@ export class CodPoemRangesPartComponent
   public sortEntries: ThesaurusEntry[] | undefined;
   // cod-poem-range-layouts
   public layoutEntries: ThesaurusEntry[] | undefined;
+  // cod-poem-range-tags
+  public tagEntries: ThesaurusEntry[] | undefined;
 
   constructor(
     authService: AuthJwtService,
@@ -74,11 +77,13 @@ export class CodPoemRangesPartComponent
     ]);
     this.ranges = formBuilder.control([], { nonNullable: true });
     this.layouts = formBuilder.control([], { nonNullable: true });
+    this.tag = formBuilder.control(null, Validators.maxLength(50));
     this.note = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
       sortType: this.sortType,
       ranges: this.ranges,
       layouts: this.layouts,
+      tag: this.tag,
       note: this.note,
     });
     this.addedRanges = formBuilder.control(null, [
@@ -108,6 +113,7 @@ export class CodPoemRangesPartComponent
     );
     this.ranges.setValue(model.ranges || []);
     this.layouts.setValue(model.layouts || []);
+    this.tag.setValue(model.tag || null);
     this.note.setValue(model.note || null);
     // for layouts control
     this.initialRanges = this.ranges.value;
@@ -132,6 +138,12 @@ export class CodPoemRangesPartComponent
     } else {
       this.layoutEntries = undefined;
     }
+    key = 'cod-poem-range-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.tagEntries = this.thesauri[key].entries;
+    } else {
+      this.tagEntries = undefined;
+    }
   }
 
   protected getModelFromForm(): CodPoemRangesPart {
@@ -152,6 +164,7 @@ export class CodPoemRangesPartComponent
     part.sortType = this.sortType.value || '';
     part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
+    part.tag = this.tag.value?.trim();
     part.note = this.note.value?.trim();
     return part;
   }

@@ -153,20 +153,42 @@
 
         <!-- NOTE -->
         <mat-tab label="note">
-          <mat-form-field class="long-text">
-            <textarea
-              rows="4"
-              matInput
-              [formControl]="note"
-              placeholder="note"
-            ></textarea>
-            <mat-error
-              *ngIf="
-                $any(note).errors?.maxLength && (note.dirty || note.touched)
-              "
-              >note too long</mat-error
-            >
-          </mat-form-field>
+          <div>
+            <!-- tag (bound) -->
+            <mat-form-field *ngIf="tagEntries?.length">
+              <mat-select [formControl]="tag" placeholder="tag">
+                <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
+                  e.value
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- tag (free) -->
+            <mat-form-field *ngIf="!tagEntries?.length">
+              <input matInput [formControl]="tag" placeholder="tag" />
+              <mat-error
+                *ngIf="
+                  $any(tag).errors?.maxLength && (tag.dirty || tag.touched)
+                "
+                >tag too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="long-text">
+              <textarea
+                rows="4"
+                matInput
+                [formControl]="note"
+                placeholder="note"
+              ></textarea>
+              <mat-error
+                *ngIf="
+                  $any(note).errors?.maxLength && (note.dirty || note.touched)
+                "
+                >note too long</mat-error
+              >
+            </mat-form-field>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </mat-card-content>
