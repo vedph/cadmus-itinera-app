@@ -33,7 +33,7 @@ export class WitnessComponent implements OnInit {
   public editorClose: EventEmitter<any>;
 
   public id: FormControl<string | null>;
-  public range: FormControl<CodLocationRange[]>;
+  public ranges: FormControl<CodLocationRange[]>;
   public form: FormGroup;
 
   public initialRanges: CodLocationRange[];
@@ -47,13 +47,13 @@ export class WitnessComponent implements OnInit {
       Validators.required,
       Validators.maxLength(500),
     ]);
-    this.range = formBuilder.control([], {
+    this.ranges = formBuilder.control([], {
       validators: CadmusValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
     this.form = formBuilder.group({
       id: this.id,
-      range: this.range,
+      ranges: this.ranges,
     });
   }
 
@@ -70,20 +70,20 @@ export class WitnessComponent implements OnInit {
     }
 
     this.id.setValue(model.id);
-    this.initialRanges = [model.range];
+    this.initialRanges = model.ranges || [];
     this.form.markAsPristine();
   }
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
-    this.range.setValue(ranges || []);
-    this.range.updateValueAndValidity();
-    this.range.markAsDirty();
+    this.ranges.setValue(ranges || []);
+    this.ranges.updateValueAndValidity();
+    this.ranges.markAsDirty();
   }
 
   private getModel(): Witness {
     return {
       id: this.id.value?.trim() || '',
-      range: this.range.value.length ? this.range.value[0] : (null as any),
+      ranges: this.ranges.value ?? [],
     };
   }
 

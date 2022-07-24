@@ -88,7 +88,7 @@ export class WitnessesPartComponent
   public addWitness(): void {
     const witness: Witness = {
       id: '',
-      range: { start: { n: 0 }, end: { n: 0 } },
+      ranges: [],
     };
     this.witnesses.setValue([...this.witnesses.value, witness]);
     this.witnesses.updateValueAndValidity();
