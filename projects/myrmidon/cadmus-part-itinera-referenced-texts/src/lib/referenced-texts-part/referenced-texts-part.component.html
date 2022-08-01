@@ -88,6 +88,10 @@
         <mat-tab label="text" *ngIf="editedText">
           <cadmus-referenced-text
             [text]="editedText"
+            [assTagEntries]="assTagEntries"
+            [refTagEntries]="refTagEntries"
+            [refTypeEntries]="refTypeEntries"
+            [txtTypeEntries]="txtTypeEntries"
             (textChange)="onTextSave($event)"
             (editorClose)="onTextClose()"
           >
