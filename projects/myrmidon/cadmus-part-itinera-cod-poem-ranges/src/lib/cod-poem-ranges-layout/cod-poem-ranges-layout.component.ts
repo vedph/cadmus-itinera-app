@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { deepCopy } from '@myrmidon/ng-tools';
 import {
   CodPoemLayoutCheckMode,
   PoemLayoutRow,
@@ -111,7 +112,9 @@ export class CodPoemRangesLayoutComponent implements OnInit {
   public saveNote(): void {
     this.cancelNote();
     const note = this.note.value?.trim();
-    this._layout!.note = note ? note : undefined;
+    const l = deepCopy(this._layout);
+    l.note = note;
+    this._layout = l;
     this.layoutSave.emit(this._layout);
   }
 }

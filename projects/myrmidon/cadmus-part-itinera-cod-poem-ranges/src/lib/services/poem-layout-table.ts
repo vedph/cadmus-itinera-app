@@ -48,7 +48,9 @@ export class PoemLayoutTable {
    * @returns The index or -1.
    */
   public getRowIndex(row: PoemLayoutRow): number {
-    return this._rows$.value.findIndex((r) => r.nr.compare(row.nr) === 0);
+    return this._rows$.value.findIndex(
+      (r) => Alnum.compareAlnums(r.nr, row.nr) === 0
+    );
   }
 
   /**
@@ -117,7 +119,7 @@ export class PoemLayoutTable {
           const row = rows.find((r) => r.nr.n === an.n && r.nr.a == an.a);
           if (row) {
             row.layout = l.layout;
-            row.note = l.note
+            row.note = l.note;
           }
         }
       });
@@ -213,7 +215,7 @@ export class PoemLayoutTable {
   public setCheckedGroup(numbers: Alnum[], checked = true): void {
     const rows = [...this._rows$.value];
     for (let i = 0; i < rows.length; i++) {
-      if (numbers.find(nr => nr.compare(rows[i].nr) === 0)) {
+      if (numbers.find((nr) => nr.compare(rows[i].nr) === 0)) {
         rows[i].checked = checked;
       }
     }
@@ -275,5 +277,5 @@ export class PoemLayoutTable {
 export enum CodPoemLayoutCheckMode {
   Single,
   Range,
-  Add
+  Add,
 }

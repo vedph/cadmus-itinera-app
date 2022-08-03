@@ -50,6 +50,7 @@
         [formControl]="note"
         placeholder="note"
         (keydown.esc)="cancelNote()"
+        (keydown.enter)="saveNote()"
       />
       <button mat-icon-button matSuffix (click)="cancelNote()" color="warn">
         <mat-icon>clear</mat-icon>

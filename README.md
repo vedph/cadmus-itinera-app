@@ -1,5 +1,18 @@
 # Cadmus Itinera
 
+- [Cadmus Itinera](#cadmus-itinera)
+  - [Docker](#docker)
+  - [Production](#production)
+  - [History](#history)
+    - [2.1.1](#211)
+    - [2.1.0](#210)
+    - [2.0.7](#207)
+    - [2.0.6](#206)
+    - [2.0.5](#205)
+    - [2.0.4](#204)
+    - [2.0.3](#203)
+    - [2.0.1](#201)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
 This is the frontend for the second generation of the Cadmus Itinera editor. Currently it's an empty shell, which will be progressively filled with new content. At the end, this will supersede the [old editor frontend](https://github.com/vedph/cadmus_itinera).
@@ -28,6 +41,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.0.4-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+- 2022-08-03: updated codicology libraries.
 
 ### 2.1.1
 

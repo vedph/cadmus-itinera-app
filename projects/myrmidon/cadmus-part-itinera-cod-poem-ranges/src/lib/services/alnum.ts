@@ -61,4 +61,17 @@ export class Alnum {
     }
     return this.a!.localeCompare(other.a!);
   }
+
+  public static compareAlnums(
+    a: Alnum | undefined | null,
+    b: Alnum | undefined | null
+  ): number {
+    if (!a && !b) {
+      return 0;
+    }
+    if (!a) {
+      return -1;
+    }
+    return new Alnum(a.n, a.a).compare(b);
+  }
 }
