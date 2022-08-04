@@ -42,6 +42,7 @@ export class RelatedPersonsPartFeatureComponent
 
   public ngOnInit(): void {
     this.initEditor([
+      'related-person-tags',
       'related-person-types',
       'external-id-scopes',
       'assertion-tags',

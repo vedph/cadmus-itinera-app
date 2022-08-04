@@ -41,12 +41,15 @@
 
   <fieldset>
     <legend>IDs</legend>
-    <cadmus-refs-external-ids
+    <cadmus-refs-asserted-ids
       [ids]="initialIds || []"
       [scopeEntries]="scopeEntries"
-      [tagEntries]="assTagEntries"
+      [tagEntries]="tagEntries"
+      [assTagEntries]="assTagEntries"
+      [refTypeEntries]="refTypeEntries"
+      [refTagEntries]="refTagEntries"
       (idsChange)="onIdsChange($event)"
-    ></cadmus-refs-external-ids>
+    ></cadmus-refs-asserted-ids>
   </fieldset>
 
   <!-- buttons -->

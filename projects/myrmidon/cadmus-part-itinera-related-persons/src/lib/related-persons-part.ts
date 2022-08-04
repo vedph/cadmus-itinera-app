@@ -1,10 +1,10 @@
 import { Part } from '@myrmidon/cadmus-core';
-import { ExternalId } from '@myrmidon/cadmus-refs-external-ids';
+import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
 
 export interface RelatedPerson {
   type: string;
   name: string;
-  ids?: ExternalId[];
+  ids?: AssertedId[];
 }
 
 /**

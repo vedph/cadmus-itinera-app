@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { ExternalId } from '@myrmidon/cadmus-refs-external-ids';
+import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { RelatedPerson } from '../related-persons-part';
 
@@ -27,6 +27,9 @@ export class RelatedPersonComponent implements OnInit {
     this.updateForm(value);
   }
 
+  // related-person-tags
+  @Input()
+  public tagEntries: ThesaurusEntry[] | undefined;
   // related-person-types
   @Input()
   public prsTypeEntries: ThesaurusEntry[] | undefined;
@@ -50,10 +53,10 @@ export class RelatedPersonComponent implements OnInit {
 
   public type: FormControl<string | null>;
   public name: FormControl<string | null>;
-  public ids: FormControl<ExternalId[]>;
+  public ids: FormControl<AssertedId[]>;
   public form: FormGroup;
 
-  public initialIds?: ExternalId[];
+  public initialIds?: AssertedId[];
 
   constructor(formBuilder: FormBuilder) {
     this.personChange = new EventEmitter<RelatedPerson>();
@@ -97,7 +100,7 @@ export class RelatedPersonComponent implements OnInit {
     };
   }
 
-  public onIdsChange(ids: ExternalId[]): void {
+  public onIdsChange(ids: AssertedId[]): void {
     this.ids.setValue(ids);
     this.ids.updateValueAndValidity();
     this.ids.markAsDirty();

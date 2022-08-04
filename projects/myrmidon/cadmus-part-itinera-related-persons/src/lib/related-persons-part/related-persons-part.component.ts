@@ -16,7 +16,8 @@ import {
 
 /**
  * RelatedPersonsPart editor component.
- * Thesauri: related-person-types, assertion-tags, doc-reference-types,
+ * Thesauri: related-person-tags, related-person-types,
+ * assertion-tags, doc-reference-types,
  * doc-reference-tags, external-id-scopes (all optional).
  */
 @Component({
@@ -33,6 +34,8 @@ export class RelatedPersonsPartComponent
   public tabIndex: number;
   public editedPerson: RelatedPerson | undefined;
 
+  // related-person-tags
+  public prsTagEntries: ThesaurusEntry[] | undefined;
   // related-person-types
   public prsTypeEntries: ThesaurusEntry[] | undefined;
   // external-id-scopes
@@ -82,7 +85,13 @@ export class RelatedPersonsPartComponent
   }
 
   protected override onThesauriSet(): void {
-    let key = 'related-person-types';
+    let key = 'related-person-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.prsTagEntries = this.thesauri[key].entries;
+    } else {
+      this.prsTagEntries = undefined;
+    }
+    key = 'related-person-types';
     if (this.thesauri && this.thesauri[key]) {
       this.prsTypeEntries = this.thesauri[key].entries;
     } else {

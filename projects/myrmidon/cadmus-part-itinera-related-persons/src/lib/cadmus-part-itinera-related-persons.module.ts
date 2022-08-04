@@ -13,7 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgToolsModule } from '@myrmidon/ng-tools';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
-import { CadmusRefsExternalIdsModule } from '@myrmidon/cadmus-refs-external-ids';
+import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -49,7 +49,7 @@ import { RelatedPersonsPartFeatureComponent } from './related-persons-part-featu
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusRefsExternalIdsModule,
+    CadmusRefsAssertedIdsModule,
     CadmusRefsAssertionModule,
   ],
   exports: [
