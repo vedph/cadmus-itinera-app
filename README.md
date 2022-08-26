@@ -44,6 +44,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-08-26: updated packages incorporating preview updates.
+
 ### 2.1.3
 
 - 2022-08-05: updated packages.
