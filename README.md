@@ -32,7 +32,7 @@ Quick Docker image build:
 
 ## Production
 
-(1) build the image as above.
+(1) build the app as above (1-2).
 
 (2) after building the app, change `env.js` in the `dist` folder for these variables and for `version`:
 
@@ -41,7 +41,7 @@ window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.0.4-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.1.4-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
 
