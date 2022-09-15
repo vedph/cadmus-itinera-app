@@ -115,6 +115,15 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
   },
+  // biblio - parts
+  {
+    path: 'items/:iid/biblio',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-part-biblio-pg').then(
+        (module) => module.CadmusPartBiblioPgModule
+      ),
+    canActivate: [AuthJwtGuardService],
+  },
   // cadmus - graph
   {
     path: 'graph',

@@ -51,6 +51,7 @@
     "@myrmidon/cadmus-item-search": "^1.1.0",
     "@myrmidon/cadmus-layer-demo": "^1.1.0",
     "@myrmidon/cadmus-mat-physical-size": "0.1.2",
+    "@myrmidon/cadmus-part-biblio-pg": "^0.1.1",
     "@myrmidon/cadmus-part-biblio-ui": "^0.1.1",
     "@myrmidon/cadmus-part-codicology-bindings": "^1.0.2",
     "@myrmidon/cadmus-part-codicology-contents": "^1.0.2",
