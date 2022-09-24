@@ -40,7 +40,7 @@
     "@myrmidon/cadmus-api": "^1.1.2",
     "@myrmidon/cadmus-biblio-api": "^0.1.1",
     "@myrmidon/cadmus-biblio-core": "^1.0.0",
-    "@myrmidon/cadmus-biblio-ui": "^0.1.1",
+    "@myrmidon/cadmus-biblio-ui": "^0.2.1",
     "@myrmidon/cadmus-cod-location": "^0.0.10",
     "@myrmidon/cadmus-codicology-ui": "^1.0.2",
     "@myrmidon/cadmus-core": "^1.1.2",
