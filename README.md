@@ -50,6 +50,7 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
   - updated Angular and Cadmus packages.
   - fix to poem ranges editor: note must be checked together with range when building layouts.
   - updated bibliography lib.
+  - updated biblio image version (2.1.5) in Docker files.
 
 ### 2.1.5
 
