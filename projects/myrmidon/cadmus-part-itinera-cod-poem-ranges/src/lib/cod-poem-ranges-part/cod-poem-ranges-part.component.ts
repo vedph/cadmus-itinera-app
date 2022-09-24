@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { take } from 'rxjs';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { deepCopy } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
@@ -65,7 +67,8 @@ export class CodPoemRangesPartComponent
     authService: AuthJwtService,
     formBuilder: FormBuilder,
     private _alnumService: AlnumRangeService,
-    private _dialogService: DialogService
+    private _dialogService: DialogService,
+    private _snackbar: MatSnackBar
   ) {
     super(authService);
     this.initialRanges = [];
@@ -246,5 +249,8 @@ export class CodPoemRangesPartComponent
     this.layouts.setValue(layouts);
     this.layouts.updateValueAndValidity();
     this.layouts.markAsDirty();
+    this._snackbar.open('Layout applied', 'OK', {
+      duration: 1500,
+    });
   }
 }

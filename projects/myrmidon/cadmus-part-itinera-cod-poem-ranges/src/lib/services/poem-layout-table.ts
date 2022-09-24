@@ -247,13 +247,14 @@ export class PoemLayoutTable {
     while (i < rows.length) {
       if (rows[i].layout) {
         let start = i++;
-        // rows are expanded here, so we can assume that
-        // all the consecutive rows with the same layout
+        // rows are expanded here, so we can assume that all
+        // the consecutive rows with the same layout and note
         // and without any alpha (which breaks sequences)
-        // belongs to the same range
+        // belong to the same range
         while (
           i < rows.length &&
           rows[i].layout === rows[start].layout &&
+          rows[i].note === rows[start].note &&
           !rows[i].nr.a
         ) {
           i++;

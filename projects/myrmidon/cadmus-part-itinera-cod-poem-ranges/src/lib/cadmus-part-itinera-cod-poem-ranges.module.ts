@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // cadmus
@@ -41,6 +42,7 @@ import { CodPoemRangesLayoutComponent } from './cod-poem-ranges-layout/cod-poem-
     MatCardModule,
     MatIconModule,
     MatInputModule,
+    MatSnackBarModule,
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,

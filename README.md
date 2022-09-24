@@ -46,6 +46,10 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-09-24:
+  - updated Angular and Cadmus packages.
+  - fix to poem ranges editor: note must be checked together with range when building layouts.
+
 ### 2.1.5
 
 - 2022-09-15: added bibliography to routes.

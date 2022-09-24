@@ -58,13 +58,6 @@
                   [formControl]="addedRanges"
                   placeholder="ranges"
                 />
-                <mat-error
-                  *ngIf="
-                    $any(addedRanges).errors?.required &&
-                    (addedRanges.dirty || addedRanges.touched)
-                  "
-                  >ranges required</mat-error
-                >
               </mat-form-field>
 
               <!-- add -->
