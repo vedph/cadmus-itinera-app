@@ -71,6 +71,10 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
+import { CadmusTextBlockViewModule } from '@myrmidon/cadmus-text-block-view';
+import { CadmusPreviewUiModule } from '@myrmidon/cadmus-preview-ui';
+import { CadmusPreviewPgModule } from '@myrmidon/cadmus-preview-pg';
+
 // for tools
 import { CadmusPartCodicologySheetLabelsModule } from '@myrmidon/cadmus-part-codicology-sheet-labels';
 
@@ -163,6 +167,9 @@ import { ITEM_BROWSER_KEYS } from './item-browser-keys';
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
+    CadmusTextBlockViewModule,
+    CadmusPreviewUiModule,
+    CadmusPreviewPgModule,
   ],
   providers: [
     EnvServiceProvider,
