@@ -65,7 +65,7 @@
     "@myrmidon/cadmus-part-codicology-shelfmarks": "^1.0.2",
     "@myrmidon/cadmus-part-codicology-watermarks": "^1.0.2",
     "@myrmidon/cadmus-part-general-pg": "^1.2.1",
-    "@myrmidon/cadmus-part-general-ui": "^1.2.2",
+    "@myrmidon/cadmus-part-general-ui": "^1.2.3",
     "@myrmidon/cadmus-part-refs-pg": "^1.2.0",
     "@myrmidon/cadmus-part-refs-ui": "^1.2.0",
     "@myrmidon/cadmus-preview-pg": "^0.0.1",
@@ -103,8 +103,8 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.7",
-    "@angular/cli": "^14.2.7",
+    "@angular-devkit/build-angular": "^14.2.8",
+    "@angular/cli": "^14.2.8",
     "@angular/compiler-cli": "^14.2.8",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",

@@ -46,6 +46,7 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-11-03: updated Angular and Cadmus packages.
 - 2022-10-27:
   - updated Angular, rangy, and Cadmus packages.
   - added preview.
