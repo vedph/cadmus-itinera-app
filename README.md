@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [2.1.7](#217)
     - [2.1.6](#216)
     - [2.1.5](#215)
     - [2.1.4](#214)
@@ -30,7 +31,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`
 2. update version in `env.js` and `ng build --configuration production`
-3. `docker build . -t vedph2020/cadmus-itinera-app:2.1.6 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:2.1.7 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -46,6 +47,10 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:2.1.5-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 2.1.7
+
+- 2022-11-08: updated Angular and Cadmus packages.
 
 ### 2.1.6
 
