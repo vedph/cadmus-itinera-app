@@ -1,5 +1,5 @@
-<form [formGroup]="form!" (submit)="save()">
-  <mat-card>
+<form [formGroup]="form" (submit)="save()">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
@@ -13,7 +13,8 @@
           <!-- author -->
           <div>
             <mat-form-field>
-              <input matInput [formControl]="author" placeholder="author" />
+              <mat-label>author</mat-label>
+              <input matInput [formControl]="author" />
               <mat-error
                 *ngIf="
                   $any(author).errors?.maxLength &&
@@ -124,7 +125,8 @@
           <!-- note -->
           <div>
             <mat-form-field class="long-text">
-              <input matInput [formControl]="note" placeholder="note" />
+              <mat-label>note</mat-label>
+              <input matInput [formControl]="note" />
               <mat-error
                 *ngIf="
                   $any(note).errors?.maxLength && (note.dirty || note.touched)
@@ -151,7 +153,8 @@
           <fieldset>
             <legend>genre</legend>
             <mat-form-field *ngIf="!genreEntries?.length">
-              <input matInput [formControl]="genre" placeholder="genre" />
+              <mat-label>genre</mat-label>
+              <input matInput [formControl]="genre" />
               <mat-error
                 *ngIf="
                   $any(genre).errors?.required && (genre.dirty || genre.touched)
@@ -200,12 +203,9 @@
           <!-- strophes -->
           <div style="margin-top: 8px">
             <mat-form-field class="long-text">
-              <textarea
-                rows="3"
-                matInput
-                [formControl]="strophes"
-                placeholder="strophes (1 per line)"
-              ></textarea>
+              <mat-label>strophes</mat-label>
+              <textarea rows="3" matInput [formControl]="strophes"></textarea>
+              <mat-hint>1 per line</mat-hint>
               <mat-error
                 *ngIf="
                   $any(strophes).errors?.maxLength &&

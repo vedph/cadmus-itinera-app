@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-
-import { EditLiteraryWorkInfoPartQuery } from './edit-literary-work-info-part.query';
-import { EditLiteraryWorkInfoPartService } from './edit-literary-work-info-part.service';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-literary-work-info-part-feature',
@@ -25,30 +18,28 @@ export class LiteraryWorkInfoPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditLiteraryWorkInfoPartQuery,
-    editPartService: EditLiteraryWorkInfoPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
   }
 
-  public ngOnInit(): void {
-    this.initEditor([
+  protected override getReqThesauriIds(): string[] {
+    return [
       'literary-work-languages',
       'literary-work-genres',
       'literary-work-metres',
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
-    ]);
+    ];
   }
 }

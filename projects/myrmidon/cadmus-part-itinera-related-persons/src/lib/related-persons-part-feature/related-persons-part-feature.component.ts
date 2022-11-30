@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-
-import { EditRelatedPersonsPartQuery } from './edit-related-persons-part.query';
-import { EditRelatedPersonsPartService } from './edit-related-persons-part.service';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-related-persons-part-feature',
@@ -24,30 +18,28 @@ export class RelatedPersonsPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditRelatedPersonsPartQuery,
-    editPartService: EditRelatedPersonsPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
   }
 
-  public ngOnInit(): void {
-    this.initEditor([
+  protected override getReqThesauriIds(): string[] {
+    return [
       'related-person-tags',
       'related-person-types',
       'external-id-scopes',
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
-    ]);
+    ];
   }
 }

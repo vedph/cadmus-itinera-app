@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  Validators,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { take } from 'rxjs';
 
-import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
+  EditedObject,
   ModelEditorComponentBase,
   renderLabelFromLastColon,
 } from '@myrmidon/cadmus-ui';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   AssertedTitle,
@@ -71,7 +78,7 @@ export class LiteraryWorkInfoPartComponent
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this.langFlags = [];
     this.initialLanguages = [];
     this.mtrFlags = [];
@@ -95,7 +102,14 @@ export class LiteraryWorkInfoPartComponent
       nonNullable: true,
     });
     this.note = formBuilder.control(null, Validators.maxLength(1000));
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       languages: this.languages,
       genre: this.genre,
       metres: this.metres,
@@ -107,76 +121,80 @@ export class LiteraryWorkInfoPartComponent
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: LiteraryWorkInfoPart): void {
-    if (!model) {
-      this.form!.reset();
-      this.pickedGenre = undefined;
-      return;
-    }
-    this.initialLanguages = model.languages || [];
-    this.genre.setValue(model.genre);
-    this.pickedGenre = this.genreEntries?.find(
-      (e) => e.id === model.genre
-    )?.value;
-    this.initialMetres = model.metres || [];
-    this.strophes.setValue(
-      model.strophes?.length ? model.strophes.join('\n') : ''
-    );
-    this.isLost.setValue(model.isLost ? true : false);
-    this.author.setValue(model.author || null);
-    this.titles.setValue(model.titles || []);
-    this.note.setValue(model.note || null);
-    this.form!.markAsPristine();
-  }
-
-  protected onModelSet(model: LiteraryWorkInfoPart): void {
-    this.updateForm(deepCopy(model));
-  }
-
-  protected override onThesauriSet(): void {
+  private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'literary-work-languages';
-    if (this.thesauri && this.thesauri[key]) {
-      this.langEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.langEntries = thesauri[key].entries;
     } else {
       this.langEntries = undefined;
     }
     key = 'literary-work-genres';
-    if (this.thesauri && this.thesauri[key]) {
-      this.genreEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.genreEntries = thesauri[key].entries;
     } else {
       this.genreEntries = undefined;
     }
     key = 'literary-work-metres';
-    if (this.thesauri && this.thesauri[key]) {
-      this.mtrEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.mtrEntries = thesauri[key].entries;
     } else {
       this.mtrEntries = undefined;
     }
     key = 'assertion-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.assTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.assTagEntries = thesauri[key].entries;
     } else {
       this.assTagEntries = undefined;
     }
     key = 'doc-reference-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTypeEntries = thesauri[key].entries;
     } else {
       this.refTypeEntries = undefined;
     }
     key = 'doc-reference-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTagEntries = thesauri[key].entries;
     } else {
       this.refTagEntries = undefined;
     }
 
     this.langFlags = this.entriesToFlags(this.langEntries);
     this.mtrFlags = this.entriesToFlags(this.mtrEntries);
+  }
+
+  private updateForm(part?: LiteraryWorkInfoPart): void {
+    if (!part) {
+      this.form.reset();
+      this.pickedGenre = undefined;
+      return;
+    }
+    this.initialLanguages = part.languages || [];
+    this.genre.setValue(part.genre);
+    this.pickedGenre = this.genreEntries?.find(
+      (e) => e.id === part.genre
+    )?.value;
+    this.initialMetres = part.metres || [];
+    this.strophes.setValue(
+      part.strophes?.length ? part.strophes.join('\n') : ''
+    );
+    this.isLost.setValue(part.isLost ? true : false);
+    this.author.setValue(part.author || null);
+    this.titles.setValue(part.titles || []);
+    this.note.setValue(part.note || null);
+    this.form.markAsPristine();
+  }
+
+  protected override onDataSet(
+    data?: EditedObject<LiteraryWorkInfoPart>
+  ): void {
+    // thesauri
+    if (data?.thesauri) {
+      this.updateThesauri(data.thesauri);
+    }
+
+    // form
+    this.updateForm(data?.value);
   }
 
   private entriesToFlags(entries: ThesaurusEntry[] | undefined): Flag[] {
@@ -205,23 +223,10 @@ export class LiteraryWorkInfoPartComponent
     return strophes.length ? strophes : undefined;
   }
 
-  protected getModelFromForm(): LiteraryWorkInfoPart {
-    let part = this.model;
-    if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: LITERARY_WORK_INFO_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        languages: [],
-        genre: '',
-        titles: [],
-      };
-    }
+  protected getValue(): LiteraryWorkInfoPart {
+    let part = this.getEditedPart(
+      LITERARY_WORK_INFO_PART_TYPEID
+    ) as LiteraryWorkInfoPart;
     part.languages = this.languages.value || [];
     part.genre = this.genre.value?.trim() || '';
     part.metres = this.metres.value?.length ? this.metres.value : undefined;

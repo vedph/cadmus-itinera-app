@@ -1,8 +1,10 @@
-@import "~@angular/material/theming";
+@use "@angular/material" as mat;
+
+@import "@angular/material/theming";
 @import "preview-styles.scss";
 
 // always include only once per project
-@include mat-core();
+@include mat.core();
 
 // import our custom themes
 @import "light-theme.scss";

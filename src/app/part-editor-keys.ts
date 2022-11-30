@@ -9,6 +9,7 @@ import {
   HISTORICAL_EVENTS_PART_TYPEID,
   NAMES_PART_TYPEID,
   CHRONOTOPES_PART_TYPEID,
+  EXTERNAL_IDS_PART_TYPEID,
 } from '@myrmidon/cadmus-part-general-ui';
 import { PartEditorKeys } from '@myrmidon/cadmus-core';
 import { EXT_BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-biblio-ui';
@@ -33,7 +34,6 @@ import { LITERARY_WORK_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-it
 import { REFERENCED_TEXTS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-referenced-texts/src/public-api';
 import { RELATED_PERSONS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-related-persons/src/public-api';
 import { WITNESSES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-witnesses/src/public-api';
-import { EXTERNAL_IDS_PART_TYPEID } from '@myrmidon/cadmus-part-refs-ui';
 
 const GENERAL = 'general';
 const BIBLIO = 'biblio';

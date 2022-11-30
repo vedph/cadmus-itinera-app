@@ -2,7 +2,8 @@
   <div>
     <!-- language (bound) -->
     <mat-form-field *ngIf="langEntries?.length">
-      <mat-select [formControl]="language" placeholder="language">
+      <mat-label>language</mat-label>
+      <mat-select [formControl]="language">
         <mat-option *ngFor="let e of langEntries" [value]="e.id">{{
           e.value
         }}</mat-option>
@@ -17,7 +18,8 @@
     </mat-form-field>
     <!-- language (free) -->
     <mat-form-field *ngIf="!langEntries?.length">
-      <input matInput [formControl]="language" placeholder="language" />
+      <mat-label>language</mat-label>
+      <input matInput [formControl]="language" />
       <mat-error
         *ngIf="
           $any(language).errors?.required &&
@@ -38,7 +40,8 @@
   <!-- value -->
   <div>
     <mat-form-field class="long-text">
-      <input matInput [formControl]="value" placeholder="title" />
+      <mat-label>title</mat-label>
+      <input matInput [formControl]="value" />
       <mat-error
         *ngIf="$any(value).errors?.required && (value.dirty || value.touched)"
         >title required</mat-error

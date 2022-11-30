@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-
-import { EditReferencedTextsPartQuery } from './edit-referenced-texts-part.query';
-import { EditReferencedTextsPartService } from './edit-referenced-texts-part.service';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-referenced-texts-part-feature',
@@ -24,28 +18,26 @@ export class ReferencedTextsPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditReferencedTextsPartQuery,
-    editPartService: EditReferencedTextsPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
   }
 
-  public ngOnInit(): void {
-    this.initEditor([
+  protected override getReqThesauriIds(): string[] {
+    return [
       'related-text-types',
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
-    ]);
+    ];
   }
 }

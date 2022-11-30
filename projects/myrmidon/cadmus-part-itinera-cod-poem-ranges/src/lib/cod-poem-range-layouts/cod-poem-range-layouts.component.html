@@ -2,7 +2,8 @@
   <form class="form-row" (submit)="applyLayout()">
     <!-- layout (bound) -->
     <mat-form-field *ngIf="layoutEntries?.length" class="form-col">
-      <mat-select [formControl]="layout" placeholder="layout">
+      <mat-label>layout</mat-label>
+      <mat-select [formControl]="layout">
         <mat-option [value]="null">---</mat-option>
         <mat-option *ngFor="let e of layoutEntries" [value]="e.id">{{
           e.value
@@ -11,7 +12,8 @@
     </mat-form-field>
     <!-- layout (free) -->
     <mat-form-field *ngIf="!layoutEntries?.length" class="form-col">
-      <input matInput [formControl]="layout" placeholder="layout" />
+      <mat-label>layout</mat-label>
+      <input matInput [formControl]="layout" />
       <mat-error
         *ngIf="
           $any(layout).errors?.maxLength && (layout.dirty || layout.touched)
@@ -49,7 +51,8 @@
 
     <!-- presets -->
     <mat-form-field>
-      <mat-select [formControl]="presets" placeholder="presets">
+      <mat-label>presets</mat-label>
+      <mat-select [formControl]="presets">
         <mat-option [value]="1">sonetto</mat-option>
         <mat-option [value]="2">canzone</mat-option>
         <mat-option [value]="3">ballata</mat-option>

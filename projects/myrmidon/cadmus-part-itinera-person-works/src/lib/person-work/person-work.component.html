@@ -2,7 +2,8 @@
   <!-- title -->
   <div>
     <mat-form-field class="long-text">
-      <input matInput [formControl]="title" placeholder="title" />
+      <mat-label>title</mat-label>
+      <input matInput [formControl]="title" />
       <mat-error
         *ngIf="$any(title).errors?.required && (title.dirty || title.touched)"
         >title required</mat-error
@@ -17,7 +18,8 @@
   <!-- eid -->
   <div>
     <mat-form-field class="long-text">
-      <input matInput [formControl]="eid" placeholder="EID" />
+      <mat-label>EID</mat-label>
+      <input matInput [formControl]="eid" />
       <mat-error
         *ngIf="$any(eid).errors?.maxLength && (eid.dirty || eid.touched)"
         >EID too long</mat-error

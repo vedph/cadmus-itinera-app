@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 
 import {
   Witness,
@@ -37,50 +42,40 @@ export class WitnessesPartComponent
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this._editedIndex = -1;
     // form
     this.witnesses = formBuilder.control([], {
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       witnesses: this.witnesses,
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: WitnessesPart): void {
-    if (!model) {
-      this.form!.reset();
+  private updateForm(part?: WitnessesPart): void {
+    if (!part) {
+      this.form.reset();
       return;
     }
-    this.witnesses.setValue(model.witnesses || []);
-    this.form!.markAsPristine();
+    this.witnesses.setValue(part.witnesses || []);
+    this.form.markAsPristine();
   }
 
-  protected onModelSet(model: WitnessesPart): void {
-    this.updateForm(deepCopy(model));
+  protected override onDataSet(data?: EditedObject<WitnessesPart>): void {
+    this.updateForm(data?.value);
   }
 
-  protected getModelFromForm(): WitnessesPart {
-    let part = this.model;
-    if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: WITNESSES_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        witnesses: [],
-      };
-    }
+  protected getValue(): WitnessesPart {
+    let part = this.getEditedPart(WITNESSES_PART_TYPEID) as WitnessesPart;
     part.witnesses = this.witnesses.value || [];
     return part;
   }

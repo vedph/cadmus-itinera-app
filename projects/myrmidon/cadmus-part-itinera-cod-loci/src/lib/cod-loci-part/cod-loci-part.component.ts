@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
 
 import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
 
@@ -40,7 +45,7 @@ export class CodLociPartComponent
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
@@ -48,59 +53,55 @@ export class CodLociPartComponent
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       loci: this.loci,
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: CodLociPart): void {
-    if (!model) {
-      this.form!.reset();
-      return;
-    }
-    this.loci.setValue(model.loci || []);
-    this.form!.markAsPristine();
-  }
-
-  protected onModelSet(model: CodLociPart): void {
-    this.updateForm(deepCopy(model));
-  }
-
-  protected override onThesauriSet(): void {
+  private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'cod-loci';
-    if (this.thesauri && this.thesauri[key]) {
-      this.locEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.locEntries = thesauri[key].entries;
     } else {
       this.locEntries = undefined;
     }
 
     key = 'cod-image-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.imgTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.imgTypeEntries = thesauri[key].entries;
     } else {
       this.imgTypeEntries = undefined;
     }
   }
 
-  protected getModelFromForm(): CodLociPart {
-    let part = this.model;
+  private updateForm(part?: CodLociPart): void {
     if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: COD_LOCI_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        loci: [],
-      };
+      this.form.reset();
+      return;
     }
+    this.loci.setValue(part.loci || []);
+    this.form.markAsPristine();
+  }
+
+  protected override onDataSet(data?: EditedObject<CodLociPart>): void {
+    // thesauri
+    if (data?.thesauri) {
+      this.updateThesauri(data.thesauri);
+    }
+
+    // form
+    this.updateForm(data?.value);
+  }
+
+  protected getValue(): CodLociPart {
+    let part = this.getEditedPart(COD_LOCI_PART_TYPEID) as CodLociPart;
     part.loci = this.loci.value || [];
     return part;
   }

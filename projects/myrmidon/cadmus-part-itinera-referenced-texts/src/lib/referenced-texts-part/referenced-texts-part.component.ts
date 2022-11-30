@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   ReferencedText,
@@ -49,7 +54,7 @@ export class ReferencedTextsPartComponent
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
@@ -57,70 +62,68 @@ export class ReferencedTextsPartComponent
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       entries: this.texts,
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: ReferencedTextsPart): void {
-    if (!model) {
-      this.form!.reset();
-      return;
-    }
-    this.texts.setValue(model.texts || []);
-    this.form!.markAsPristine();
-  }
-
-  protected onModelSet(model: ReferencedTextsPart): void {
-    this.updateForm(deepCopy(model));
-  }
-
-  protected override onThesauriSet(): void {
+  private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'related-text-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.txtTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.txtTypeEntries = thesauri[key].entries;
     } else {
       this.txtTypeEntries = undefined;
     }
     key = 'assertion-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.assTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.assTagEntries = thesauri[key].entries;
     } else {
       this.assTagEntries = undefined;
     }
     key = 'doc-reference-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTypeEntries = thesauri[key].entries;
     } else {
       this.refTypeEntries = undefined;
     }
     key = 'doc-reference-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTagEntries = thesauri[key].entries;
     } else {
       this.refTagEntries = undefined;
     }
   }
 
-  protected getModelFromForm(): ReferencedTextsPart {
-    let part = this.model;
+  private updateForm(part?: ReferencedTextsPart): void {
     if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: REFERENCED_TEXTS_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        texts: [],
-      };
+      this.form.reset();
+      return;
     }
+    this.texts.setValue(part.texts || []);
+    this.form.markAsPristine();
+  }
+
+  protected override onDataSet(data?: EditedObject<ReferencedTextsPart>): void {
+    // thesauri
+    if (data?.thesauri) {
+      this.updateThesauri(data.thesauri);
+    }
+
+    // form
+    this.updateForm(data?.value);
+  }
+
+  protected getValue(): ReferencedTextsPart {
+    let part = this.getEditedPart(
+      REFERENCED_TEXTS_PART_TYPEID
+    ) as ReferencedTextsPart;
     part.texts = this.texts.value || [];
     return part;
   }

@@ -49,6 +49,10 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-11-30:
+  - updated to Angular 15
+  - replaced Akita with ELF
+  - removed `@angular/flex-layout`
 - 2022-11-18: updated Docker version numbers for backend.
 
 ### 2.1.8

@@ -4,16 +4,16 @@ import {
   FormBuilder,
   Validators,
   FormGroup,
+  UntypedFormGroup,
 } from '@angular/forms';
 import { take } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { deepCopy } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   CodPoemLayout,
@@ -70,7 +70,7 @@ export class CodPoemRangesPartComponent
     private _dialogService: DialogService,
     private _snackbar: MatSnackBar
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this.initialRanges = [];
     this.initialLayouts = [];
     // form
@@ -82,13 +82,6 @@ export class CodPoemRangesPartComponent
     this.layouts = formBuilder.control([], { nonNullable: true });
     this.tag = formBuilder.control(null, Validators.maxLength(50));
     this.note = formBuilder.control(null, Validators.maxLength(1000));
-    this.form = formBuilder.group({
-      sortType: this.sortType,
-      ranges: this.ranges,
-      layouts: this.layouts,
-      tag: this.tag,
-      note: this.note,
-    });
     this.addedRanges = formBuilder.control(null, [
       Validators.required,
       Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN, 'g')),
@@ -98,72 +91,77 @@ export class CodPoemRangesPartComponent
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
+  public override ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  private updateForm(model: CodPoemRangesPart): void {
-    if (!model) {
-      this.form!.reset();
-      return;
-    }
-    this.sortType.setValue(
-      model.sortType
-        ? model.sortType
-        : this.sortEntries?.length
-        ? this.sortEntries[0].id
-        : ''
-    );
-    this.ranges.setValue(model.ranges || []);
-    this.layouts.setValue(model.layouts || []);
-    this.tag.setValue(model.tag || null);
-    this.note.setValue(model.note || null);
-    // for layouts control
-    this.initialRanges = this.ranges.value;
-    this.initialLayouts = this.layouts.value;
-    this.form!.markAsPristine();
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
+      sortType: this.sortType,
+      ranges: this.ranges,
+      layouts: this.layouts,
+      tag: this.tag,
+      note: this.note,
+    });
   }
 
-  protected onModelSet(model: CodPoemRangesPart): void {
-    this.updateForm(deepCopy(model));
-  }
-
-  protected override onThesauriSet(): void {
+  private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'cod-poem-range-sort-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.sortEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.sortEntries = thesauri[key].entries;
     } else {
       this.sortEntries = undefined;
     }
     key = 'cod-poem-range-layouts';
-    if (this.thesauri && this.thesauri[key]) {
-      this.layoutEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.layoutEntries = thesauri[key].entries;
     } else {
       this.layoutEntries = undefined;
     }
     key = 'cod-poem-range-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.tagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.tagEntries = thesauri[key].entries;
     } else {
       this.tagEntries = undefined;
     }
   }
 
-  protected getModelFromForm(): CodPoemRangesPart {
-    let part = this.model;
+  private updateForm(part?: CodPoemRangesPart): void {
     if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: COD_POEM_RANGES_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        sortType: '',
-      };
+      this.form.reset();
+      return;
     }
+    this.sortType.setValue(
+      part.sortType
+        ? part.sortType
+        : this.sortEntries?.length
+        ? this.sortEntries[0].id
+        : ''
+    );
+    this.ranges.setValue(part.ranges || []);
+    this.layouts.setValue(part.layouts || []);
+    this.tag.setValue(part.tag || null);
+    this.note.setValue(part.note || null);
+    // for layouts control
+    this.initialRanges = this.ranges.value;
+    this.initialLayouts = this.layouts.value;
+    this.form.markAsPristine();
+  }
+
+  protected override onDataSet(data?: EditedObject<CodPoemRangesPart>): void {
+    // thesauri
+    if (data?.thesauri) {
+      this.updateThesauri(data.thesauri);
+    }
+
+    // form
+    this.updateForm(data?.value);
+  }
+
+  protected getValue(): CodPoemRangesPart {
+    let part = this.getEditedPart(
+      COD_POEM_RANGES_PART_TYPEID
+    ) as CodPoemRangesPart;
     part.sortType = this.sortType.value || '';
     part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
     part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;

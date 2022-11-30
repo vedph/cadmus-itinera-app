@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  Validators,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 
-import { deepCopy } from '@myrmidon/ng-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 
 import { LetterInfoPart, LETTER_INFO_PART_TYPEID } from '../letter-info-part';
 
@@ -19,56 +24,47 @@ export class LetterInfoPartComponent
   extends ModelEditorComponentBase<LetterInfoPart>
   implements OnInit
 {
-  public subject: FormControl<string|null>;
-  public header: FormControl<string|null>;
-  public textDate: FormControl<string|null>;
+  public subject: FormControl<string | null>;
+  public header: FormControl<string | null>;
+  public textDate: FormControl<string | null>;
 
   constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
-    super(authService);
+    super(authService, formBuilder);
     // form
     this.subject = formBuilder.control(null, Validators.maxLength(200));
     this.header = formBuilder.control(null, Validators.maxLength(500));
     this.textDate = formBuilder.control(null, Validators.maxLength(100));
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       subject: this.subject,
       header: this.header,
       textDate: this.textDate,
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: LetterInfoPart): void {
-    if (!model) {
-      this.form!.reset();
+  private updateForm(part?: LetterInfoPart): void {
+    if (!part) {
+      this.form.reset();
       return;
     }
-    this.subject.setValue(model.subject || null);
-    this.header.setValue(model.header || null);
-    this.textDate.setValue(model.textDate || null);
-    this.form!.markAsPristine();
+    this.subject.setValue(part.subject || null);
+    this.header.setValue(part.header || null);
+    this.textDate.setValue(part.textDate || null);
+    this.form.markAsPristine();
   }
 
-  protected onModelSet(model: LetterInfoPart): void {
-    this.updateForm(deepCopy(model));
+  protected override onDataSet(data?: EditedObject<LetterInfoPart>): void {
+    this.updateForm(data?.value);
   }
 
-  protected getModelFromForm(): LetterInfoPart {
-    let part = this.model;
-    if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: LETTER_INFO_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-      };
-    }
+  protected getValue(): LetterInfoPart {
+    let part = this.getEditedPart(LETTER_INFO_PART_TYPEID) as LetterInfoPart;
     part.subject = this.subject.value?.trim();
     part.header = this.header.value?.trim();
     part.textDate = this.textDate.value?.trim();

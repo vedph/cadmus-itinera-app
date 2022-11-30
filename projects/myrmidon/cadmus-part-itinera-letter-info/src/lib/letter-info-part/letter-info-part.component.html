@@ -1,5 +1,5 @@
-<form [formGroup]="form!" (submit)="save()">
-  <mat-card>
+<form [formGroup]="form" (submit)="save()">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
@@ -10,7 +10,8 @@
       <!-- subject -->
       <div>
         <mat-form-field class="long-text">
-          <input matInput [formControl]="subject" placeholder="subject" />
+          <mat-label>subject</mat-label>
+          <input matInput [formControl]="subject" />
           <mat-error
             *ngIf="
               $any(subject).errors?.maxLength &&
@@ -24,7 +25,8 @@
       <!-- header -->
       <div>
         <mat-form-field class="long-text">
-          <input matInput [formControl]="header" placeholder="header" />
+          <mat-label>header</mat-label>
+          <input matInput [formControl]="header" />
           <mat-error
             *ngIf="
               $any(header).errors?.maxLength && (header.dirty || header.touched)
@@ -37,7 +39,8 @@
       <!-- textDate -->
       <div>
         <mat-form-field class="long-text">
-          <input matInput [formControl]="textDate" placeholder="text date" />
+          <mat-label>text date</mat-label>
+          <input matInput [formControl]="textDate" />
           <mat-error
             *ngIf="
               $any(textDate).errors?.maxLength &&

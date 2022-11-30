@@ -44,11 +44,11 @@
   </div>
   <!-- note editor -->
   <div *ngIf="editingNote">
+    <mat-label>note</mat-label>
     <mat-form-field>
       <input
         matInput
         [formControl]="note"
-        placeholder="note"
         (keydown.esc)="cancelNote()"
         (keydown.enter)="saveNote()"
       />

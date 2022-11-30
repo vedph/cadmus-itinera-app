@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-
-import { EditPersonWorksPartQuery } from './edit-person-works-part.query';
-import { EditPersonWorksPartService } from './edit-person-works-part.service';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-person-works-feature',
@@ -24,27 +18,21 @@ export class PersonWorksPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditPersonWorksPartQuery,
-    editPartService: EditPersonWorksPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
   }
 
-  public ngOnInit(): void {
-    this.initEditor([
-      'assertion-tags',
-      'doc-reference-types',
-      'doc-reference-tags',
-    ]);
+  protected override getReqThesauriIds(): string[] {
+    return ['assertion-tags', 'doc-reference-types', 'doc-reference-tags'];
   }
 }

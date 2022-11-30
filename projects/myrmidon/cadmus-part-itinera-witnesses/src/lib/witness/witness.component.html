@@ -2,7 +2,8 @@
   <!-- id -->
   <div>
     <mat-form-field>
-      <input matInput [formControl]="id" placeholder="ID" />
+      <mat-label>ID</mat-label>
+      <input matInput [formControl]="id" />
       <mat-error *ngIf="$any(id).errors?.required && (id.dirty || id.touched)"
         >ID required</mat-error
       >

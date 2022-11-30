@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   RelatedPerson,
@@ -54,7 +59,7 @@ export class RelatedPersonsPartComponent
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
-    super(authService);
+    super(authService, formBuilder);
     this._editedIndex = -1;
     this.tabIndex = 0;
     // form
@@ -62,82 +67,80 @@ export class RelatedPersonsPartComponent
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
-    this.form = formBuilder.group({
+  }
+
+  public override ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
+    return formBuilder.group({
       entries: this.persons,
     });
   }
 
-  public ngOnInit(): void {
-    this.initEditor();
-  }
-
-  private updateForm(model: RelatedPersonsPart): void {
-    if (!model) {
-      this.form!.reset();
-      return;
-    }
-    this.persons.setValue(model.persons || []);
-    this.form!.markAsPristine();
-  }
-
-  protected onModelSet(model: RelatedPersonsPart): void {
-    this.updateForm(deepCopy(model));
-  }
-
-  protected override onThesauriSet(): void {
+  private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'related-person-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.prsTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.prsTagEntries = thesauri[key].entries;
     } else {
       this.prsTagEntries = undefined;
     }
     key = 'related-person-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.prsTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.prsTypeEntries = thesauri[key].entries;
     } else {
       this.prsTypeEntries = undefined;
     }
     key = 'external-id-scopes';
-    if (this.thesauri && this.thesauri[key]) {
-      this.scopeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.scopeEntries = thesauri[key].entries;
     } else {
       this.scopeEntries = undefined;
     }
     key = 'assertion-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.assTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.assTagEntries = thesauri[key].entries;
     } else {
       this.assTagEntries = undefined;
     }
     key = 'doc-reference-types';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTypeEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTypeEntries = thesauri[key].entries;
     } else {
       this.refTypeEntries = undefined;
     }
     key = 'doc-reference-tags';
-    if (this.thesauri && this.thesauri[key]) {
-      this.refTagEntries = this.thesauri[key].entries;
+    if (this.hasThesaurus(key)) {
+      this.refTagEntries = thesauri[key].entries;
     } else {
       this.refTagEntries = undefined;
     }
   }
 
-  protected getModelFromForm(): RelatedPersonsPart {
-    let part = this.model;
+  private updateForm(part?: RelatedPersonsPart): void {
     if (!part) {
-      part = {
-        itemId: this.itemId || '',
-        id: '',
-        typeId: RELATED_PERSONS_PART_TYPEID,
-        roleId: this.roleId,
-        timeCreated: new Date(),
-        creatorId: '',
-        timeModified: new Date(),
-        userId: '',
-        persons: [],
-      };
+      this.form.reset();
+      return;
     }
+    this.persons.setValue(part.persons || []);
+    this.form.markAsPristine();
+  }
+
+  protected override onDataSet(data?: EditedObject<RelatedPersonsPart>): void {
+    // thesauri
+    if (data?.thesauri) {
+      this.updateThesauri(data.thesauri);
+    }
+
+    // form
+    this.updateForm(data?.value);
+  }
+
+  protected getValue(): RelatedPersonsPart {
+    let part = this.getEditedPart(
+      RELATED_PERSONS_PART_TYPEID
+    ) as RelatedPersonsPart;
     part.persons = this.persons.value || [];
     return part;
   }

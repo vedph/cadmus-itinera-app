@@ -2,7 +2,8 @@
   <div class="form-row">
     <!-- citation (bound) -->
     <mat-form-field *ngIf="locEntries?.length">
-      <mat-select [formControl]="citation" placeholder="citation">
+      <mat-label>citation</mat-label>
+      <mat-select [formControl]="citation">
         <mat-option *ngFor="let e of locEntries" [value]="e.id">{{
           e.value
         }}</mat-option>
@@ -17,7 +18,8 @@
     </mat-form-field>
     <!-- citation (free) -->
     <mat-form-field *ngIf="!locEntries?.length">
-      <input matInput [formControl]="citation" placeholder="citation" />
+      <mat-label>citation</mat-label>
+      <input matInput [formControl]="citation" />
       <mat-error
         *ngIf="
           $any(citation).errors?.required &&
@@ -45,7 +47,8 @@
   <div>
     <!-- text -->
     <mat-form-field class="long-text">
-      <input matInput [formControl]="text" placeholder="text" />
+      <mat-label>text</mat-label>
+      <input matInput [formControl]="text" />
       <mat-error
         *ngIf="$any(text).errors?.required && (text.dirty || text.touched)"
         >text required</mat-error

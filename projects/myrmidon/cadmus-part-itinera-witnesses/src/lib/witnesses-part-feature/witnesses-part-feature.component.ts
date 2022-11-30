@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-import { EditWitnessesPartQuery } from './edit-witnesses-part.query';
-import { EditWitnessesPartService } from './edit-witnesses-part.service';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-witnesses-part-feature',
@@ -23,23 +18,17 @@ export class WitnessesPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditWitnessesPartQuery,
-    editPartService: EditWitnessesPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
-  }
-
-  public ngOnInit(): void {
-    this.initEditor();
   }
 }

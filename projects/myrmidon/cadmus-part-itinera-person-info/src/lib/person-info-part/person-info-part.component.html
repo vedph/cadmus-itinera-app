@@ -1,5 +1,5 @@
-<form [formGroup]="form!" (submit)="save()">
-  <mat-card>
+<form [formGroup]="form" (submit)="save()">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
@@ -10,7 +10,8 @@
       <div>
         <!-- sex (bound) -->
         <mat-form-field *ngIf="sexEntries?.length">
-          <mat-select [formControl]="sex" placeholder="sex">
+          <mat-label>sex</mat-label>
+          <mat-select [formControl]="sex">
             <mat-option *ngFor="let e of sexEntries" [value]="e.id">{{
               e.value
             }}</mat-option>
@@ -22,7 +23,8 @@
         </mat-form-field>
         <!-- sex (free) -->
         <mat-form-field *ngIf="!sexEntries?.length">
-          <input matInput [formControl]="sex" placeholder="sex" />
+          <mat-label>sex</mat-label>
+          <input matInput [formControl]="sex" />
           <mat-error
             *ngIf="$any(sex).errors?.required && (sex.dirty || sex.touched)"
             >sex required</mat-error

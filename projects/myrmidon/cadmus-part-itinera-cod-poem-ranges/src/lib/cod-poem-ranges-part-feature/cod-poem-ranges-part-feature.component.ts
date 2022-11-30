@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-  EditItemQuery,
-  EditItemService,
-  EditPartFeatureBase,
-} from '@myrmidon/cadmus-state';
-
-import { EditCodPoemRangesPartQuery } from './edit-cod-poem-ranges-part.service';
-import { EditCodPoemRangesPartService } from './edit-cod-poem-ranges-part.query';
+import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
+import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Component({
   selector: 'cadmus-cod-poem-ranges-part-feature',
@@ -24,27 +18,25 @@ export class CodPoemRangesPartFeatureComponent
     router: Router,
     route: ActivatedRoute,
     snackbar: MatSnackBar,
-    editPartQuery: EditCodPoemRangesPartQuery,
-    editPartService: EditCodPoemRangesPartService,
-    editItemQuery: EditItemQuery,
-    editItemService: EditItemService
+    itemService: ItemService,
+    thesaurusService: ThesaurusService,
+    editorService: PartEditorService
   ) {
     super(
       router,
       route,
       snackbar,
-      editPartQuery,
-      editPartService,
-      editItemQuery,
-      editItemService
+      itemService,
+      thesaurusService,
+      editorService
     );
   }
 
-  public ngOnInit(): void {
-    this.initEditor([
+  protected override getReqThesauriIds(): string[] {
+    return [
       'cod-poem-range-sort-types',
       'cod-poem-range-layouts',
       'cod-poem-range-tags',
-    ]);
+    ];
   }
 }

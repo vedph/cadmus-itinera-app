@@ -1,5 +1,5 @@
-<form [formGroup]="form!" (submit)="save()">
-  <mat-card>
+<form [formGroup]="form" (submit)="save()">
+  <mat-card appearance="outlined">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
@@ -13,7 +13,8 @@
           <div>
             <!-- sortType (bound) -->
             <mat-form-field *ngIf="sortEntries?.length" class="form-col">
-              <mat-select [formControl]="sortType" placeholder="type">
+              <mat-label>type</mat-label>
+              <mat-select [formControl]="sortType">
                 <mat-option *ngFor="let e of sortEntries" [value]="e.id">{{
                   e.value
                 }}</mat-option>
@@ -28,7 +29,8 @@
             </mat-form-field>
             <!-- sortType (free) -->
             <mat-form-field *ngIf="!sortEntries?.length" class="form-col">
-              <input matInput [formControl]="sortType" placeholder="type" />
+              <mat-label>type</mat-label>
+              <input matInput [formControl]="sortType" />
               <mat-error
                 *ngIf="
                   $any(sortType).errors?.required &&
@@ -52,12 +54,8 @@
             <form class="form-row" (submit)="addRanges()">
               <!-- addedRanges -->
               <mat-form-field style="flex: 1 0 auto">
-                <input
-                  #adder
-                  matInput
-                  [formControl]="addedRanges"
-                  placeholder="ranges"
-                />
+                <mat-label>ranges</mat-label>
+                <input #adder matInput [formControl]="addedRanges" />
               </mat-form-field>
 
               <!-- add -->
@@ -149,7 +147,8 @@
           <div>
             <!-- tag (bound) -->
             <mat-form-field *ngIf="tagEntries?.length">
-              <mat-select [formControl]="tag" placeholder="tag">
+              <mat-label>tag</mat-label>
+              <mat-select [formControl]="tag">
                 <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
                   e.value
                 }}</mat-option>
@@ -157,7 +156,8 @@
             </mat-form-field>
             <!-- tag (free) -->
             <mat-form-field *ngIf="!tagEntries?.length">
-              <input matInput [formControl]="tag" placeholder="tag" />
+              <mat-label>tag</mat-label>
+              <input matInput [formControl]="tag" />
               <mat-error
                 *ngIf="
                   $any(tag).errors?.maxLength && (tag.dirty || tag.touched)
@@ -168,12 +168,8 @@
           </div>
           <div>
             <mat-form-field class="long-text">
-              <textarea
-                rows="4"
-                matInput
-                [formControl]="note"
-                placeholder="note"
-              ></textarea>
+              <mat-label>note</mat-label>
+              <textarea rows="4" matInput [formControl]="note"></textarea>
               <mat-error
                 *ngIf="
                   $any(note).errors?.maxLength && (note.dirty || note.touched)
