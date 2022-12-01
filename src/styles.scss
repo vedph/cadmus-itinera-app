@@ -7,7 +7,21 @@
 @include mat.core();
 
 // import our custom themes
-@import "light-theme.scss";
+// @import "light-theme.scss";
+$light-primary: mat.define-palette($mat-light-blue, 900);
+$light-accent: mat.define-palette($mat-yellow, 600, 900, A400);
+$light-warn: mat.define-palette($mat-deep-orange);
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
+    ),
+    density: -2,
+  )
+);
 
 // theme classes: you can hardcode one of them
 // on the <body> tag, or switch dynamically at runtime
