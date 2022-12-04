@@ -61,7 +61,7 @@ export class WitnessesPartComponent
     });
   }
 
-  private updateForm(part?: WitnessesPart): void {
+  private updateForm(part?: WitnessesPart | null): void {
     if (!part) {
       this.form.reset();
       return;

@@ -92,7 +92,7 @@ export class PersonWorksPartComponent
     }
   }
 
-  private updateForm(part?: PersonWorksPart): void {
+  private updateForm(part?: PersonWorksPart | null): void {
     if (!part) {
       this.form.reset();
       return;

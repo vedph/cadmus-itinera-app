@@ -126,7 +126,7 @@ export class CodPoemRangesPartComponent
     }
   }
 
-  private updateForm(part?: CodPoemRangesPart): void {
+  private updateForm(part?: CodPoemRangesPart | null): void {
     if (!part) {
       this.form.reset();
       return;

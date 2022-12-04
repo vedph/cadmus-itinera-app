@@ -81,7 +81,7 @@ export class CodLociPartComponent
     }
   }
 
-  private updateForm(part?: CodLociPart): void {
+  private updateForm(part?: CodLociPart | null): void {
     if (!part) {
       this.form.reset();
       return;

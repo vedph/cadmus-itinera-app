@@ -101,7 +101,7 @@ export class ReferencedTextsPartComponent
     }
   }
 
-  private updateForm(part?: ReferencedTextsPart): void {
+  private updateForm(part?: ReferencedTextsPart | null): void {
     if (!part) {
       this.form.reset();
       return;

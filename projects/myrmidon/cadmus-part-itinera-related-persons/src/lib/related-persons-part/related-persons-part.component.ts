@@ -118,7 +118,7 @@ export class RelatedPersonsPartComponent
     }
   }
 
-  private updateForm(part?: RelatedPersonsPart): void {
+  private updateForm(part?: RelatedPersonsPart | null): void {
     if (!part) {
       this.form.reset();
       return;

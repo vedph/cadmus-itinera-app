@@ -163,7 +163,7 @@ export class LiteraryWorkInfoPartComponent
     this.mtrFlags = this.entriesToFlags(this.mtrEntries);
   }
 
-  private updateForm(part?: LiteraryWorkInfoPart): void {
+  private updateForm(part?: LiteraryWorkInfoPart | null): void {
     if (!part) {
       this.form.reset();
       this.pickedGenre = undefined;

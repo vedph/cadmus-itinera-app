@@ -48,7 +48,7 @@ export class LetterInfoPartComponent
     });
   }
 
-  private updateForm(part?: LetterInfoPart): void {
+  private updateForm(part?: LetterInfoPart | null): void {
     if (!part) {
       this.form.reset();
       return;
