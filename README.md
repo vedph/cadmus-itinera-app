@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.1](#301)
     - [3.0.0](#300)
     - [2.1.8](#218)
     - [2.1.7](#217)
@@ -31,9 +32,9 @@ The codicological parts in this project will be imported from an [independent li
 
 Quick Docker image build:
 
-1. `npm run build-lib`
-2. update version in `env.js` and `ng build --configuration production`
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+1. `npm run build-lib`;
+2. update version in `env.js` and `ng build --configuration production`;
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -50,6 +51,9 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+### 3.0.1
+
+- 2022-12-06: updated packages.
 - 2022-12-04: updated packages.
 
 ### 3.0.0
