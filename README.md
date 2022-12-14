@@ -4,6 +4,8 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.3](#303)
+    - [3.0.2](#302)
     - [3.0.1](#301)
     - [3.0.0](#300)
     - [2.1.8](#218)
@@ -34,7 +36,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.3 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -47,9 +49,17 @@ window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.1-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.3-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 3.0.3
+
+- 2022-12-14: commented out incompatible theme.
+
+### 3.0.2
+
+- 2022-12-14: updated Angular and other 3rd party packages.
 
 ### 3.0.1
 
