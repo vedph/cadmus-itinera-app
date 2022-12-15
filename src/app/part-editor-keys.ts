@@ -62,6 +62,9 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [DOC_REFERENCES_PART_TYPEID]: {
     part: GENERAL,
   },
+  [EXTERNAL_IDS_PART_TYPEID]: {
+    part: GENERAL,
+  },
   [HISTORICAL_EVENTS_PART_TYPEID]: {
     part: GENERAL,
   },
@@ -82,10 +85,6 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   },
   [NOTE_PART_TYPEID]: {
     part: GENERAL,
-  },
-  // refs
-  [EXTERNAL_IDS_PART_TYPEID]: {
-    part: REFS,
   },
   // codicology
   [COD_BINDINGS_PART_TYPEID]: {

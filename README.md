@@ -54,6 +54,11 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-12-15:
+  - updated Cadmus packages.
+  - fixed external IDs part type ID.
+  - aesthetic fixes.
+
 ### 3.0.4
 
 - 2022-12-15: updated Cadmus packages and Angular.
