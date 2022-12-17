@@ -250,12 +250,13 @@ export class PoemLayoutTable {
         // rows are expanded here, so we can assume that all
         // the consecutive rows with the same layout and note
         // and without any alpha (which breaks sequences)
-        // belong to the same range
+        // belong to the same range, except when a > b
         while (
           i < rows.length &&
           rows[i].layout === rows[start].layout &&
           rows[i].note === rows[start].note &&
-          !rows[i].nr.a
+          !rows[i].nr.a &&
+          rows[i].nr.n > rows[i - 1].nr.n
         ) {
           i++;
         }
