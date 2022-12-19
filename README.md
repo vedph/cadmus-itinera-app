@@ -55,6 +55,8 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-12-19: updated Cadmus packages.
+
 ### 3.0.5
 
 - 2022-12-17: fixed handling out of order ranges in poem ranges.
