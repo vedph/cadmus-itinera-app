@@ -55,6 +55,7 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2022-12-20: fix to poem layout table.
 - 2022-12-19: updated Cadmus packages.
 
 ### 3.0.5

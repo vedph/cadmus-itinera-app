@@ -236,6 +236,19 @@ export class PoemLayoutTable {
     this._rows$.next(rows);
   }
 
+  private isCollapsibleRow(a: PoemLayoutRow, b: PoemLayoutRow): boolean {
+    return (
+      // same layout and note
+      a.layout === b.layout &&
+      a.note === b.note &&
+      // no alpha suffixes
+      !a.nr.a &&
+      !b.nr.a &&
+      // a must precede b
+      a.nr.n < b.nr.n
+    );
+  }
+
   /**
    * Get the currently defined layouts in the table.
    * @returns Array of layouts.
@@ -251,13 +264,7 @@ export class PoemLayoutTable {
         // the consecutive rows with the same layout and note
         // and without any alpha (which breaks sequences)
         // belong to the same range, except when a > b
-        while (
-          i < rows.length &&
-          rows[i].layout === rows[start].layout &&
-          rows[i].note === rows[start].note &&
-          !rows[i].nr.a &&
-          rows[i].nr.n > rows[i - 1].nr.n
-        ) {
+        while (i < rows.length && this.isCollapsibleRow(rows[start], rows[i])) {
           i++;
         }
         layouts.push({
