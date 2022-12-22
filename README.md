@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.6](#306)
     - [3.0.5](#305)
     - [3.0.4](#304)
     - [3.0.3](#303)
@@ -38,7 +39,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.5 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.6 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -51,9 +52,23 @@ window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 ```
 
-(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.3-prod`. The production version is labeled like this one, with `-prod` suffix.
+(3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 3.0.6
+
+- 2022-12-22:
+  - updated Cadmus packages.
+  - upgraded Monaco editor changing the glob in `angular.json` to:
+
+```json
+{
+  "glob": "**/*",
+  "input": "node_modules/monaco-editor",
+  "output": "assets/monaco-editor"
+}
+```
 
 - 2022-12-20: fix to poem layout table.
 - 2022-12-19: updated Cadmus packages.

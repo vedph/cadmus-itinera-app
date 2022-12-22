@@ -1,432 +1,429 @@
 {
-	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-	"version": 1,
-	"newProjectRoot": "projects",
-	"projects": {
-		"cadmus-itinera-app": {
-			"projectType": "application",
-			"schematics": {
-				"@schematics/angular:application": {
-					"strict": true
-				},
-				"@schematics/angular:component": {
-					"style": "scss"
-				}
-			},
-			"root": "",
-			"sourceRoot": "src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
-					"options": {
-						"outputPath": "dist/cadmus-itinera-app",
-						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
-						"tsConfig": "tsconfig.app.json",
-						"assets": [
-							"src/favicon.ico",
-							"src/assets",
-							"src/env.js",
-							{
-								"glob": "**/*",
-								"input": "node_modules/ngx-monaco-editor/assets/monaco",
-								"output": "/assets/monaco"
-							}
-						],
-						"styles": [
-							"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-							"src/styles.scss"
-						],
-						"scripts": [],
-						"sourceMap": {
-							"scripts": true,
-							"styles": true,
-							"hidden": false,
-							"vendor": true
-						}
-					},
-					"configurations": {
-						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "3mb",
-									"maximumError": "4mb"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "2kb",
-									"maximumError": "4kb"
-								}
-							],
-							"fileReplacements": [
-								{
-									"replace": "src/environments/environment.ts",
-									"with": "src/environments/environment.prod.ts"
-								}
-							],
-							"outputHashing": "all"
-						},
-						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
-							"vendorChunk": true,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"serve": {
-					"builder": "@angular-devkit/build-angular:dev-server",
-					"configurations": {
-						"production": {
-							"browserTarget": "cadmus-itinera-app:build:production"
-						},
-						"development": {
-							"browserTarget": "cadmus-itinera-app:build:development"
-						}
-					},
-					"defaultConfiguration": "development"
-				},
-				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "cadmus-itinera-app:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "src/test.ts",
-						"polyfills": "src/polyfills.ts",
-						"tsConfig": "tsconfig.spec.json",
-						"karmaConfig": "karma.conf.js",
-						"assets": [
-							"src/favicon.ico",
-							"src/assets"
-						],
-						"styles": [
-							"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-							"src/styles.scss"
-						],
-						"scripts": []
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-pg": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-pg",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-pg/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-pg/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-pg/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-pg/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-cod-loci": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-cod-loci",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-cod-loci/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-cod-loci/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-cod-loci/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-cod-poem-ranges": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-person-info": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-person-info",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-person-info/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-person-info/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-person-info/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-person-info/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-person-works": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-person-works",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-person-works/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-person-works/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-person-works/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-person-works/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-letter-info": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-letter-info",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-letter-info/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-letter-info/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-letter-info/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-literary-work-info": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-literary-work-info",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-literary-work-info/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-literary-work-info/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-literary-work-info/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-referenced-texts": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-referenced-texts",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-referenced-texts/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-related-persons": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-related-persons",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-related-persons/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-related-persons/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-related-persons/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/karma.conf.js"
-					}
-				}
-			}
-		},
-		"@myrmidon/cadmus-part-itinera-witnesses": {
-			"projectType": "library",
-			"root": "projects/myrmidon/cadmus-part-itinera-witnesses",
-			"sourceRoot": "projects/myrmidon/cadmus-part-itinera-witnesses/src",
-			"prefix": "cadmus",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
-					"options": {
-						"project": "projects/myrmidon/cadmus-part-itinera-witnesses/ng-package.json"
-					},
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "projects/myrmidon/cadmus-part-itinera-witnesses/src/test.ts",
-						"tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json",
-						"karmaConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/karma.conf.js"
-					}
-				}
-			}
-		}
-	}
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "cadmus-itinera-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        },
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/cadmus-itinera-app",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/env.js",
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor",
+                "output": "assets/monaco-editor"
+              }
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.scss"
+            ],
+            "scripts": [],
+            "sourceMap": {
+              "scripts": true,
+              "styles": true,
+              "hidden": false,
+              "vendor": true
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3mb",
+                  "maximumError": "4mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "cadmus-itinera-app:build:production"
+            },
+            "development": {
+              "browserTarget": "cadmus-itinera-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "cadmus-itinera-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-pg": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-pg",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-pg/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-pg/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-pg/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-pg/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-cod-loci": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-cod-loci",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-cod-loci/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-cod-loci/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-cod-loci/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-cod-poem-ranges": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-person-info": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-person-info",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-person-info/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-person-info/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-person-info/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-person-info/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-person-works": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-person-works",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-person-works/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-person-works/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-person-works/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-person-works/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-letter-info": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-letter-info",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-letter-info/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-letter-info/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-letter-info/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-literary-work-info": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-literary-work-info",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-literary-work-info/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-literary-work-info/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-literary-work-info/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-referenced-texts": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-referenced-texts",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-referenced-texts/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-referenced-texts/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-related-persons": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-related-persons",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-related-persons/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-related-persons/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-related-persons/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/cadmus-part-itinera-witnesses": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-witnesses",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-witnesses/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-part-itinera-witnesses/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-part-itinera-witnesses/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/karma.conf.js"
+          }
+        }
+      }
+    }
+  }
 }
