@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.7](#307)
     - [3.0.6](#306)
     - [3.0.5](#305)
     - [3.0.4](#304)
@@ -39,7 +40,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.6 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.7 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -56,7 +57,11 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
-- 2023-01-09: updated Angular and packages.
+### 3.0.7
+
+- 2023-01-09:
+  - updated Angular and packages.
+  - fix to poem ranges table.
 
 ### 3.0.6
 

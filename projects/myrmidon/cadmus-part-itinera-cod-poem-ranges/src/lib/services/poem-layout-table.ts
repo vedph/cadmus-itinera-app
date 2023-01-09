@@ -236,7 +236,7 @@ export class PoemLayoutTable {
     this._rows$.next(rows);
   }
 
-  private isCollapsibleRow(a: PoemLayoutRow, b: PoemLayoutRow): boolean {
+  private canCollapseRow(a: PoemLayoutRow, b: PoemLayoutRow): boolean {
     return (
       // same layout and note
       a.layout === b.layout &&
@@ -245,7 +245,7 @@ export class PoemLayoutTable {
       !a.nr.a &&
       !b.nr.a &&
       // a must precede b
-      a.nr.n < b.nr.n
+      a.nr.n + 1 === b.nr.n
     );
   }
 
@@ -263,8 +263,8 @@ export class PoemLayoutTable {
         // rows are expanded here, so we can assume that all
         // the consecutive rows with the same layout and note
         // and without any alpha (which breaks sequences)
-        // belong to the same range, except when a > b
-        while (i < rows.length && this.isCollapsibleRow(rows[start], rows[i])) {
+        // belong to the same range, except when a is not before b
+        while (i < rows.length && this.canCollapseRow(rows[start], rows[i])) {
           i++;
         }
         layouts.push({
