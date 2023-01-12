@@ -58,6 +58,11 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2023-01-12:
+  - updated packages.
+  - updated biblio API version number in Docker compose scripts.
+  - fix validation in work info part.
+
 ### 3.0.8
 
 - 2023-01-12: updated Angular and packages.

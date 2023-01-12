@@ -169,6 +169,7 @@ export class LiteraryWorkInfoPartComponent
       this.pickedGenre = undefined;
       return;
     }
+    this.languages.setValue(part.languages || []);
     this.initialLanguages = part.languages || [];
     this.genre.setValue(part.genre);
     this.pickedGenre = this.genreEntries?.find(
