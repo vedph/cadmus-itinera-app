@@ -106,6 +106,15 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
   },
+  // geography
+  {
+    path: 'items/:iid/geography',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-part-geo-pg').then(
+        (module) => module.CadmusPartGeoPgModule
+      ),
+    canActivate: [AuthJwtGuardService],
+  },
   // biblio - parts
   {
     path: 'items/:iid/biblio',

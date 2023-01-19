@@ -61,6 +61,9 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2023-01-19:
+  - added geography parts.
+
 ### 3.0.11
 
 - 2023-01-17: updated Cadmus packages.

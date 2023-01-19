@@ -24,7 +24,7 @@ import { COD_SHEET_LABELS_PART_TYPEID } from '@myrmidon/cadmus-part-codicology-s
 import { COD_SHELFMARKS_PART_TYPEID } from '@myrmidon/cadmus-part-codicology-shelfmarks';
 import { COD_WATERMARKS_PART_TYPEID } from '@myrmidon/cadmus-part-codicology-watermarks';
 
-// Itinera
+// itinera
 import { COD_LOCI_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-cod-loci/src/public-api';
 import { COD_POEM_RANGES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src/public-api';
 import { PERSON_INFO_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-person-info/src/public-api';
@@ -35,11 +35,15 @@ import { REFERENCED_TEXTS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itin
 import { RELATED_PERSONS_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-related-persons/src/public-api';
 import { WITNESSES_PART_TYPEID } from 'projects/myrmidon/cadmus-part-itinera-witnesses/src/public-api';
 
+// geography
+import { ASSERTED_LOCATIONS_PART_TYPEID } from '@myrmidon/cadmus-part-geo-asserted-locations';
+import { ASSERTED_TOPONYMS_PART_TYPEID } from '@myrmidon/cadmus-part-geo-asserted-toponyms';
+
 const GENERAL = 'general';
 const BIBLIO = 'biblio';
 const CODICOLOGY = 'codicology';
 const ITINERA = 'itinera';
-const REFS = 'refs';
+const GEOGRAPHY = 'geography';
 
 /**
  * The parts and fragments editor keys for this UI.
@@ -144,5 +148,12 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   },
   [WITNESSES_PART_TYPEID]: {
     part: ITINERA,
+  },
+    // geography
+  [ASSERTED_LOCATIONS_PART_TYPEID]: {
+    part: GEOGRAPHY,
+  },
+  [ASSERTED_TOPONYMS_PART_TYPEID]: {
+    part: GEOGRAPHY,
   },
 };
