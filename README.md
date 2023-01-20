@@ -61,6 +61,7 @@ window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
 
 ## History
 
+- 2023-01-20: updated Angular and packages.
 - 2023-01-19:
   - added geography parts.
 
