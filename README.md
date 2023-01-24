@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.12](#3012)
     - [3.0.11](#3011)
     - [3.0.10](#3010)
     - [3.0.9](#309)
@@ -44,9 +45,16 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.11 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.12 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
+
+If you want to generate a production version, follow these directions. Anyway, you can spare the prod image by just overwriting the `env.js` file in your [Docker compose script](docker-compose.yml) via a volume, e.g..:
+
+```yml
+volumes:
+  - /opt/cadmus/web/env.js:/usr/share/nginx/html/env.js
+```
 
 (1) build the app as above (1-2).
 
@@ -55,12 +63,16 @@ Quick Docker image build:
 ```js
 window.__env.apiUrl = "https://itinera.unisi.it:54184/api/";
 window.__env.biblioApiUrl = "https://itinera.unisi.it:61692/api/";
+window.__env.mapbox_token = "the token for this project";
 ```
 
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
 
+### 3.0.12
+
+- 2023-01-24: updated packages.
 - 2023-01-20: updated Angular and packages.
 - 2023-01-19:
   - added geography parts.
