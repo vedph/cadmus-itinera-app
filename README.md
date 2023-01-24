@@ -70,6 +70,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-01-24: updated packages and added lookup definitions.
+
 ### 3.0.12
 
 - 2023-01-24: updated packages.
