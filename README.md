@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.0.13](#3013)
     - [3.0.12](#3012)
     - [3.0.11](#3011)
     - [3.0.10](#3010)
@@ -45,7 +46,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.12 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.0.13 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -69,6 +70,8 @@ window.__env.mapbox_token = "the token for this project";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 3.0.13
 
 - 2023-01-25: updated packages.
 - 2023-01-24: updated packages and added lookup definitions.
