@@ -1,4 +1,5 @@
 import { Part } from '@myrmidon/cadmus-core';
+import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
 import { Assertion } from '@myrmidon/cadmus-refs-assertion';
 
 export interface AssertedTitle {
@@ -16,7 +17,7 @@ export interface LiteraryWorkInfoPart extends Part {
   metres?: string[];
   strophes?: string[];
   isLost?: boolean;
-  author?: string;
+  authorIds?: AssertedId[];
   titles: AssertedTitle[];
   note?: string;
 }
@@ -120,6 +121,68 @@ export const LITERARY_WORK_INFO_PART_SCHEMA = {
     },
     author: {
       type: 'string',
+    },
+    authorIds: {
+      type: 'array',
+      items: {
+        anyOf: [
+          {
+            type: 'object',
+            required: ['value'],
+            properties: {
+              tag: {
+                type: 'string',
+              },
+              value: {
+                type: 'string',
+              },
+              scope: {
+                type: 'string',
+              },
+              assertion: {
+                type: 'object',
+                required: ['rank'],
+                properties: {
+                  tag: {
+                    type: 'string',
+                  },
+                  rank: {
+                    type: 'integer',
+                  },
+                  note: {
+                    type: 'string',
+                  },
+                  references: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        {
+                          type: 'object',
+                          required: ['citation'],
+                          properties: {
+                            type: {
+                              type: 'string',
+                            },
+                            tag: {
+                              type: 'string',
+                            },
+                            citation: {
+                              type: 'string',
+                            },
+                            note: {
+                              type: 'string',
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
     },
     titles: {
       type: 'array',

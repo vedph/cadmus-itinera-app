@@ -10,13 +10,16 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+import { MonacoEditorModule } from 'ngx-monaco-editor';
+
 import { NgToolsModule } from '@myrmidon/ng-tools';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
+import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+
 import { ReferencedTextsPartComponent } from './referenced-texts-part/referenced-texts-part.component';
 import { ReferencedTextComponent } from './referenced-text/referenced-text.component';
 import { ReferencedTextsPartFeatureComponent } from './referenced-texts-part-feature/referenced-texts-part-feature.component';
@@ -44,6 +47,7 @@ import { ReferencedTextsPartFeatureComponent } from './referenced-texts-part-fea
     MonacoEditorModule,
     // Cadmus
     NgToolsModule,
+    CadmusRefsAssertedIdsModule,
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,

@@ -39,6 +39,9 @@ export class ReferencedTextComponent implements OnInit {
   @Input()
   public refTagEntries: ThesaurusEntry[] | undefined;
 
+  @Input()
+  public noLookup?: boolean;
+
   @Output()
   public textChange: EventEmitter<ReferencedText>;
   @Output()
@@ -133,6 +136,12 @@ export class ReferencedTextComponent implements OnInit {
     this.assertion.setValue(assertion || null);
     this.assertion.updateValueAndValidity();
     setTimeout(() => this.assertion.markAsDirty(), 0);
+  }
+
+  public onIdPick(id: string): void {
+    this.targetId.setValue(id);
+    this.targetId.updateValueAndValidity();
+    this.targetId.markAsDirty();
   }
 
   public cancel(): void {

@@ -24,6 +24,7 @@ import {
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
 import { Flag } from '@myrmidon/cadmus-ui-flags-picker';
+import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
 
 /**
  * LiteraryWorkInfo part editor component.
@@ -49,7 +50,7 @@ export class LiteraryWorkInfoPartComponent
   public metres: FormControl<string[]>;
   public strophes: FormControl<string | null>;
   public isLost: FormControl<boolean>;
-  public author: FormControl<string | null>;
+  public authorIds: FormControl<AssertedId[]>;
   public titles: FormControl<AssertedTitle[]>;
   public note: FormControl<string | null>;
 
@@ -57,6 +58,7 @@ export class LiteraryWorkInfoPartComponent
   public initialLanguages: string[];
   public mtrFlags: Flag[];
   public initialMetres: string[];
+  public initialAuthorIds: AssertedId[];
 
   public pickedGenre?: string;
 
@@ -83,6 +85,7 @@ export class LiteraryWorkInfoPartComponent
     this.initialLanguages = [];
     this.mtrFlags = [];
     this.initialMetres = [];
+    this.initialAuthorIds = [];
     this._editedIndex = -1;
     // form
     this.languages = formBuilder.control([], {
@@ -96,7 +99,7 @@ export class LiteraryWorkInfoPartComponent
     this.metres = formBuilder.control([], { nonNullable: true });
     this.strophes = formBuilder.control(null);
     this.isLost = formBuilder.control(false, { nonNullable: true });
-    this.author = formBuilder.control(null, Validators.maxLength(300));
+    this.authorIds = formBuilder.control([], { nonNullable: true });
     this.titles = formBuilder.control([], {
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
@@ -115,7 +118,7 @@ export class LiteraryWorkInfoPartComponent
       metres: this.metres,
       strophes: this.strophes,
       isLost: this.isLost,
-      author: this.author,
+      author: this.authorIds,
       titles: this.titles,
       note: this.note,
     });
@@ -180,7 +183,7 @@ export class LiteraryWorkInfoPartComponent
       part.strophes?.length ? part.strophes.join('\n') : ''
     );
     this.isLost.setValue(part.isLost ? true : false);
-    this.author.setValue(part.author || null);
+    this.initialAuthorIds = part.authorIds || [];
     this.titles.setValue(part.titles || []);
     this.note.setValue(part.note || null);
     this.form.markAsPristine();
@@ -233,7 +236,9 @@ export class LiteraryWorkInfoPartComponent
     part.metres = this.metres.value?.length ? this.metres.value : undefined;
     part.strophes = this.parseStrophes(this.strophes.value);
     part.isLost = this.isLost.value ? true : undefined;
-    part.author = this.author.value?.trim();
+    part.authorIds = this.authorIds.value.length
+      ? this.authorIds.value
+      : undefined;
     part.titles = this.titles.value || [];
     part.note = this.note.value?.trim();
 
@@ -261,6 +266,12 @@ export class LiteraryWorkInfoPartComponent
 
   public renderLabel(label: string): string {
     return renderLabelFromLastColon(label);
+  }
+
+  public onAuthorIdsChange(ids: AssertedId[]): void {
+    this.authorIds.setValue(ids);
+    this.authorIds.updateValueAndValidity();
+    this.authorIds.markAsDirty();
   }
 
   //#region Titles

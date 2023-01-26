@@ -33,8 +33,29 @@ footer #info a {
   color: silver;
 }
 
+div.tool {
+  margin-bottom: 8px;
+}
 fieldset {
   border: 1px solid silver;
   border-radius: 6px;
   padding: 6px 12px;
+}
+div.tool#tool-loc fieldset {
+  border-color: #d46a6a;
+}
+div.tool#tool-loc legend {
+  color: #d46a6a;
+}
+div.tool#tool-pin fieldset {
+  border-color: #a5c663;
+}
+div.tool#tool-pin legend {
+  color: #a5c663;
+}
+div.tool#tool-viaf fieldset {
+  border-color: #407f7f;
+}
+div.tool#tool-viaf legend {
+  color: #407f7f;
 }

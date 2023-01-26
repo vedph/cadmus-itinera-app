@@ -104,19 +104,34 @@
       [opened]="snavToggle.value"
       style="min-height: 400px; width: 270px; padding: 4px"
     >
-      <fieldset>
-        <legend>cod location</legend>
-        <cadmus-cod-location-converter></cadmus-cod-location-converter>
-      </fieldset>
-      <fieldset>
-        <legend>VIAF</legend>
-        <cadmus-ref-lookup
-          [service]="viafService"
-          linkTemplate="http://www.viaf.org/viaf/{viafid}"
-          label="VIAF"
-          (itemChange)="onViafItemChange($event)"
-        ></cadmus-ref-lookup>
-      </fieldset>
+      <!-- cod location -->
+      <div class="tool" id="tool-loc">
+        <fieldset>
+          <legend>cod location</legend>
+          <cadmus-cod-location-converter></cadmus-cod-location-converter>
+        </fieldset>
+      </div>
+      <!-- pin lookup -->
+      <div class="tool" id="tool-pin">
+        <fieldset>
+          <legend>pin lookup</legend>
+          <cadmus-scoped-pin-lookup
+            (idPick)="onIdPick($event)"
+          ></cadmus-scoped-pin-lookup>
+        </fieldset>
+      </div>
+      <!-- VIAF -->
+      <div class="tool" id="tool-viaf">
+        <fieldset>
+          <legend>VIAF</legend>
+          <cadmus-ref-lookup
+            [service]="viafService"
+            linkTemplate="http://www.viaf.org/viaf/{viafid}"
+            label="VIAF"
+            (itemChange)="onViafItemChange($event)"
+          ></cadmus-ref-lookup>
+        </fieldset>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <router-outlet></router-outlet>

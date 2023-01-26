@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
 import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
@@ -47,6 +48,7 @@ import { LiteraryWorkInfoPartFeatureComponent } from './literary-work-info-part-
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
+    CadmusRefsAssertedIdsModule,
     CadmusRefsAssertionModule,
     CadmusUiFlagsPickerModule,
   ],

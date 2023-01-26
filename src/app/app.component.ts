@@ -84,6 +84,13 @@ export class AppComponent implements OnInit {
       });
   }
 
+  public onIdPick(id: string): void {
+      this._clipboard.copy(id);
+      this._snackbar.open('ID copied', 'OK', {
+        duration: 1500,
+      });
+  }
+
   public onViafItemChange(item: any | undefined): void {
     if (item?.viafid) {
       this._clipboard.copy(item.viafid);

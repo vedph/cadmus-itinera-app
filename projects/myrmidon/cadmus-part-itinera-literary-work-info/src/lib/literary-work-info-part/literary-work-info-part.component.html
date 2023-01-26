@@ -10,20 +10,15 @@
       <mat-tab-group>
         <!-- GENERAL -->
         <mat-tab label="general">
-          <!-- author -->
-          <div>
-            <mat-form-field>
-              <mat-label>author</mat-label>
-              <input matInput [formControl]="author" />
-              <mat-error
-                *ngIf="
-                  $any(author).errors?.maxLength &&
-                  (author.dirty || author.touched)
-                "
-                >author too long</mat-error
-              >
-            </mat-form-field>
-          </div>
+          <!-- author IDs -->
+          <fieldset style="margin-bottom: 8px;">
+            <legend>author(s)</legend>
+            <cadmus-refs-asserted-ids
+              [assTagEntries]="assTagEntries"
+              [ids]="initialAuthorIds"
+              (idsChange)="onAuthorIdsChange($event)"
+            ></cadmus-refs-asserted-ids>
+          </fieldset>
 
           <!-- titles -->
           <fieldset>
