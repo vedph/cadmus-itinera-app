@@ -58,7 +58,7 @@
     "@myrmidon/cadmus-part-codicology-layouts": "^2.0.5",
     "@myrmidon/cadmus-part-codicology-material-dsc": "^2.0.3",
     "@myrmidon/cadmus-part-codicology-pg": "^2.0.0",
-    "@myrmidon/cadmus-part-codicology-sheet-labels": "^2.0.8",
+    "@myrmidon/cadmus-part-codicology-sheet-labels": "^2.0.9",
     "@myrmidon/cadmus-part-codicology-shelfmarks": "^2.0.3",
     "@myrmidon/cadmus-part-codicology-watermarks": "^2.0.3",
     "@myrmidon/cadmus-part-general-pg": "^2.0.3",
