@@ -72,6 +72,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-02-02: fixed import for JSONP used by VIAF lookup according to this [Angular issue](https://github.com/angular/angular/issues/47312).
+
 ### 3.1.0
 
 - 2023-01-26:

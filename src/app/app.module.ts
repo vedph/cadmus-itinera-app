@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // material
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -114,6 +114,10 @@ export function initElfDevTools(actions: Actions) {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    // required by VIAF JSONP
+    // note: this module must be listed BEFORE HttpClientModule!
+    // https://github.com/angular/angular/issues/47312
+    HttpClientJsonpModule,
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
