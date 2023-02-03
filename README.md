@@ -73,6 +73,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-02-03:
+  - updated Angular and packages.
+  - improved submodels input/output bindings.
+
 ### 3.1.1
 
 - 2023-02-02:

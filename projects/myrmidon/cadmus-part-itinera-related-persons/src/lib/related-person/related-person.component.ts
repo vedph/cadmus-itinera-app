@@ -23,6 +23,9 @@ export class RelatedPersonComponent implements OnInit {
     return this._person;
   }
   public set person(value: RelatedPerson | undefined) {
+    if (this._person === value) {
+      return;
+    }
     this._person = value;
     this.updateForm(value);
   }
@@ -56,8 +59,6 @@ export class RelatedPersonComponent implements OnInit {
   public ids: FormControl<AssertedId[]>;
   public form: FormGroup;
 
-  public initialIds?: AssertedId[];
-
   constructor(formBuilder: FormBuilder) {
     this.personChange = new EventEmitter<RelatedPerson>();
     this.editorClose = new EventEmitter<any>();
@@ -88,7 +89,7 @@ export class RelatedPersonComponent implements OnInit {
 
     this.type.setValue(model.type);
     this.name.setValue(model.name);
-    this.initialIds = model.ids || [];
+    this.ids.setValue(model.ids || []);
     this.form.markAsPristine();
   }
 
@@ -114,6 +115,7 @@ export class RelatedPersonComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.personChange.emit(this.getModel());
+    this._person = this.getModel();
+    this.personChange.emit(this._person);
   }
 }

@@ -22,6 +22,9 @@ export class ReferencedTextComponent implements OnInit {
     return this._text;
   }
   public set text(value: ReferencedText | undefined) {
+    if (this._text === value) {
+      return;
+    }
     this._text = value;
     this.updateForm(value);
   }
@@ -152,6 +155,7 @@ export class ReferencedTextComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.textChange.emit(this.getModel());
+    this._text = this.getModel();
+    this.textChange.emit(this._text);
   }
 }

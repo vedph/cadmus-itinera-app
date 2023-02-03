@@ -18,14 +18,17 @@ import { CodLocus } from '../cod-loci-part';
   styleUrls: ['./cod-locus.component.css'],
 })
 export class CodLocusComponent implements OnInit {
-  private _model: CodLocus | undefined;
+  private _locus: CodLocus | undefined;
 
   @Input()
   public get locus(): CodLocus | undefined {
-    return this._model;
+    return this._locus;
   }
   public set locus(value: CodLocus | undefined) {
-    this._model = value;
+    if (this._locus === value) {
+      return;
+    }
+    this._locus = value;
     this.updateForm(value);
   }
 
@@ -76,8 +79,8 @@ export class CodLocusComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this._model) {
-      this.updateForm(this._model);
+    if (this._locus) {
+      this.updateForm(this._locus);
     }
   }
 
@@ -123,6 +126,7 @@ export class CodLocusComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.locusChange.emit(this.getModel());
+    this._locus = this.getModel();
+    this.locusChange.emit(this._locus);
   }
 }

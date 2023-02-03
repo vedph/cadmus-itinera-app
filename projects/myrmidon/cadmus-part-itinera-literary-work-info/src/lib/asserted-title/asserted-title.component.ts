@@ -23,6 +23,9 @@ export class AssertedTitleComponent implements OnInit {
     return this._title;
   }
   public set title(value: AssertedTitle | undefined) {
+    if (this._title === value) {
+      return;
+    }
     this._title = value;
     this.updateForm(value);
   }
@@ -118,6 +121,7 @@ export class AssertedTitleComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.titleChange.emit(this.getModel());
+    this._title = this.getModel();
+    this.titleChange.emit(this._title);
   }
 }

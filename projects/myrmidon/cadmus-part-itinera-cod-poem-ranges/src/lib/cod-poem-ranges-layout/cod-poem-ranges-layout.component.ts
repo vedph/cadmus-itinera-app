@@ -27,6 +27,9 @@ export class CodPoemRangesLayoutComponent implements OnInit {
     return this._layout;
   }
   public set layout(value: PoemLayoutRow | undefined) {
+    if (this._layout === value) {
+      return;
+    }
     this._layout = value;
     this.updateForm(value);
   }

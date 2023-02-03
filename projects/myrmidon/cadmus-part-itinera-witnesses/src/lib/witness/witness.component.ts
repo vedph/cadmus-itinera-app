@@ -23,6 +23,9 @@ export class WitnessComponent implements OnInit {
     return this._witness;
   }
   public set witness(value: Witness | undefined) {
+    if (this._witness === value) {
+      return;
+    }
     this._witness = value;
     this.updateForm(value);
   }
@@ -95,6 +98,7 @@ export class WitnessComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.witnessChange.emit(this.getModel());
+    this._witness = this.getModel();
+    this.witnessChange.emit(this._witness);
   }
 }

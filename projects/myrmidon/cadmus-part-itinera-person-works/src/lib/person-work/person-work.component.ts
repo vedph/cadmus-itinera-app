@@ -33,6 +33,9 @@ export class PersonWorkComponent implements OnInit {
     return this._work;
   }
   public set work(value: PersonWork | undefined) {
+    if (this._work === value) {
+      return;
+    }
     this._work = value;
     this.updateForm(value);
   }
@@ -108,6 +111,7 @@ export class PersonWorkComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.workChange.emit(this.getModel());
+    this._work = this.getModel();
+    this.workChange.emit(this._work);
   }
 }
