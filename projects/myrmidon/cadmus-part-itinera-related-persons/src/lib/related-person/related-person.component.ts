@@ -30,15 +30,15 @@ export class RelatedPersonComponent implements OnInit {
     this.updateForm(value);
   }
 
-  // related-person-tags
-  @Input()
-  public tagEntries: ThesaurusEntry[] | undefined;
   // related-person-types
   @Input()
   public prsTypeEntries: ThesaurusEntry[] | undefined;
-  // external-id-scopes
+  // asserted-id-tags
   @Input()
-  public scopeEntries: ThesaurusEntry[] | undefined;
+  public idTagEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-scopes
+  @Input()
+  public idScopeEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   @Input()
   public assTagEntries: ThesaurusEntry[] | undefined;

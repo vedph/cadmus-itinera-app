@@ -21,9 +21,8 @@ import {
 
 /**
  * RelatedPersonsPart editor component.
- * Thesauri: related-person-tags, related-person-types,
- * assertion-tags, doc-reference-types,
- * doc-reference-tags, external-id-scopes (all optional).
+ * Thesauri: related-person-types, assertion-tags, doc-reference-types,
+ * doc-reference-tags, asserted-id-tags, asserted-id-scopes (all optional).
  */
 @Component({
   selector: 'cadmus-related-persons-part',
@@ -39,12 +38,12 @@ export class RelatedPersonsPartComponent
   public tabIndex: number;
   public editedPerson: RelatedPerson | undefined;
 
-  // related-person-tags
-  public prsTagEntries: ThesaurusEntry[] | undefined;
   // related-person-types
   public prsTypeEntries: ThesaurusEntry[] | undefined;
-  // external-id-scopes
-  public scopeEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-tags
+  public idTagEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-scopes
+  public idScopeEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   public assTagEntries: ThesaurusEntry[] | undefined;
   // doc-reference-types
@@ -80,11 +79,11 @@ export class RelatedPersonsPartComponent
   }
 
   private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'related-person-tags';
+    let key = 'asserted-id-tags';
     if (this.hasThesaurus(key)) {
-      this.prsTagEntries = thesauri[key].entries;
+      this.idTagEntries = thesauri[key].entries;
     } else {
-      this.prsTagEntries = undefined;
+      this.idTagEntries = undefined;
     }
     key = 'related-person-types';
     if (this.hasThesaurus(key)) {
@@ -92,11 +91,11 @@ export class RelatedPersonsPartComponent
     } else {
       this.prsTypeEntries = undefined;
     }
-    key = 'external-id-scopes';
+    key = 'asserted-id-scopes';
     if (this.hasThesaurus(key)) {
-      this.scopeEntries = thesauri[key].entries;
+      this.idScopeEntries = thesauri[key].entries;
     } else {
-      this.scopeEntries = undefined;
+      this.idScopeEntries = undefined;
     }
     key = 'assertion-tags';
     if (this.hasThesaurus(key)) {

@@ -34,9 +34,9 @@ export class RelatedPersonsPartFeatureComponent
 
   protected override getReqThesauriIds(): string[] {
     return [
-      'related-person-tags',
       'related-person-types',
-      'external-id-scopes',
+      'asserted-id-tags',
+      'asserted-id-scopes',
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',

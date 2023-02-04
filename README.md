@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.1.2](#312)
     - [3.1.1](#311)
     - [3.1.0](#310)
     - [3.0.13](#3013)
@@ -48,7 +49,7 @@ Quick Docker image build:
 
 1. `npm run build-lib`;
 2. update version in `env.js` and `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.1.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.1.2 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -73,6 +74,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 3.1.2
+
+- 2023-02-04: updated packages.
 - 2023-02-03:
   - updated Angular and packages.
   - improved submodels input/output bindings.

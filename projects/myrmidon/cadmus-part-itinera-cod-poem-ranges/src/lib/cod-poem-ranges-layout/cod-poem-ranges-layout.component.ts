@@ -87,7 +87,7 @@ export class CodPoemRangesLayoutComponent implements OnInit {
     let mode = CodPoemLayoutCheckMode.Single;
     if (event.shiftKey) {
       mode = CodPoemLayoutCheckMode.Range;
-    } else if (event.ctrlKey) {
+    } else if (event.ctrlKey || event.altKey) {
       mode = CodPoemLayoutCheckMode.Add;
     }
     this.layoutCheck.emit({ layout: this._layout, mode: mode });
