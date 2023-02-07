@@ -55,10 +55,7 @@ export class LiteraryWorkInfoPartComponent
   public note: FormControl<string | null>;
 
   public langFlags: Flag[];
-  public initialLanguages: string[];
   public mtrFlags: Flag[];
-  public initialMetres: string[];
-  public initialAuthorIds: AssertedId[];
 
   public pickedGenre?: string;
 
@@ -82,10 +79,7 @@ export class LiteraryWorkInfoPartComponent
   ) {
     super(authService, formBuilder);
     this.langFlags = [];
-    this.initialLanguages = [];
     this.mtrFlags = [];
-    this.initialMetres = [];
-    this.initialAuthorIds = [];
     this._editedIndex = -1;
     // form
     this.languages = formBuilder.control([], {
@@ -173,17 +167,16 @@ export class LiteraryWorkInfoPartComponent
       return;
     }
     this.languages.setValue(part.languages || []);
-    this.initialLanguages = part.languages || [];
     this.genre.setValue(part.genre);
     this.pickedGenre = this.genreEntries?.find(
       (e) => e.id === part.genre
     )?.value;
-    this.initialMetres = part.metres || [];
+    this.metres.setValue(part.metres || []);
     this.strophes.setValue(
       part.strophes?.length ? part.strophes.join('\n') : ''
     );
     this.isLost.setValue(part.isLost ? true : false);
-    this.initialAuthorIds = part.authorIds || [];
+    this.authorIds.setValue(part.authorIds || []);
     this.titles.setValue(part.titles || []);
     this.note.setValue(part.note || null);
     this.form.markAsPristine();

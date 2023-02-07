@@ -54,8 +54,6 @@ export class AssertedTitleComponent implements OnInit {
   public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
-  public initialAssertion?: Assertion;
-
   constructor(formBuilder: FormBuilder) {
     this.titleChange = new EventEmitter<AssertedTitle>();
     this.editorClose = new EventEmitter<any>();
@@ -93,7 +91,7 @@ export class AssertedTitleComponent implements OnInit {
     this.language.setValue(model.language);
     this.value.setValue(model.value);
     this.hasAssertion.setValue(model.value ? true : false);
-    this.initialAssertion = model.assertion;
+    this.assertion.setValue(model.assertion || null);
     this.form.markAsPristine();
   }
 
@@ -109,8 +107,8 @@ export class AssertedTitleComponent implements OnInit {
 
   public onAssertionChange(assertion: Assertion | undefined): void {
     this.assertion.setValue(assertion || null);
+    this.assertion.markAsDirty();
     this.assertion.updateValueAndValidity();
-    setTimeout(() => this.assertion.markAsDirty(), 0);
   }
 
   public cancel(): void {
