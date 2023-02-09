@@ -58,8 +58,6 @@ export class ReferencedTextComponent implements OnInit {
   public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
-  public initialAssertion?: Assertion;
-
   constructor(formBuilder: FormBuilder) {
     this.textChange = new EventEmitter<ReferencedText>();
     this.editorClose = new EventEmitter<any>();
@@ -104,7 +102,7 @@ export class ReferencedTextComponent implements OnInit {
       model.sourceCitations?.length ? model.sourceCitations.join('\n') : ''
     );
     this.hasAssertion.setValue(model.assertion ? true : false);
-    this.initialAssertion = model.assertion;
+    this.assertion.setValue(model.assertion || null);
     this.form.markAsPristine();
   }
 

@@ -40,6 +40,8 @@ export class LiteraryWorkInfoPartFeatureComponent
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
+      'asserted-id-scopes',
+      'asserted-id-tags'
     ];
   }
 }

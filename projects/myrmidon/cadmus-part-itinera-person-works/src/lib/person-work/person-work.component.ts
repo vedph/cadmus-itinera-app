@@ -51,8 +51,6 @@ export class PersonWorkComponent implements OnInit {
   public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
-  public initialAssertion?: Assertion;
-
   constructor(formBuilder: FormBuilder) {
     this.workChange = new EventEmitter<PersonWork>();
     this.editorClose = new EventEmitter<any>();
@@ -82,7 +80,7 @@ export class PersonWorkComponent implements OnInit {
 
     this.eid.setValue(model.eid || null);
     this.title.setValue(model.title);
-    this.initialAssertion = model.assertion;
+    this.assertion.setValue(model.assertion || null);
     this.hasAssertion.setValue(model.assertion ? true : false);
     this.form.markAsPristine();
   }

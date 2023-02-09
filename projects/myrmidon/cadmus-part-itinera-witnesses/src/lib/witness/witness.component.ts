@@ -39,10 +39,7 @@ export class WitnessComponent implements OnInit {
   public ranges: FormControl<CodLocationRange[]>;
   public form: FormGroup;
 
-  public initialRanges: CodLocationRange[];
-
   constructor(formBuilder: FormBuilder) {
-    this.initialRanges = [];
     this.witnessChange = new EventEmitter<Witness>();
     this.editorClose = new EventEmitter<any>();
     // form
@@ -73,7 +70,7 @@ export class WitnessComponent implements OnInit {
     }
 
     this.id.setValue(model.id);
-    this.initialRanges = model.ranges || [];
+    this.ranges.setValue(model.ranges || []);
     this.form.markAsPristine();
   }
 

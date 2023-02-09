@@ -11,10 +11,14 @@
         <!-- GENERAL -->
         <mat-tab label="general">
           <!-- author IDs -->
-          <fieldset style="margin-bottom: 8px;">
+          <fieldset style="margin-bottom: 8px">
             <legend>author(s)</legend>
             <cadmus-refs-asserted-ids
+              [idTagEntries]="idTagEntries"
+              [idScopeEntries]="idScopeEntries"
               [assTagEntries]="assTagEntries"
+              [refTagEntries]="refTagEntries"
+              [refTypeEntries]="refTypeEntries"
               [ids]="authorIds.value"
               (idsChange)="onAuthorIdsChange($event)"
             ></cadmus-refs-asserted-ids>

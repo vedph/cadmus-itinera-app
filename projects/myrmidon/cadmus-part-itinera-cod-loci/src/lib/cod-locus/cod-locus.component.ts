@@ -45,25 +45,20 @@ export class CodLocusComponent implements OnInit {
   public editorClose: EventEmitter<any>;
 
   public citation: FormControl<string | null>;
-  public range: FormControl<CodLocationRange[]>;
+  public ranges: FormControl<CodLocationRange[]>;
   public text: FormControl<string | null>;
   public images: FormControl<CodImage[]>;
   public form: FormGroup;
 
-  public initialImages: CodImage[];
-  public initialRanges: CodLocationRange[];
-
   constructor(formBuilder: FormBuilder) {
     this.locusChange = new EventEmitter<CodLocus>();
     this.editorClose = new EventEmitter<any>();
-    this.initialImages = [];
-    this.initialRanges = [];
     // form
     this.citation = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.range = formBuilder.control([], {
+    this.ranges = formBuilder.control([], {
       validators: NgToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
@@ -72,7 +67,7 @@ export class CodLocusComponent implements OnInit {
 
     this.form = formBuilder.group({
       citation: this.citation,
-      range: this.range,
+      ranges: this.ranges,
       text: this.text,
       images: this.images,
     });
@@ -91,25 +86,25 @@ export class CodLocusComponent implements OnInit {
     }
 
     this.citation.setValue(model.citation);
-    this.initialRanges = [model.range];
+    this.ranges.setValue([model.range]);
     this.text.setValue(model.text);
-    this.initialImages = model.images || [];
+    this.images.setValue(model.images || []);
     this.form.markAsPristine();
   }
 
   private getModel(): CodLocus {
     return {
       citation: this.citation.value?.trim() || '',
-      range: this.range.value.length ? this.range.value[0] : null as any,
+      range: this.ranges.value.length ? this.ranges.value[0] : (null as any),
       text: this.text.value?.trim() || '',
       images: this.images.value?.length ? this.images.value : undefined,
     };
   }
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
-    this.range.setValue(ranges || []);
-    this.range.updateValueAndValidity();
-    this.range.markAsDirty();
+    this.ranges.setValue(ranges || []);
+    this.ranges.updateValueAndValidity();
+    this.ranges.markAsDirty();
   }
 
   public onImagesChange(images: CodImage[] | undefined): void {

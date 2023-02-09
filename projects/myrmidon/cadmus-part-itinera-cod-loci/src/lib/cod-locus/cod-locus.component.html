@@ -39,7 +39,7 @@
     <!-- range -->
     <cadmus-cod-location
       [required]="true"
-      [location]="initialRanges"
+      [location]="ranges.value"
       (locationChange)="onLocationChange($event)"
     ></cadmus-cod-location>
   </div>
@@ -64,7 +64,7 @@
     <!-- images -->
     <cadmus-cod-images
       [typeEntries]="imgTypeEntries"
-      [images]="initialImages"
+      [images]="images.value"
       (imagesChange)="onImagesChange($event)"
     ></cadmus-cod-images>
   </div>

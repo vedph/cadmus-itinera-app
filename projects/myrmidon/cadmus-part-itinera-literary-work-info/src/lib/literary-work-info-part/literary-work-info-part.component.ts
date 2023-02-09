@@ -30,7 +30,8 @@ import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
  * LiteraryWorkInfo part editor component.
  * Thesauri: literary-work-languages, literary-work-genres,
  * literary-work-metres, assertion-tags, doc-reference-types,
- * doc-reference-tags (all optional).
+ * doc-reference-tags, asserted-id-scopes, asserted-id-tags
+ * (all optional).
  */
 @Component({
   selector: 'cadmus-literary-work-info-part',
@@ -71,6 +72,10 @@ export class LiteraryWorkInfoPartComponent
   public refTypeEntries: ThesaurusEntry[] | undefined;
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-scopes
+  public idScopeEntries?: ThesaurusEntry[] | undefined;
+  // asserted-id-tags
+  public idTagEntries?: ThesaurusEntry[] | undefined;
 
   constructor(
     authService: AuthJwtService,
@@ -154,6 +159,18 @@ export class LiteraryWorkInfoPartComponent
       this.refTagEntries = thesauri[key].entries;
     } else {
       this.refTagEntries = undefined;
+    }
+    key = 'asserted-id-scopes';
+    if (this.hasThesaurus(key)) {
+      this.idScopeEntries = thesauri[key].entries;
+    } else {
+      this.idScopeEntries = undefined;
+    }
+    key = 'asserted-id-tags';
+    if (this.hasThesaurus(key)) {
+      this.idTagEntries = thesauri[key].entries;
+    } else {
+      this.idTagEntries = undefined;
     }
 
     this.langFlags = this.entriesToFlags(this.langEntries);
