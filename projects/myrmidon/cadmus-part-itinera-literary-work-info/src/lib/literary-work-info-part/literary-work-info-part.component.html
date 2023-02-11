@@ -142,9 +142,8 @@
           <fieldset>
             <legend>language(s)</legend>
             <cadmus-ui-flags-picker
-              [flags]="langFlags"
-              [selectedIds]="languages.value"
-              (selectedIdsChange)="onLanguagesChange($event)"
+              [flags]="langFlags$ | async"
+              (flagsChange)="onLanguageFlagsChange($event)"
             ></cadmus-ui-flags-picker>
           </fieldset>
 
@@ -190,14 +189,15 @@
         <!-- POETRY -->
         <mat-tab label="poetry">
           <!-- metres -->
-          <fieldset *ngIf="mtrFlags?.length">
-            <legend>metre(s)</legend>
-            <cadmus-ui-flags-picker
-              [flags]="mtrFlags"
-              [selectedIds]="metres.value"
-              (selectedIdsChange)="onMetresChange($event)"
-            ></cadmus-ui-flags-picker>
-          </fieldset>
+          <div *ngIf="mtrFlags$ | async as flags">
+            <fieldset *ngIf="flags?.length">
+              <legend>metre(s)</legend>
+              <cadmus-ui-flags-picker
+                [flags]="flags"
+                (flagsChange)="onMetreFlagsChange($event)"
+              ></cadmus-ui-flags-picker>
+            </fieldset>
+          </div>
 
           <!-- strophes -->
           <div style="margin-top: 8px">

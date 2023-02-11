@@ -6,7 +6,7 @@ import {
   FormGroup,
   UntypedFormGroup,
 } from '@angular/forms';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
@@ -23,8 +23,15 @@ import {
   LiteraryWorkInfoPart,
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
-import { Flag } from '@myrmidon/cadmus-ui-flags-picker';
+import { Flag, FlagsPickerAdapter } from '@myrmidon/cadmus-ui-flags-picker';
 import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
+
+function entryToFlag(entry: ThesaurusEntry): Flag {
+  return {
+    id: entry.id,
+    label: entry.value,
+  };
+}
 
 /**
  * LiteraryWorkInfo part editor component.
@@ -42,30 +49,55 @@ export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>
   implements OnInit
 {
+  private readonly _flagAdapter: FlagsPickerAdapter;
   private _editedIndex;
+  private _langEntries: ThesaurusEntry[];
+  private _mtrEntries: ThesaurusEntry[];
 
   public editedTitle: AssertedTitle | undefined;
 
-  public languages: FormControl<string[]>;
+  public languages: FormControl<Flag[]>;
   public genre: FormControl<string | null>;
-  public metres: FormControl<string[]>;
+  public metres: FormControl<Flag[]>;
   public strophes: FormControl<string | null>;
   public isLost: FormControl<boolean>;
   public authorIds: FormControl<AssertedId[]>;
   public titles: FormControl<AssertedTitle[]>;
   public note: FormControl<string | null>;
 
-  public langFlags: Flag[];
-  public mtrFlags: Flag[];
+  public langFlags$: Observable<Flag[]>;
+  public mtrFlags$: Observable<Flag[]>;
 
   public pickedGenre?: string;
 
-  // literary-work-languages
-  public langEntries: ThesaurusEntry[] | undefined;
   // literary-work-genres
   public genreEntries: ThesaurusEntry[] | undefined;
+  // literary-work-languages
+  public get langEntries(): ThesaurusEntry[] | undefined {
+    return this._langEntries;
+  }
+  public set langEntries(value: ThesaurusEntry[] | undefined) {
+    if (this._langEntries === value) {
+      return;
+    }
+    this._langEntries = value || [];
+    this._flagAdapter.setSlotFlags(
+      'languages',
+      this._langEntries.map(entryToFlag)
+    );
+  }
   // literary-work-metres
-  public mtrEntries: ThesaurusEntry[] | undefined;
+  public get mtrEntries(): ThesaurusEntry[] | undefined {
+    return this._mtrEntries;
+  }
+  public set mtrEntries(value: ThesaurusEntry[] | undefined) {
+    if (this._mtrEntries === value) {
+      return;
+    }
+    this._mtrEntries = value || [];
+    this._flagAdapter.setSlotFlags('metres', this._mtrEntries.map(entryToFlag));
+  }
+
   // assertion-tags
   public assTagEntries: ThesaurusEntry[] | undefined;
   // doc-reference-types
@@ -83,8 +115,12 @@ export class LiteraryWorkInfoPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this.langFlags = [];
-    this.mtrFlags = [];
+    // flags
+    this._langEntries = [];
+    this._mtrEntries = [];
+    this._flagAdapter = new FlagsPickerAdapter();
+    this.langFlags$ = this._flagAdapter.selectFlags('languages');
+    this.mtrFlags$ = this._flagAdapter.selectFlags('metres');
     this._editedIndex = -1;
     // form
     this.languages = formBuilder.control([], {
@@ -172,9 +208,6 @@ export class LiteraryWorkInfoPartComponent
     } else {
       this.idTagEntries = undefined;
     }
-
-    this.langFlags = this.entriesToFlags(this.langEntries);
-    this.mtrFlags = this.entriesToFlags(this.mtrEntries);
   }
 
   private updateForm(part?: LiteraryWorkInfoPart | null): void {
@@ -183,12 +216,16 @@ export class LiteraryWorkInfoPartComponent
       this.pickedGenre = undefined;
       return;
     }
-    this.languages.setValue(part.languages || []);
+    this.languages.setValue(
+      this._flagAdapter.setSlotChecks('languages', part.languages)
+    );
     this.genre.setValue(part.genre);
     this.pickedGenre = this.genreEntries?.find(
       (e) => e.id === part.genre
     )?.value;
-    this.metres.setValue(part.metres || []);
+    this.metres.setValue(
+      this._flagAdapter.setSlotChecks('metres', part.metres || [])
+    );
     this.strophes.setValue(
       part.strophes?.length ? part.strophes.join('\n') : ''
     );
@@ -211,17 +248,6 @@ export class LiteraryWorkInfoPartComponent
     this.updateForm(data?.value);
   }
 
-  private entriesToFlags(entries: ThesaurusEntry[] | undefined): Flag[] {
-    return entries?.length
-      ? entries.map((e) => {
-          return {
-            id: e.id,
-            label: e.value,
-          } as Flag;
-        })
-      : [];
-  }
-
   private parseStrophes(text: string | null): string[] | undefined {
     if (!text) {
       return undefined;
@@ -241,9 +267,9 @@ export class LiteraryWorkInfoPartComponent
     let part = this.getEditedPart(
       LITERARY_WORK_INFO_PART_TYPEID
     ) as LiteraryWorkInfoPart;
-    part.languages = this.languages.value || [];
+    part.languages = this._flagAdapter.getCheckedFlagIds('languages');
     part.genre = this.genre.value?.trim() || '';
-    part.metres = this.metres.value?.length ? this.metres.value : undefined;
+    part.metres = this._flagAdapter.getOptionalCheckedFlagIds('metres');
     part.strophes = this.parseStrophes(this.strophes.value);
     part.isLost = this.isLost.value ? true : undefined;
     part.authorIds = this.authorIds.value.length
@@ -255,14 +281,14 @@ export class LiteraryWorkInfoPartComponent
     return part;
   }
 
-  public onLanguagesChange(ids: string[]): void {
-    this.languages.setValue(ids);
+  public onLanguageFlagsChange(flags: Flag[]): void {
+    this.languages.setValue(flags);
     this.languages.updateValueAndValidity();
     this.languages.markAsDirty();
   }
 
-  public onMetresChange(ids: string[]): void {
-    this.metres.setValue(ids);
+  public onMetreFlagsChange(flags: Flag[]): void {
+    this.metres.setValue(flags);
     this.metres.updateValueAndValidity();
     this.metres.markAsDirty();
   }
