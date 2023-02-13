@@ -52,7 +52,7 @@
     "@myrmidon/cadmus-part-biblio-ui": "^2.0.1",
     "@myrmidon/cadmus-part-codicology-bindings": "^2.0.6",
     "@myrmidon/cadmus-part-codicology-contents": "^2.0.11",
-    "@myrmidon/cadmus-part-codicology-decorations": "^2.0.18",
+    "@myrmidon/cadmus-part-codicology-decorations": "^2.0.19",
     "@myrmidon/cadmus-part-codicology-edits": "^2.0.10",
     "@myrmidon/cadmus-part-codicology-hands": "^2.0.15",
     "@myrmidon/cadmus-part-codicology-layouts": "^2.0.8",
