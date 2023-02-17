@@ -66,6 +66,7 @@ import { CadmusRefsViafLookupModule } from '@myrmidon/cadmus-refs-viaf-lookup';
 
 // cadmus libs
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
+import { CadmusBiblioUiModule } from '@myrmidon/cadmus-biblio-ui';
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusProfileCoreModule } from '@myrmidon/cadmus-profile-core';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
@@ -90,6 +91,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { PART_EDITOR_KEYS } from './part-editor-keys';
 import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
 import { ITEM_BROWSER_KEYS } from './item-browser-keys';
+import { BiblioPageComponent } from './biblio-page/biblio-page.component';
 
 // https://ngneat.github.io/elf/docs/dev-tools/
 export function initElfDevTools(actions: Actions) {
@@ -109,6 +111,7 @@ export function initElfDevTools(actions: Actions) {
     ManageUsersPageComponent,
     RegisterUserPageComponent,
     ResetPasswordComponent,
+    BiblioPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -174,6 +177,7 @@ export function initElfDevTools(actions: Actions) {
     CadmusPartCodicologySheetLabelsModule,
     CadmusRefsViafLookupModule,
     // cadmus
+    CadmusBiblioUiModule,
     CadmusApiModule,
     CadmusCoreModule,
     CadmusProfileCoreModule,

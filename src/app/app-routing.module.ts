@@ -11,13 +11,13 @@ import { EditorGuardService } from '@myrmidon/cadmus-api';
 
 // locals
 import { HomeComponent } from './home/home.component';
+import { BiblioPageComponent } from './biblio-page/biblio-page.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 import { ManageUsersPageComponent } from './manage-users-page/manage-users-page.component';
 import { RegisterUserPageComponent } from './register-user-page/register-user-page.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { LoginPageComponent } from './login-page/login-page.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   // auth
   { path: 'login', component: LoginPageComponent },
@@ -38,14 +38,6 @@ const routes: Routes = [
   },
   // cadmus - items
   {
-    path: 'items',
-    loadChildren: () =>
-      import('@myrmidon/cadmus-item-list').then(
-        (module) => module.CadmusItemListModule
-      ),
-    canActivate: [AuthJwtGuardService],
-  },
-  {
     path: 'items/:id',
     loadChildren: () =>
       import('@myrmidon/cadmus-item-editor').then(
@@ -53,6 +45,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
     canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: 'items',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-item-list').then(
+        (module) => module.CadmusItemListModule
+      ),
+    canActivate: [AuthJwtGuardService],
   },
   {
     path: 'search',
@@ -64,18 +64,18 @@ const routes: Routes = [
   },
   // cadmus - thesauri
   {
-    path: 'thesauri',
-    loadChildren: () =>
-      import('@myrmidon/cadmus-thesaurus-list').then(
-        (module) => module.CadmusThesaurusListModule
-      ),
-    canActivate: [EditorGuardService],
-  },
-  {
     path: 'thesauri/:id',
     loadChildren: () =>
       import('@myrmidon/cadmus-thesaurus-editor').then(
         (module) => module.CadmusThesaurusEditorModule
+      ),
+    canActivate: [EditorGuardService],
+  },
+  {
+    path: 'thesauri',
+    loadChildren: () =>
+      import('@myrmidon/cadmus-thesaurus-list').then(
+        (module) => module.CadmusThesaurusListModule
       ),
     canActivate: [EditorGuardService],
   },
@@ -142,7 +142,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthJwtGuardService],
   },
+  // itinera - biblio
+  {
+    path: 'biblio',
+    component: BiblioPageComponent,
+    canActivate: [AuthJwtAdminGuardService],
+  },
   // fallback
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: HomeComponent },
 ];
 

@@ -80,6 +80,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-02-17:
+  - updated Angular and packages.
+  - added bibliography page.
+
 ### 3.1.8
 
 - 2023-02-13: updated codicology packages.

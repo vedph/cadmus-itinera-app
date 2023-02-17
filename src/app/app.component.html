@@ -39,6 +39,16 @@
     >
       Thesauri
     </button>
+    <!-- biblio menu -->
+    <button
+      mat-button
+      routerLink="/biblio"
+      *ngIf="
+        user && (user.roles.includes('admin') || user.roles.includes('editor'))
+      "
+    >
+      Bibliography
+    </button>
 
     <span class="tb-fill-remaining-space"></span>
 
