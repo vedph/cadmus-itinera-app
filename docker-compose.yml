@@ -64,7 +64,7 @@ services:
       - cadmus-network
 
   cadmus-biblio-api:
-    image: vedph2020/cadmus_biblio_api:3.1.2
+    image: vedph2020/cadmus_biblio_api:3.1.3
     ports:
       - 61691:80
     depends_on:
@@ -80,7 +80,7 @@ services:
       - cadmus-network
 
   cadmus-app:
-    image: vedph2020/cadmus-itinera-app:3.1.9
+    image: vedph2020/cadmus-itinera-app:3.1.10
     ports:
       - 4200:80
     depends_on:
