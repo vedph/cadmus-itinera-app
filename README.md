@@ -83,6 +83,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-02-20:
+  - updated biblio packages.
+  - changed size limit for subject in letter info.
+
 ### 3.1.11
 
 - 2023-02-20: updated biblio packages.
