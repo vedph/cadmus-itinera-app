@@ -52,7 +52,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
-This is the frontend for the second generation of the Cadmus Itinera editor. Currently it's an empty shell, which will be progressively filled with new content. At the end, this will supersede the [old editor frontend](https://github.com/vedph/cadmus_itinera).
+This is the frontend for the second generation of the Cadmus Itinera editor.
 
 The codicological parts in this project will be imported from an [independent library](https://github.com/vedph/cadmus-codicology).
 
