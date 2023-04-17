@@ -6,6 +6,7 @@
     <a mat-button routerLink="/home">Cadmus Itinera</a>
 
     <button
+      type="button"
       mat-button
       [matMenuTriggerFor]="itemMenu"
       *ngIf="logged && itemBrowsers"
@@ -26,11 +27,16 @@
     </ng-container>
 
     <!-- search menu -->
-    <button mat-button routerLink="/search" *ngIf="logged">Search</button>
+    <button type="button" mat-button routerLink="/search" *ngIf="logged">
+      Search
+    </button>
     <!-- graph menu -->
-    <button mat-button routerLink="/graph" *ngIf="logged">Graph</button>
+    <button type="button" mat-button routerLink="/graph" *ngIf="logged">
+      Graph
+    </button>
     <!-- thesauri menu -->
     <button
+      type="button"
       mat-button
       routerLink="/thesauri"
       *ngIf="
@@ -41,6 +47,7 @@
     </button>
     <!-- biblio menu -->
     <button
+      type="button"
       mat-button
       routerLink="/biblio"
       *ngIf="
@@ -60,7 +67,7 @@
       ></mat-slide-toggle>
 
       <!-- indicators -->
-      <img [src]="getGravatarUrl(user.email, 32)" [alt]="user.userName" />
+      <img [src]="getGravatarUrl(user.email, 32)" alt="{{ user.userName }}" />
       <mat-icon
         class="small-icon"
         *ngIf="user && user.roles.includes('admin')"
@@ -84,6 +91,7 @@
 
       <!-- admin menu -->
       <button
+        type="button"
         *ngIf="user && user.roles.includes('admin')"
         mat-button
         [matMenuTriggerFor]="adminMenu"
@@ -97,11 +105,11 @@
     </div>
 
     <!-- login -->
-    <button *ngIf="!logged" mat-icon-button routerLink="/login">
+    <button type="button" *ngIf="!logged" mat-icon-button routerLink="/login">
       <mat-icon>login</mat-icon>
     </button>
     <!-- logout -->
-    <button *ngIf="logged" mat-icon-button (click)="logout()">
+    <button type="button" *ngIf="logged" mat-icon-button (click)="logout()">
       <mat-icon>logout</mat-icon>
     </button>
   </mat-toolbar>
@@ -109,11 +117,7 @@
 
 <main>
   <mat-sidenav-container>
-    <mat-sidenav
-      mode="side"
-      [opened]="snavToggle.value"
-      style="min-height: 400px; padding: 4px"
-    >
+    <mat-sidenav id="sidenav" mode="side" [opened]="snavToggle.value">
       <!-- cod location -->
       <div class="tool" id="tool-loc">
         <fieldset>
@@ -168,6 +172,7 @@
   <div id="info">
     <p>
       <a
+        rel="noopener"
         href="https://www.unisi.it/ricerca/finanziamenti-prin/petrarch%E2%80%99s-itinera-italian-trecento-intellectual-network-and-european"
         target="_blank"
         >Petrarch's Itinera Project</a
@@ -175,7 +180,9 @@
     </p>
     <p>
       Cadmus by
-      <a href="http://www.fusisoft.it" target="_blank">Daniele Fusi</a>
+      <a rel="noopener" href="http://www.fusisoft.it" target="_blank"
+        >Daniele Fusi</a
+      >
       <br />
       version {{ version }}
     </p>

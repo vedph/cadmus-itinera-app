@@ -11,6 +11,11 @@ mat-icon.small-icon {
   flex: 1 1 auto;
 }
 
+#sidenav {
+  min-height: 400px;
+  padding: 4px;
+}
+
 footer {
   display: flex;
   flex: row wrap;
