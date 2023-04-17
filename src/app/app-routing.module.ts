@@ -146,7 +146,7 @@ const routes: Routes = [
   {
     path: 'biblio',
     component: BiblioPageComponent,
-    canActivate: [AuthJwtAdminGuardService],
+    canActivate: [EditorGuardService],
   },
   // fallback
   { path: '', redirectTo: 'home', pathMatch: 'full' },

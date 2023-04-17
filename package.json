@@ -102,7 +102,7 @@
     "@types/rangy": "0.0.34",
     "diff-match-patch": "^1.0.5",
     "gravatar": "^1.8.2",
-    "mapbox-gl": "^2.14.0",
+    "mapbox-gl": "^2.14.1",
     "ngx-mapbox-gl": "^9.1.0",
     "ngx-markdown": "^15.1.2",
     "ngx-monaco-editor": "^12.0.0",

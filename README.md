@@ -87,7 +87,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
-- 2023-04-17: minor changes to app page markup.
+- 2023-04-17:
+  - minor changes to app page markup.
+  - changed guard for bibliography page so that editors can access it.
 - 2023-04-13: updated Angular and packages.
 - 2023-04-03: updated Angular and packages.
 
