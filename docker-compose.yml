@@ -38,7 +38,7 @@ services:
       - cadmus-network
 
   cadmus-api:
-    image: vedph2020/cadmus-itinera-api:4.1.1
+    image: vedph2020/cadmus-itinera-api:4.1.2
     ports:
       # https://stackoverflow.com/questions/48669548/why-does-aspnet-core-start-on-port-80-from-within-docker
       - 5052:80
@@ -80,7 +80,7 @@ services:
       - cadmus-network
 
   cadmus-app:
-    image: vedph2020/cadmus-itinera-app:3.2.1
+    image: vedph2020/cadmus-itinera-app:3.2.2
     ports:
       - 4200:80
     depends_on:
