@@ -89,6 +89,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-05-12: updated to Angular 16.
+
 ### 3.2.3
 
 - 2023-04-27: updated general part wrapper library.
