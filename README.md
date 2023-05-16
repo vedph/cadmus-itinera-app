@@ -4,6 +4,7 @@
   - [Docker](#docker)
   - [Production](#production)
   - [History](#history)
+    - [3.3.0](#330)
     - [3.2.3](#323)
     - [3.2.2](#322)
     - [3.2.1](#321)
@@ -64,7 +65,7 @@ The codicological parts in this project will be imported from an [independent li
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.2.3 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.3.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -89,6 +90,13 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 3.3.0
+
+- 2023-05-16:
+  - updated graph UI library package.
+  - replaced graph UI page package with its graph-enabled extension, adding the required walker dependencies.
+  - renamed containers in docker compose scripts.
+  - added docker compose script with graph enabled and no item seeding.
 - 2023-05-12: updated to Angular 16.
 
 ### 3.2.3

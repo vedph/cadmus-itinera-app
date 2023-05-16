@@ -19,6 +19,9 @@
     "build-pg": "ng build @myrmidon/cadmus-part-itinera-pg",
     "build-lib": "npm run build-cod-loci && npm run build-cod-poem && npm run build-prs && npm run build-pwk && npm run build-lti && npm run build-lwi && npm run build-rft && npm run build-rep && npm run build-wit && npm run build-pg"
   },
+  "overrides": {
+    "d3-selection": "3.0.0"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.0.1",
@@ -41,8 +44,9 @@
     "@myrmidon/cadmus-cod-location": "^2.0.0",
     "@myrmidon/cadmus-codicology-ui": "^3.0.0",
     "@myrmidon/cadmus-core": "^5.0.0",
-    "@myrmidon/cadmus-graph-pg": "^5.0.0",
-    "@myrmidon/cadmus-graph-ui": "^5.0.0",
+    "@myrmidon/cadmus-graph-pg-ex": "^5.0.0",
+    "@myrmidon/cadmus-graph-ui": "^5.0.1",
+    "@myrmidon/cadmus-graph-ui-ex": "^0.0.3",
     "@myrmidon/cadmus-item-editor": "^5.0.0",
     "@myrmidon/cadmus-item-list": "^5.0.0",
     "@myrmidon/cadmus-item-search": "^5.0.0",
@@ -97,7 +101,8 @@
     "@ngneat/elf-devtools": "^1.2.1",
     "@ngneat/elf-entities": "^4.4.4",
     "@ngneat/elf-pagination": "^1.1.0",
-    "@ngneat/elf-requests": "^1.7.0",
+    "@ngneat/elf-requests": "^1.8.0",
+    "@swimlane/ngx-graph": "^8.0.3",
     "@types/diff-match-patch": "^1.0.32",
     "@types/rangy": "0.0.35",
     "diff-match-patch": "^1.0.5",
@@ -116,6 +121,9 @@
     "@angular/cli": "^16.0.1",
     "@angular/compiler-cli": "^16.0.1",
     "@angular/localize": "^16.0.1",
+    "@types/d3-dispatch": "^3.0.2",
+    "@types/d3-drag": "^3.0.2",
+    "@types/d3-timer": "^3.0.0",
     "@types/jasmine": "~4.3.1",
     "@types/mapbox-gl": "^2.7.11",
     "@types/node": "^20.1.3",

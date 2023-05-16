@@ -58,7 +58,9 @@ services:
     environment:
       - CONNECTIONSTRINGS__DEFAULT=mongodb://cadmus-itinera-mongo:27017/{0}
       - CONNECTIONSTRINGS__INDEX=Server=cadmus-itinera-mysql;port=3306;Database={0};Uid=root;Pwd=mysql
-      - SEED__INDEXDELAY=50
+      - SEED__INDEXDELAY=0
+      - SEED__ITEMCOUNT=0
+      - INDEXING__ISGRAPHENABLED=true
       - MESSAGING__APIROOTURL=http://cadmusapi.azurewebsites.net
       - MESSAGING__APPROOTURL=http://cadmusapi.com/
       - MESSAGING__SUPPORTEMAIL=support@cadmus.com
