@@ -47,6 +47,7 @@ export class CodLocusComponent implements OnInit {
   public citation: FormControl<string | null>;
   public ranges: FormControl<CodLocationRange[]>;
   public text: FormControl<string | null>;
+  public note: FormControl<string | null>;
   public images: FormControl<CodImage[]>;
   public form: FormGroup;
 
@@ -63,12 +64,14 @@ export class CodLocusComponent implements OnInit {
       nonNullable: true,
     });
     this.text = formBuilder.control(null, Validators.maxLength(1000));
+    this.note = formBuilder.control(null, Validators.maxLength(5000));
     this.images = formBuilder.control([], { nonNullable: true });
 
     this.form = formBuilder.group({
       citation: this.citation,
       ranges: this.ranges,
       text: this.text,
+      note: this.note,
       images: this.images,
     });
   }
@@ -88,6 +91,7 @@ export class CodLocusComponent implements OnInit {
     this.citation.setValue(model.citation);
     this.ranges.setValue([model.range]);
     this.text.setValue(model.text);
+    this.note.setValue(model.note || null);
     this.images.setValue(model.images || []);
     this.form.markAsPristine();
   }
@@ -97,6 +101,7 @@ export class CodLocusComponent implements OnInit {
       citation: this.citation.value?.trim() || '',
       range: this.ranges.value.length ? this.ranges.value[0] : (null as any),
       text: this.text.value?.trim() || '',
+      note: this.note.value?.trim() || undefined,
       images: this.images.value?.length ? this.images.value : undefined,
     };
   }

@@ -90,6 +90,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-05-17: added `note` to `CodLocus`.
+
 ### 3.3.0
 
 - 2023-05-16:

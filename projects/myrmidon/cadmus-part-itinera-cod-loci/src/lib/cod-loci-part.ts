@@ -9,6 +9,7 @@ export interface CodLocus {
   citation: string;
   range: CodLocationRange;
   text: string;
+  note?: string;
   images?: CodImage[];
 }
 
@@ -159,6 +160,9 @@ export const COD_LOCI_PART_SCHEMA = {
                 },
               },
               text: {
+                type: 'string',
+              },
+              note: {
                 type: 'string',
               },
               images: {

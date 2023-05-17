@@ -61,6 +61,18 @@
   </div>
 
   <div>
+    <!-- note -->
+    <mat-form-field class="long-text">
+      <mat-label>note</mat-label>
+      <input matInput [formControl]="note" />
+      <mat-error
+        *ngIf="$any(note).errors?.maxLength && (note.dirty || note.touched)"
+        >note too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <div>
     <!-- images -->
     <cadmus-cod-images
       [typeEntries]="imgTypeEntries"
