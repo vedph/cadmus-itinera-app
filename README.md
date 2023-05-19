@@ -1,58 +1,5 @@
 # Cadmus Itinera
 
-- [Cadmus Itinera](#cadmus-itinera)
-  - [Docker](#docker)
-  - [Production](#production)
-  - [History](#history)
-    - [3.3.0](#330)
-    - [3.2.3](#323)
-    - [3.2.2](#322)
-    - [3.2.1](#321)
-    - [3.2.0](#320)
-    - [3.1.13](#3113)
-    - [3.1.12](#3112)
-    - [3.1.11](#3111)
-    - [3.1.10](#3110)
-    - [3.1.9](#319)
-    - [3.1.8](#318)
-    - [3.1.7](#317)
-    - [3.1.6](#316)
-    - [3.1.5](#315)
-    - [3.1.4](#314)
-    - [3.1.3](#313)
-    - [3.1.2](#312)
-    - [3.1.1](#311)
-    - [3.1.0](#310)
-    - [3.0.13](#3013)
-    - [3.0.12](#3012)
-    - [3.0.11](#3011)
-    - [3.0.10](#3010)
-    - [3.0.9](#309)
-    - [3.0.8](#308)
-    - [3.0.7](#307)
-    - [3.0.6](#306)
-    - [3.0.5](#305)
-    - [3.0.4](#304)
-    - [3.0.3](#303)
-    - [3.0.2](#302)
-    - [3.0.1](#301)
-    - [3.0.0](#300)
-    - [2.1.8](#218)
-    - [2.1.7](#217)
-    - [2.1.6](#216)
-    - [2.1.5](#215)
-    - [2.1.4](#214)
-    - [2.1.3](#213)
-    - [2.1.2](#212)
-    - [2.1.1](#211)
-    - [2.1.0](#210)
-    - [2.0.7](#207)
-    - [2.0.6](#206)
-    - [2.0.5](#205)
-    - [2.0.4](#204)
-    - [2.0.3](#203)
-    - [2.0.1](#201)
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
 This is the frontend for the second generation of the Cadmus Itinera editor.
@@ -65,7 +12,7 @@ The codicological parts in this project will be imported from an [independent li
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:3.3.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:3.3.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -90,6 +37,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 3.3.1
+
+- 2023-05-19: updated graph packages.
 - 2023-05-17: added `note` to `CodLocus`.
 
 ### 3.3.0
