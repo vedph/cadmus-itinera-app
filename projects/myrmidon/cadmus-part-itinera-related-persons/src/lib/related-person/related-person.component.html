@@ -44,15 +44,18 @@
 
   <fieldset>
     <legend>IDs</legend>
-    <cadmus-refs-asserted-ids
-      [ids]="ids.value"
+    <cadmus-refs-asserted-composite-ids
       [idScopeEntries]="idScopeEntries"
       [idTagEntries]="idTagEntries"
       [assTagEntries]="assTagEntries"
       [refTypeEntries]="refTypeEntries"
       [refTagEntries]="refTagEntries"
+      [pinByTypeMode]="pinByTypeMode"
+      [canSwitchMode]="canSwitchMode"
+      [canEditTarget]="canEditTarget"
+      [ids]="ids.value"
       (idsChange)="onIdsChange($event)"
-    ></cadmus-refs-asserted-ids>
+    ></cadmus-refs-asserted-composite-ids>
   </fieldset>
 
   <!-- buttons -->

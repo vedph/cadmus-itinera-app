@@ -41,7 +41,8 @@ export class LiteraryWorkInfoPartFeatureComponent
       'doc-reference-types',
       'doc-reference-tags',
       'asserted-id-scopes',
-      'asserted-id-tags'
+      'asserted-id-tags',
+      'pin-link-settings'
     ];
   }
 }

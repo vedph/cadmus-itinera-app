@@ -1,10 +1,10 @@
 import { Part } from '@myrmidon/cadmus-core';
-import { AssertedId } from '@myrmidon/cadmus-refs-asserted-ids';
+import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
 
 export interface RelatedPerson {
   type: string;
   name: string;
-  ids?: AssertedId[];
+  ids?: AssertedCompositeId[];
 }
 
 /**
@@ -89,63 +89,87 @@ export const RELATED_PERSONS_PART_SCHEMA = {
               ids: {
                 type: 'array',
                 items: {
-                  anyOf: [
-                    {
+                  type: 'object',
+                  default: {},
+                  required: ['target'],
+                  properties: {
+                    target: {
                       type: 'object',
-                      required: ['value'],
+                      required: ['gid', 'label'],
                       properties: {
-                        tag: {
+                        gid: {
+                          type: 'string',
+                        },
+                        label: {
+                          type: 'string',
+                        },
+                        itemId: {
+                          type: 'string',
+                        },
+                        partId: {
+                          type: 'string',
+                        },
+                        partTypeId: {
+                          type: 'string',
+                        },
+                        roleId: {
+                          type: 'string',
+                        },
+                        name: {
                           type: 'string',
                         },
                         value: {
                           type: 'string',
                         },
-                        scope: {
+                      },
+                    },
+                    scope: {
+                      type: 'string',
+                    },
+                    tag: {
+                      type: 'string',
+                    },
+                    assertion: {
+                      type: 'object',
+                      required: ['rank'],
+                      properties: {
+                        tag: {
                           type: 'string',
                         },
-                        assertion: {
-                          type: 'object',
-                          required: ['rank'],
-                          properties: {
-                            tag: {
-                              type: 'string',
-                            },
-                            rank: {
-                              type: 'integer',
-                            },
-                            note: {
-                              type: 'string',
-                            },
-                            references: {
-                              type: 'array',
-                              items: {
-                                anyOf: [
-                                  {
-                                    type: 'object',
-                                    required: ['citation'],
-                                    properties: {
-                                      type: {
-                                        type: 'string',
-                                      },
-                                      tag: {
-                                        type: 'string',
-                                      },
-                                      citation: {
-                                        type: 'string',
-                                      },
-                                      note: {
-                                        type: 'string',
-                                      },
-                                    },
+                        rank: {
+                          type: 'integer',
+                        },
+                        note: {
+                          type: 'string',
+                        },
+                        references: {
+                          type: 'array',
+                          items: {
+                            anyOf: [
+                              {
+                                type: 'object',
+                                required: ['citation'],
+                                properties: {
+                                  type: {
+                                    type: 'string',
                                   },
-                                ],
+                                  tag: {
+                                    type: 'string',
+                                  },
+                                  citation: {
+                                    type: 'string',
+                                  },
+                                  note: {
+                                    type: 'string',
+                                  },
+                                },
                               },
-                            },
+                            ],
                           },
                         },
                       },
                     },
-                  ],
+                  },
                 },
               },
             },
