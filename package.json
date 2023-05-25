@@ -45,7 +45,7 @@
     "@myrmidon/cadmus-codicology-ui": "^3.0.0",
     "@myrmidon/cadmus-core": "^5.0.0",
     "@myrmidon/cadmus-graph-pg-ex": "^5.0.2",
-    "@myrmidon/cadmus-graph-ui": "^5.0.1",
+    "@myrmidon/cadmus-graph-ui": "^5.0.2",
     "@myrmidon/cadmus-graph-ui-ex": "^1.0.3",
     "@myrmidon/cadmus-item-editor": "^5.0.0",
     "@myrmidon/cadmus-item-list": "^5.0.0",
