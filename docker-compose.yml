@@ -70,7 +70,7 @@ services:
   # Cadmus app
   cadmus-itinera-app:
     container_name: cadmus-itinera-app
-    image: vedph2020/cadmus-itinera-app:4.0.0
+    image: vedph2020/cadmus-itinera-app:4.0.1
     ports:
       - 4200:80
     depends_on:
