@@ -12,7 +12,7 @@ The codicological parts in this project will be imported from an [independent li
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:4.0.3 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:4.0.4 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -36,6 +36,8 @@ window.__env.mapbox_token = "the token for this project";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 4.0.4
 
 - 2023-05-26:
   - added missing thesaurus to related persons part feature for pin lookup settings.
