@@ -37,6 +37,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-05-26:
+  - added missing thesaurus to related persons part feature for pin lookup settings.
+  - updated packages.
+
 ### 4.0.3
 
 - 2023-05-26: updated packages and Angular.

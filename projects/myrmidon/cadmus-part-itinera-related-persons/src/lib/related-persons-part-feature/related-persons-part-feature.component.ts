@@ -40,6 +40,7 @@ export class RelatedPersonsPartFeatureComponent
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
+      'pin-link-settings'
     ];
   }
 }
