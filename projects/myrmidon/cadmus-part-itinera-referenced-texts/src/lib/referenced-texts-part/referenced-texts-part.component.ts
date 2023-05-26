@@ -21,8 +21,9 @@ import {
 
 /**
  * ReferencedTextsPart editor component.
- * Thesauri: related-text-types, assertion-tags, doc-reference-types,
- * doc-reference-tags.
+ * Thesauri: related-text-types, asserted-id-scopes, asserted-id-tags,
+ * assertion-tags, doc-reference-types, doc-reference-tags,
+ * pin-link-settings.
  */
 @Component({
   selector: 'cadmus-referenced-texts-part',
@@ -40,12 +41,23 @@ export class ReferencedTextsPartComponent
 
   // related-text-types
   public txtTypeEntries: ThesaurusEntry[] | undefined;
+  public idScopeEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-tags
+  public idTagEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   public assTagEntries: ThesaurusEntry[] | undefined;
   // doc-reference-types
   public refTypeEntries: ThesaurusEntry[] | undefined;
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
+
+  // pin link settings
+  // by-type: true/false
+  public pinByTypeMode?: boolean;
+  // switch-mode: true/false
+  public canSwitchMode?: boolean;
+  // edit-target: true/false
+  public canEditTarget?: boolean;
 
   public texts: FormControl<ReferencedText[]>;
 
@@ -74,12 +86,43 @@ export class ReferencedTextsPartComponent
     });
   }
 
+  /**
+   * Load settings from thesaurus entries.
+   *
+   * @param entries The thesaurus entries if any.
+   */
+  private loadSettings(entries?: ThesaurusEntry[]): void {
+    if (!entries?.length) {
+      this.pinByTypeMode = undefined;
+      this.canSwitchMode = undefined;
+      this.canEditTarget = undefined;
+    }
+    this.pinByTypeMode =
+      entries?.find((e) => e.id === 'by-type')?.value === 'true';
+    this.canSwitchMode =
+      entries?.find((e) => e.id === 'switch-mode')?.value === 'true';
+    this.canEditTarget =
+      entries?.find((e) => e.id === 'edit-target')?.value === 'true';
+  }
+
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'related-text-types';
     if (this.hasThesaurus(key)) {
       this.txtTypeEntries = thesauri[key].entries;
     } else {
       this.txtTypeEntries = undefined;
+    }
+    key = 'asserted-id-scopes';
+    if (this.hasThesaurus(key)) {
+      this.idScopeEntries = thesauri[key].entries;
+    } else {
+      this.idScopeEntries = undefined;
+    }
+    key = 'asserted-id-tags';
+    if (this.hasThesaurus(key)) {
+      this.idTagEntries = thesauri[key].entries;
+    } else {
+      this.idTagEntries = undefined;
     }
     key = 'assertion-tags';
     if (this.hasThesaurus(key)) {
@@ -99,6 +142,8 @@ export class ReferencedTextsPartComponent
     } else {
       this.refTagEntries = undefined;
     }
+    // load settings from thesaurus
+    this.loadSettings(thesauri['pin-link-settings']?.entries);
   }
 
   private updateForm(part?: ReferencedTextsPart | null): void {
@@ -129,42 +174,40 @@ export class ReferencedTextsPartComponent
   }
 
   public addText(): void {
-    const text: ReferencedText = {
-      type: this.txtTypeEntries?.length ? this.txtTypeEntries[0].id : '',
-      targetId: '',
-    };
-    this.texts.setValue([...this.texts.value, text]);
-    this.texts.updateValueAndValidity();
-    this.editText(this.texts.value.length - 1);
-  }
-
-  public editText(index: number): void {
-    if (index < 0) {
-      this._editedIndex = -1;
-      this.tabIndex = 0;
-      this.editedText = undefined;
-    } else {
-      this._editedIndex = index;
-      this.editedText = this.texts.value[index];
-      setTimeout(() => {
-        this.tabIndex = 1;
-      }, 300);
-    }
-  }
-
-  public onTextSave(entry: ReferencedText): void {
-    this.texts.setValue(
-      this.texts.value.map((e: ReferencedText, i: number) =>
-        i === this._editedIndex ? entry : e
-      )
+    this.editText(
+      {
+        type: this.txtTypeEntries?.length ? this.txtTypeEntries[0].id : '',
+        targetId: { target: { gid: '', label: '' } },
+      },
+      -1
     );
+  }
+
+  public editText(text: ReferencedText, index: number): void {
+    this._editedIndex = index;
+    this.editedText = text;
+    setTimeout(() => {
+      this.tabIndex = 1;
+    }, 0);
+  }
+
+  public onTextSave(text: ReferencedText): void {
+    const texts = [...this.texts.value];
+    if (this._editedIndex === -1) {
+      texts.push(text);
+    } else {
+      texts.splice(this._editedIndex, 1, text);
+    }
+    this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
     this.texts.markAsDirty();
-    this.editText(-1);
+    this.closeText();
   }
 
-  public onTextClose(): void {
-    this.editText(-1);
+  public closeText(): void {
+    this._editedIndex = -1;
+    this.editedText = undefined;
+    this.tabIndex = 0;
   }
 
   public deleteText(index: number): void {

@@ -43,7 +43,7 @@
                     mat-icon-button
                     color="primary"
                     matTooltip="Edit this text"
-                    (click)="editText(i)"
+                    (click)="editText(text, i)"
                   >
                     <mat-icon>edit</mat-icon>
                   </button>
@@ -76,7 +76,7 @@
                   </button>
                 </td>
                 <td>
-                  {{ text.type | flatLookup: txtTypeEntries:"id":"value" }}
+                  {{ text.type | flatLookup : txtTypeEntries : "id" : "value" }}
                 </td>
                 <td>{{ text.targetId }}</td>
                 <td>{{ text.targetCitation }}</td>
@@ -89,11 +89,16 @@
           <cadmus-referenced-text
             [text]="editedText"
             [assTagEntries]="assTagEntries"
+            [idScopeEntries]="idScopeEntries"
+            [idTagEntries]="idTagEntries"
             [refTagEntries]="refTagEntries"
             [refTypeEntries]="refTypeEntries"
             [txtTypeEntries]="txtTypeEntries"
+            [pinByTypeMode]="pinByTypeMode"
+            [canSwitchMode]="canSwitchMode"
+            [canEditTarget]="canEditTarget"
             (textChange)="onTextSave($event)"
-            (editorClose)="onTextClose()"
+            (editorClose)="closeText()"
           >
           </cadmus-referenced-text>
         </mat-tab>

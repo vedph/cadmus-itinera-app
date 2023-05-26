@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { Assertion } from '@myrmidon/cadmus-refs-assertion';
+import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
+
 import { ReferencedText } from '../referenced-texts-part';
 
 @Component({
@@ -32,6 +34,12 @@ export class ReferencedTextComponent implements OnInit {
   // related-text-types
   @Input()
   public txtTypeEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-scopes
+  @Input()
+  public idScopeEntries: ThesaurusEntry[] | undefined;
+  // asserted-id-tags
+  @Input()
+  public idTagEntries: ThesaurusEntry[] | undefined;
   // assertion-tags
   @Input()
   public assTagEntries: ThesaurusEntry[] | undefined;
@@ -45,13 +53,24 @@ export class ReferencedTextComponent implements OnInit {
   @Input()
   public noLookup?: boolean;
 
+  // pin link settings
+  // by-type: true/false
+  @Input()
+  public pinByTypeMode?: boolean;
+  // switch-mode: true/false
+  @Input()
+  public canSwitchMode?: boolean;
+  // edit-target: true/false
+  @Input()
+  public canEditTarget?: boolean;
+
   @Output()
   public textChange: EventEmitter<ReferencedText>;
   @Output()
   public editorClose: EventEmitter<any>;
 
   public type: FormControl<string | null>;
-  public targetId: FormControl<string | null>;
+  public targetId: FormControl<AssertedCompositeId | null>;
   public targetCitation: FormControl<string | null>;
   public sourceCitations: FormControl<string | null>;
   public hasAssertion: FormControl<boolean>;
@@ -124,7 +143,7 @@ export class ReferencedTextComponent implements OnInit {
   private getModel(): ReferencedText {
     return {
       type: this.type.value?.trim() || '',
-      targetId: this.targetId.value?.trim() || '',
+      targetId: this.targetId.value!,
       targetCitation: this.targetCitation.value?.trim(),
       sourceCitations: this.parseCitations(this.sourceCitations.value),
       assertion: this.hasAssertion.value
@@ -139,7 +158,7 @@ export class ReferencedTextComponent implements OnInit {
     setTimeout(() => this.assertion.markAsDirty(), 0);
   }
 
-  public onIdPick(id: string): void {
+  public onIdChange(id: AssertedCompositeId): void {
     this.targetId.setValue(id);
     this.targetId.updateValueAndValidity();
     this.targetId.markAsDirty();

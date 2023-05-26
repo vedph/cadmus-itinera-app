@@ -1,9 +1,10 @@
 import { Part } from '@myrmidon/cadmus-core';
+import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
 import { Assertion } from '@myrmidon/cadmus-refs-assertion';
 
 export interface ReferencedText {
   type: string;
-  targetId: string;
+  targetId: AssertedCompositeId;
   targetCitation?: string;
   sourceCitations?: string[];
   assertion?: Assertion;
@@ -86,7 +87,87 @@ export const REFERENCED_TEXTS_PART_SCHEMA = {
                 type: 'string',
               },
               targetId: {
-                type: 'string',
+                type: 'object',
+                default: {},
+                required: ['target'],
+                properties: {
+                  target: {
+                    type: 'object',
+                    required: ['gid', 'label'],
+                    properties: {
+                      gid: {
+                        type: 'string',
+                      },
+                      label: {
+                        type: 'string',
+                      },
+                      itemId: {
+                        type: 'string',
+                      },
+                      partId: {
+                        type: 'string',
+                      },
+                      partTypeId: {
+                        type: 'string',
+                      },
+                      roleId: {
+                        type: 'string',
+                      },
+                      name: {
+                        type: 'string',
+                      },
+                      value: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                  scope: {
+                    type: 'string',
+                  },
+                  tag: {
+                    type: 'string',
+                  },
+                  assertion: {
+                    type: 'object',
+                    required: ['rank'],
+                    properties: {
+                      tag: {
+                        type: 'string',
+                      },
+                      rank: {
+                        type: 'integer',
+                      },
+                      note: {
+                        type: 'string',
+                      },
+                      references: {
+                        type: 'array',
+                        items: {
+                          anyOf: [
+                            {
+                              type: 'object',
+                              required: ['citation'],
+                              properties: {
+                                type: {
+                                  type: 'string',
+                                },
+                                tag: {
+                                  type: 'string',
+                                },
+                                citation: {
+                                  type: 'string',
+                                },
+                                note: {
+                                  type: 'string',
+                                },
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
               },
               targetCitation: {
                 type: 'string',

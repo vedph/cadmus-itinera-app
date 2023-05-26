@@ -35,9 +35,12 @@ export class ReferencedTextsPartFeatureComponent
   protected override getReqThesauriIds(): string[] {
     return [
       'related-text-types',
+      'asserted-id-scopes',
+      'asserted-id-tags',
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
+      'pin-link-settings',
     ];
   }
 }

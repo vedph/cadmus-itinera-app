@@ -28,32 +28,23 @@
     </mat-form-field>
   </div>
 
-  <div class="form-row">
+  <div>
     <!-- targetId -->
-    <mat-form-field>
-      <mat-label>target ID</mat-label>
-      <input matInput [formControl]="targetId" />
-      <mat-error
-        *ngIf="
-          $any(targetId).errors?.required &&
-          (targetId.dirty || targetId.touched)
-        "
-        >ID required</mat-error
-      >
-      <mat-error
-        *ngIf="
-          $any(targetId).errors?.maxLength &&
-          (targetId.dirty || targetId.touched)
-        "
-        >ID too long</mat-error
-      >
-    </mat-form-field>
-
-    <!-- lookup -->
-    <cadmus-scoped-pin-lookup
-      *ngIf="!noLookup"
-      (idPick)="onIdPick($event)"
-    ></cadmus-scoped-pin-lookup>
+    <fieldset>
+      <legend>target ID</legend>
+      <cadmus-refs-asserted-composite-id
+        [id]="targetId.value"
+        [idScopeEntries]="idScopeEntries"
+        [idTagEntries]="idTagEntries"
+        [assTagEntries]="assTagEntries"
+        [refTypeEntries]="refTypeEntries"
+        [refTagEntries]="refTagEntries"
+        [pinByTypeMode]="pinByTypeMode"
+        [canSwitchMode]="canSwitchMode"
+        [canEditTarget]="canEditTarget"
+        (idChange)="onIdChange($event)"
+      ></cadmus-refs-asserted-composite-id>
+    </fieldset>
 
     <!-- targetCitation -->
     <mat-form-field>
