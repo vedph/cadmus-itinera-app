@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-05-26: updated packages.
+
 ### 4.0.4
 
 - 2023-05-26:
