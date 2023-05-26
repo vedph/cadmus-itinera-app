@@ -65,7 +65,7 @@
     "@myrmidon/cadmus-part-codicology-sheet-labels": "^3.0.0",
     "@myrmidon/cadmus-part-codicology-shelfmarks": "^3.0.0",
     "@myrmidon/cadmus-part-codicology-watermarks": "^4.0.0",
-    "@myrmidon/cadmus-part-general-pg": "^6.0.0",
+    "@myrmidon/cadmus-part-general-pg": "^6.0.1",
     "@myrmidon/cadmus-part-general-ui": "^6.0.1",
     "@myrmidon/cadmus-part-geo-asserted-locations": "^1.0.0",
     "@myrmidon/cadmus-part-geo-asserted-toponyms": "^1.0.0",
