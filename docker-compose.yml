@@ -52,16 +52,16 @@ services:
       - 5052:80
     depends_on:
       - cadmus-itinera-mongo
-      - cadmus-itinera-mysql
+      - cadmus-itinera-pgsql
     environment:
       - CONNECTIONSTRINGS__DEFAULT=mongodb://cadmus-itinera-mongo:27017/{0}
-      - CONNECTIONSTRINGS__INDEX=Server=cadmus-itinera-mysql;port=3306;Database={0};Uid=root;Pwd=mysql
-      - SEED__INDEXDELAY=50
+      - CONNECTIONSTRINGS__INDEX=Server=cadmus-itinera-pgsql;port=5432;Database={0};User Id=postgres;Password=postgres;Include Error Detail=True
+      - SERILOG__CONNECTIONSTRING=mongodb://cadmus-itinera-mongo:27017/{0}-log
+      - STOCKUSERS__0__PASSWORD=P4ss-W0rd!
+      - SEED__INDEXDELAY=25
       - MESSAGING__APIROOTURL=http://cadmusapi.azurewebsites.net
       - MESSAGING__APPROOTURL=http://cadmusapi.com/
       - MESSAGING__SUPPORTEMAIL=support@cadmus.com
-      - SERILOG__CONNECTIONSTRING=mongodb://cadmus-itinera-mongo:27017/{0}-log
-      - STOCKUSERS__0__PASSWORD=P4ss-W0rd!
     networks:
       - cadmus-itinera-network
 
