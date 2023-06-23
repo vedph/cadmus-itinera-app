@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-06-23: updated Angular and packages.
+
 ### 5.0.0
 
 - 2023-06-17: moved to PostgreSQL.
