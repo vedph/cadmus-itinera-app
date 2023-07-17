@@ -46,7 +46,7 @@ export class PersonInfoPartComponent
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.bio = formBuilder.control(null, Validators.maxLength(5000));
+    this.bio = formBuilder.control(null, Validators.maxLength(50000));
   }
 
   public override ngOnInit(): void {

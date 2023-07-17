@@ -37,6 +37,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-07-17:
+  - set all the asserted composite IDs default to internal link.
+  - person info bio max length raised to 50k even though this is just a theorical limit and it is not suggested nor compliant with structured data to go beyond a reasonable size.
 - 2023-07-16: updated packages.
 
 ### 5.0.1
