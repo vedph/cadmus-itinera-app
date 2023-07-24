@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-07-24: updated Angular and packages.
+
 ### 5.0.2
 
 - 2023-07-17:
