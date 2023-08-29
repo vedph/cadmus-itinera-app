@@ -12,7 +12,7 @@ The codicological parts in this project will be imported from an [independent li
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:5.0.3 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:5.0.4 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Production
 
@@ -37,6 +37,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 5.0.4
+
+- 2023-08-29: updated Angular and packages.
 - 2023-08-11: updated Angular.
 
 ### 5.0.3
