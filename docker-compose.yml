@@ -28,7 +28,7 @@ services:
 
   # Biblio API
   cadmus-biblio-api:
-    image: vedph2020/cadmus-biblio-api:5.0.2
+    image: vedph2020/cadmus-biblio-api:5.1.0
     container_name: cadmus-biblio-api
     ports:
       - 61691:80
@@ -68,7 +68,7 @@ services:
   # Cadmus app
   cadmus-itinera-app:
     container_name: cadmus-itinera-app
-    image: vedph2020/cadmus-itinera-app:5.0.4
+    image: vedph2020/cadmus-itinera-app:5.0.5
     ports:
       - 4200:80
     depends_on:
