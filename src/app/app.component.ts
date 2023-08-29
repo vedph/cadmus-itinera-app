@@ -10,10 +10,12 @@ import {
   GravatarService,
   User,
 } from '@myrmidon/auth-jwt-login';
-import { EnvService } from '@myrmidon/ng-tools';
+import { EnvService, RamStorageService } from '@myrmidon/ng-tools';
 import { FormBuilder, FormControl } from '@angular/forms';
 
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
+import { ASSERTED_COMPOSITE_ID_CONFIGS_KEY } from '@myrmidon/cadmus-refs-asserted-ids';
+import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
 
 @Component({
   selector: 'app-root',
@@ -37,11 +39,34 @@ export class AppComponent implements OnInit {
     public viafService: ViafRefLookupService,
     private _clipboard: Clipboard,
     private _snackbar: MatSnackBar,
+    workService: WorkRefLookupService,
     env: EnvService,
+    storage: RamStorageService,
     formBuilder: FormBuilder
   ) {
     this.version = env.get('version') || '';
     this.snavToggle = formBuilder.control(false, { nonNullable: true });
+    // configure external lookup for asserted composite IDs
+    storage.store(ASSERTED_COMPOSITE_ID_CONFIGS_KEY, [
+      {
+        name: 'biblio',
+        iconUrl: '/assets/img/biblio128.png',
+        description: 'Itinera bibliography',
+        label: 'ID',
+        service: workService,
+        itemIdGetter: (item: any) => item?.id,
+        itemLabelGetter: (item: any) => item?.key || item?.title,
+      },
+      {
+        name: 'VIAF',
+        iconUrl: '/assets/img/viaf128.png',
+        description: 'Virtual International Authority File',
+        label: 'ID',
+        service: viafService,
+        itemIdGetter: (item: any) => item?.viafid,
+        itemLabelGetter: (item: any) => item?.term,
+      },
+    ]);
   }
 
   ngOnInit(): void {
@@ -85,10 +110,10 @@ export class AppComponent implements OnInit {
   }
 
   public onIdPick(id: string): void {
-      this._clipboard.copy(id);
-      this._snackbar.open('ID copied', 'OK', {
-        duration: 1500,
-      });
+    this._clipboard.copy(id);
+    this._snackbar.open('ID copied', 'OK', {
+      duration: 1500,
+    });
   }
 
   public onViafItemChange(item: any | undefined): void {

@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-08-29: added asserted composite IDs external lookup configurations in `app.component`.
+
 ### 5.0.5
 
 - 2023-08-29: updated biblio packages.
