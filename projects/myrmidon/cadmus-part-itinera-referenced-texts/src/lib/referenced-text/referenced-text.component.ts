@@ -6,7 +6,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { Assertion } from '@myrmidon/cadmus-refs-assertion';
 import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { ReferencedText } from '../referenced-texts-part';
@@ -73,8 +72,6 @@ export class ReferencedTextComponent implements OnInit {
   public targetId: FormControl<AssertedCompositeId | null>;
   public targetCitation: FormControl<string | null>;
   public sourceCitations: FormControl<string | null>;
-  public hasAssertion: FormControl<boolean>;
-  public assertion: FormControl<Assertion | null>;
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
@@ -94,15 +91,11 @@ export class ReferencedTextComponent implements OnInit {
       null,
       Validators.maxLength(1000)
     );
-    this.hasAssertion = formBuilder.control(false, { nonNullable: true });
-    this.assertion = formBuilder.control(null);
     this.form = formBuilder.group({
       type: this.type,
       targetId: this.targetId,
       targetCitation: this.targetCitation,
       sourceCitations: this.sourceCitations,
-      hasAssertion: this.hasAssertion,
-      assertion: this.assertion,
     });
   }
 
@@ -120,8 +113,6 @@ export class ReferencedTextComponent implements OnInit {
     this.sourceCitations.setValue(
       model.sourceCitations?.length ? model.sourceCitations.join('\n') : ''
     );
-    this.hasAssertion.setValue(model.assertion ? true : false);
-    this.assertion.setValue(model.assertion || null);
     this.form.markAsPristine();
   }
 
@@ -146,16 +137,7 @@ export class ReferencedTextComponent implements OnInit {
       targetId: this.targetId.value!,
       targetCitation: this.targetCitation.value?.trim(),
       sourceCitations: this.parseCitations(this.sourceCitations.value),
-      assertion: this.hasAssertion.value
-        ? this.assertion.value || undefined
-        : undefined,
     };
-  }
-
-  public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion || null);
-    this.assertion.updateValueAndValidity();
-    setTimeout(() => this.assertion.markAsDirty(), 0);
   }
 
   public onIdChange(id: AssertedCompositeId): void {

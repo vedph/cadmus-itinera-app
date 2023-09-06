@@ -77,19 +77,6 @@
     </mat-form-field>
   </div>
 
-  <!-- assertion -->
-  <div>
-    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
-    <cadmus-refs-assertion
-      *ngIf="hasAssertion.value"
-      [assTagEntries]="assTagEntries"
-      [refTagEntries]="refTagEntries"
-      [refTypeEntries]="refTypeEntries"
-      [assertion]="assertion.value"
-      (assertionChange)="onAssertionChange($event)"
-    ></cadmus-refs-assertion>
-  </div>
-
   <!-- buttons -->
   <div>
     <button

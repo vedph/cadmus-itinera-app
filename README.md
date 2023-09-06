@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-09-06: removed `Assertion` from `ReferencedText` (`@myrmidon/cadmus-part-itinera-referenced-texts`).
+
 ### 5.0.6
 
 - 2023-08-29: added asserted composite IDs external lookup configurations in `app.component`.
