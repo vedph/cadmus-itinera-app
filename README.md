@@ -37,6 +37,7 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-09-11: updated Angular.
 - 2023-09-06: removed `Assertion` from `ReferencedText` (`@myrmidon/cadmus-part-itinera-referenced-texts`).
 
 ### 5.0.6
