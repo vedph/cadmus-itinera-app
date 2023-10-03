@@ -31,7 +31,7 @@ export class LetterInfoPartComponent
   constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
     super(authService, formBuilder);
     // form
-    this.subject = formBuilder.control(null, Validators.maxLength(600));
+    this.subject = formBuilder.control(null, Validators.maxLength(3000));
     this.header = formBuilder.control(null, Validators.maxLength(500));
     this.textDate = formBuilder.control(null, Validators.maxLength(100));
   }

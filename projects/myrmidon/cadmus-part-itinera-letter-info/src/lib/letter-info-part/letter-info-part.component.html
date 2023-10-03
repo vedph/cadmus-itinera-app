@@ -11,7 +11,7 @@
       <div>
         <mat-form-field class="long-text">
           <mat-label>subject</mat-label>
-          <input matInput [formControl]="subject" />
+          <textarea matInput [formControl]="subject"></textarea>
           <mat-error
             *ngIf="
               $any(subject).errors?.maxLength &&
