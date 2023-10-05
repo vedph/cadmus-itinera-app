@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-10-05: updated Angular and packages (with fixed graph walker).
+
 ### 6.0.0
 
 - 2023-10-04: ⚠️ updated packages and removed ELF.
