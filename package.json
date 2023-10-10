@@ -95,7 +95,7 @@
     "@myrmidon/ng-mat-tools": "2.0.0",
     "@myrmidon/ng-tools": "2.0.3",
     "@myrmidon/ngx-dirty-check": "^1.0.0",
-    "@myrmidon/paged-data-browsers": "^0.0.4",
+    "@myrmidon/paged-data-browsers": "^0.0.5",
     "@swimlane/ngx-graph": "^8.2.2",
     "@types/diff-match-patch": "^1.0.34",
     "@types/rangy": "0.0.36",
