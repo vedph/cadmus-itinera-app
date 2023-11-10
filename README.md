@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2023-11-10: ⚠️ upgraded to Angular 17.
+
 ### 6.0.2
 
 - 2023-10-10: updated packages (fix in paged store list caching).

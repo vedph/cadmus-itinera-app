@@ -155,10 +155,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {
-      initialNavigation: 'enabledBlocking',
-      useHash: true,
-    }),
+    RouterModule.forRoot(routes),
   ],
   exports: [RouterModule],
 })
