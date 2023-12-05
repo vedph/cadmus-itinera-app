@@ -44,6 +44,8 @@
     "@myrmidon/cadmus-cod-location": "^3.0.0",
     "@myrmidon/cadmus-codicology-ui": "^4.0.0",
     "@myrmidon/cadmus-core": "^6.0.0",
+    "@myrmidon/cadmus-flags-pg": "^1.0.0",
+    "@myrmidon/cadmus-flags-ui": "^1.0.1",
     "@myrmidon/cadmus-graph-pg-ex": "^6.0.0",
     "@myrmidon/cadmus-graph-ui": "^7.0.0",
     "@myrmidon/cadmus-graph-ui-ex": "^2.0.0",
