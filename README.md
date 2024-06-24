@@ -37,6 +37,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2024-06-24:
+  - ⚠️ upgraded to Angular 18.
+  - updated bricks to 5.x.x and replaced Monaco editor.
 - 2023-12-05:
   - updated Angular and packages.
   - opted in for flags editing.
