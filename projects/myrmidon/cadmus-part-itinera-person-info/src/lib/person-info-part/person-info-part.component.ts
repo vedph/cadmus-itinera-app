@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -23,18 +23,14 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
 })
 export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>
-  implements OnInit
+  implements OnInit, OnDestroy
 {
+  private readonly _disposables: monaco.IDisposable[] = [];
+  private _editorModel?: monaco.editor.ITextModel;
+  private _editor?: monaco.editor.IStandaloneCodeEditor;
+
   public sex: FormControl<string | null>;
   public bio: FormControl<string | null>;
-
-  public editorOptions = {
-    theme: 'vs-light',
-    language: 'markdown',
-    wordWrap: 'on',
-    // https://github.com/atularen/ngx-monaco-editor/issues/19
-    automaticLayout: true,
-  };
 
   // person-sex
   public sexEntries: ThesaurusEntry[] | undefined;
@@ -51,6 +47,36 @@ export class PersonInfoPartComponent
 
   public override ngOnInit(): void {
     super.ngOnInit();
+  }
+
+  public override ngOnDestroy() {
+    this._disposables.forEach((d) => d.dispose());
+  }
+
+  public onCreateEditor(editor: monaco.editor.IEditor) {
+    editor.updateOptions({
+      minimap: {
+        side: 'right',
+      },
+      wordWrap: 'on',
+      automaticLayout: true,
+    });
+    this._editorModel =
+      this._editorModel ||
+      monaco.editor.createModel('# Hello world', 'markdown');
+    editor.setModel(this._editorModel);
+    this._editor = editor as monaco.editor.IStandaloneCodeEditor;
+
+    this._disposables.push(
+      this._editorModel.onDidChangeContent((e) => {
+        console.log(this._editorModel!.getValue());
+        this.bio.setValue(this._editorModel!.getValue());
+        this.bio.markAsDirty();
+        this.bio.updateValueAndValidity();
+      })
+    );
+
+    // TODO configure plugins
   }
 
   protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
@@ -76,6 +102,7 @@ export class PersonInfoPartComponent
     }
     this.sex.setValue(part.sex);
     this.bio.setValue(part.bio || null);
+    this._editorModel?.setValue(part.bio || '');
     this.form.markAsPristine();
   }
 

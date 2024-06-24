@@ -2,6 +2,7 @@
   <!-- banner -->
   <div id="banner">
     <img
+      alt="banner"
       srcset="
         ./assets/img/banner-1024.jpg 1024w,
         ./assets/img/banner-512.jpg   512w
@@ -17,7 +18,7 @@
         type="button"
         *ngIf="!(user$ | async)"
         mat-mini-fab
-        color="primary"
+        class="mat-primary"
         matTooltip="Login"
         routerLink="/login"
       >
@@ -25,7 +26,7 @@
       </button>
       <button
         type="button"
-        color="primary"
+        class="mat-primary"
         mat-mini-fab
         href="https://github.com/vedph/cadmus-itinera"
         target="_blank"

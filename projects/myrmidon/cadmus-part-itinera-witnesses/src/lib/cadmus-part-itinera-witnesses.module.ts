@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -18,6 +17,7 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { WitnessesPartComponent } from './witnesses-part/witnesses-part.component';
 import { WitnessComponent } from './witness/witness.component';
 import { WitnessesPartFeatureComponent } from './witnesses-part-feature/witnesses-part-feature.component';
+import { CodLocationComponent, CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,8 @@ import { WitnessesPartFeatureComponent } from './witnesses-part-feature/witnesse
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusCodLocationModule,
+    CodLocationRangePipe,
+    CodLocationComponent,
   ],
   exports: [
     WitnessesPartComponent,

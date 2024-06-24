@@ -3,9 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {
-  HttpClientJsonpModule,
-  HttpClientModule,
-  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+  withJsonpSupport,
 } from '@angular/common/http';
 
 // material
@@ -42,28 +42,37 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
-// ngx-monaco
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { NgeMonacoModule } from '@cisstech/nge/monaco';
 // ngx-markdown
 import { MarkdownModule } from 'ngx-markdown';
 
 // myrmidon
-import { NgxDirtyCheckModule } from '@myrmidon/ngx-dirty-check';
 import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import {
-  AuthJwtInterceptor,
   AuthJwtLoginModule,
+  authJwtInterceptor,
 } from '@myrmidon/auth-jwt-login';
 import { AuthJwtAdminModule } from '@myrmidon/auth-jwt-admin';
 
 // cadmus bricks
-import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
-import { CadmusRefsDocReferencesModule } from '@myrmidon/cadmus-refs-doc-references';
-import { CadmusRefsHistoricalDateModule } from '@myrmidon/cadmus-refs-historical-date';
-import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
-import { CadmusRefsLookupModule } from '@myrmidon/cadmus-refs-lookup';
-import { CadmusRefsViafLookupModule } from '@myrmidon/cadmus-refs-viaf-lookup';
+import { GEONAMES_USERNAME_TOKEN } from '@myrmidon/cadmus-refs-geonames-lookup';
+import { AssertedIdsComponent, ScopedPinLookupComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import { DocReferencesComponent } from '@myrmidon/cadmus-refs-doc-references';
+import { HistoricalDateComponent } from '@myrmidon/cadmus-refs-historical-date';
+import { RefLookupComponent } from '@myrmidon/cadmus-refs-lookup';
+import { CodLocationComponent } from '@myrmidon/cadmus-cod-location';
+import { TextBlockViewComponent } from '@myrmidon/cadmus-text-block-view';
+import {
+  CADMUS_TEXT_ED_BINDINGS_TOKEN,
+  CADMUS_TEXT_ED_SERVICE_OPTIONS_TOKEN,
+} from '@myrmidon/cadmus-text-ed';
+import {
+  MdBoldCtePlugin,
+  MdItalicCtePlugin,
+  MdLinkCtePlugin,
+} from '@myrmidon/cadmus-text-ed-md';
+import { TxtEmojiCtePlugin } from '@myrmidon/cadmus-text-ed-txt';
 
 // cadmus libs
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
@@ -74,7 +83,6 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
-import { CadmusTextBlockViewModule } from '@myrmidon/cadmus-text-block-view';
 import { CadmusPreviewUiModule } from '@myrmidon/cadmus-preview-ui';
 import { CadmusPreviewPgModule } from '@myrmidon/cadmus-preview-pg';
 
@@ -104,15 +112,11 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
     ResetPasswordComponent,
     BiblioPageComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    // required by VIAF JSONP
-    // note: this module must be listed BEFORE HttpClientModule!
-    // https://github.com/angular/angular/issues/47312
-    HttpClientJsonpModule,
-    HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
     // material
@@ -149,7 +153,7 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
     MatTreeModule,
     ClipboardModule,
     // monaco
-    MonacoEditorModule.forRoot(),
+    NgeMonacoModule.forRoot({}),
     // markdown
     MarkdownModule.forRoot(),
     // myrmidon
@@ -157,17 +161,17 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
     NgMatToolsModule,
     AuthJwtLoginModule,
     AuthJwtAdminModule,
-    NgxDirtyCheckModule,
     // cadmus bricks
-    CadmusRefsAssertedIdsModule,
-    CadmusRefsDocReferencesModule,
-    CadmusRefsHistoricalDateModule,
-    CadmusRefsLookupModule,
-    CadmusCodLocationModule,
+    AssertedIdsComponent,
+    ScopedPinLookupComponent,
+    DocReferencesComponent,
+    HistoricalDateComponent,
+    RefLookupComponent,
+    CodLocationComponent,
     CadmusCodicologyUiModule,
-    CadmusPartCodicologySheetLabelsModule,
-    CadmusRefsViafLookupModule,
+    TextBlockViewComponent,
     // cadmus
+    CadmusPartCodicologySheetLabelsModule,
     CadmusBiblioUiModule,
     CadmusApiModule,
     CadmusCoreModule,
@@ -175,11 +179,14 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusTextBlockViewModule,
     CadmusPreviewUiModule,
     CadmusPreviewPgModule,
   ],
   providers: [
+    provideHttpClient(
+      withInterceptors([authJwtInterceptor]),
+      withJsonpSupport()
+    ),
     EnvServiceProvider,
     // parts and fragments type IDs to editor group keys mappings
     // https://github.com/nrwl/nx/issues/208#issuecomment-384102058
@@ -199,14 +206,55 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
       provide: 'itemBrowserKeys',
       useValue: ITEM_BROWSER_KEYS,
     },
-    // HTTP interceptor
-    // https://medium.com/@ryanchenkie_40935/angular-authentication-using-the-http-client-and-http-interceptors-2f9d1540eb8
+    // GeoNames lookup (see environment.prod.ts for the username)
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthJwtInterceptor,
-      multi: true,
+      provide: GEONAMES_USERNAME_TOKEN,
+      useValue: 'myrmex',
+    },
+    // text editor plugins
+    // https://github.com/vedph/cadmus-bricks-shell-v2/blob/master/projects/myrmidon/cadmus-text-ed/README.md
+    MdBoldCtePlugin,
+    MdItalicCtePlugin,
+    TxtEmojiCtePlugin,
+    MdLinkCtePlugin,
+    {
+      provide: CADMUS_TEXT_ED_SERVICE_OPTIONS_TOKEN,
+      useFactory: (
+        mdBoldCtePlugin: MdBoldCtePlugin,
+        mdItalicCtePlugin: MdItalicCtePlugin,
+        txtEmojiCtePlugin: TxtEmojiCtePlugin,
+        mdLinkCtePlugin: MdLinkCtePlugin
+      ) => {
+        return {
+          plugins: [
+            mdBoldCtePlugin,
+            mdItalicCtePlugin,
+            txtEmojiCtePlugin,
+            mdLinkCtePlugin,
+          ],
+        };
+      },
+      deps: [
+        MdBoldCtePlugin,
+        MdItalicCtePlugin,
+        TxtEmojiCtePlugin,
+        MdLinkCtePlugin,
+      ],
+    },
+    // monaco bindings for plugins
+    // 2080 = monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyB;
+    // 2087 = monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyI;
+    // 2083 = monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyE;
+    // 2090 = monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL;
+    {
+      provide: CADMUS_TEXT_ED_BINDINGS_TOKEN,
+      useValue: {
+        2080: 'md.bold', // Ctrl+B
+        2087: 'md.italic', // Ctrl+I
+        2083: 'txt.emoji', // Ctrl+E
+        2090: 'md.link', // Ctrl+L
+      },
     },
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

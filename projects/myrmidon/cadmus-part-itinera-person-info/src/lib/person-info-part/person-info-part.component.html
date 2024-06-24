@@ -38,10 +38,10 @@
 
       <!-- bio -->
       <div>
-        <ngx-monaco-editor
-          [options]="editorOptions"
-          formControlName="bio"
-        ></ngx-monaco-editor>
+        <nge-monaco-editor
+          style="--editor-height: 400px"
+          (ready)="onCreateEditor($event)"
+        />
         <mat-error
           *ngIf="$any(bio).errors?.maxLength && (bio.touched || bio.dirty)"
           >too long</mat-error

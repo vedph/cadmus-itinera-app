@@ -40,6 +40,9 @@ window.__env.mapbox_token = "the token for this project";
 - 2024-06-24:
   - ⚠️ upgraded to Angular 18.
   - [updated bricks](https://github.com/vedph/cadmus-bricks-shell-v2#migration-from-v1) to 5.x.x and replaced Monaco editor.
+  - replaced `mapbox-gl` with `leaflet`.
+  - replaced `color` with classes.
+  - added text editor plugins.
 - 2023-12-05:
   - updated Angular and packages.
   - opted in for flags editing.

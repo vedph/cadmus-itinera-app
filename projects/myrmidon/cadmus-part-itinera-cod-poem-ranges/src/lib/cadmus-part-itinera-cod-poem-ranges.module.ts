@@ -12,7 +12,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // cadmus
-import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -24,6 +23,7 @@ import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts/cod-poem-
 import { AlnumRangePipe } from './pipes/alnum-range.pipe';
 import { CodPoemRangesPartFeatureComponent } from './cod-poem-ranges-part-feature/cod-poem-ranges-part-feature.component';
 import { CodPoemRangesLayoutComponent } from './cod-poem-ranges-layout/cod-poem-ranges-layout.component';
+import { CodLocationComponent } from '@myrmidon/cadmus-cod-location';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,7 @@ import { CodPoemRangesLayoutComponent } from './cod-poem-ranges-layout/cod-poem-
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusCodLocationModule,
+    CodLocationComponent,
     CadmusCodicologyUiModule,
   ],
   exports: [

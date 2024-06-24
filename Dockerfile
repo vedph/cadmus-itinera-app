@@ -4,7 +4,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN rm /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html
-COPY dist/cadmus-itinera-app/ .
+COPY dist/browser/cadmus-itinera-app/ .
 
 EXPOSE 80
 # ENTRYPOINT ["nginx", "-g", "daemon off;"]

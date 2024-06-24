@@ -16,6 +16,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
 import { ASSERTED_COMPOSITE_ID_CONFIGS_KEY } from '@myrmidon/cadmus-refs-asserted-ids';
 import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
+import { GeoNamesRefLookupService } from '@myrmidon/cadmus-refs-geonames-lookup';
 
 @Component({
   selector: 'app-root',
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit {
     workService: WorkRefLookupService,
     env: EnvService,
     storage: RamStorageService,
+    geonames: GeoNamesRefLookupService,
     formBuilder: FormBuilder
   ) {
     this.version = env.get('version') || '';
@@ -65,6 +67,15 @@ export class AppComponent implements OnInit {
         service: viafService,
         itemIdGetter: (item: any) => item?.viafid,
         itemLabelGetter: (item: any) => item?.term,
+      },
+      {
+        name: 'geonames',
+        iconUrl: '/assets/img/geonames128.png',
+        description: 'GeoNames',
+        label: 'ID',
+        service: geonames,
+        itemIdGetter: (item: any) => item?.geonameId,
+        itemLabelGetter: (item: any) => item?.name,
       },
     ]);
   }

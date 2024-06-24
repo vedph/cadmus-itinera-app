@@ -8,7 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+
+import { NgeMonacoModule } from '@cisstech/nge/monaco';
 
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
@@ -36,7 +37,7 @@ import { PersonInfoPartFeatureComponent } from './person-info-part-feature/perso
     MatTabsModule,
     MatTooltipModule,
     NgMatToolsModule,
-    MonacoEditorModule,
+    NgeMonacoModule,
     // Cadmus
     CadmusStateModule,
     CadmusUiModule,

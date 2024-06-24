@@ -10,14 +10,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { NgeMonacoModule } from '@cisstech/nge/monaco';
+
 import { NgToolsModule } from '@myrmidon/ng-tools';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
-import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
-import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
+
+import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
+import { AssertedCompositeIdsComponent, AssertedIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { RelatedPersonComponent } from './related-person/related-person.component';
 import { RelatedPersonsPartComponent } from './related-persons-part/related-persons-part.component';
@@ -27,7 +30,7 @@ import { RelatedPersonsPartFeatureComponent } from './related-persons-part-featu
   declarations: [
     RelatedPersonComponent,
     RelatedPersonsPartComponent,
-    RelatedPersonsPartFeatureComponent
+    RelatedPersonsPartFeatureComponent,
   ],
   imports: [
     CommonModule,
@@ -43,19 +46,20 @@ import { RelatedPersonsPartFeatureComponent } from './related-persons-part-featu
     MatTabsModule,
     MatTooltipModule,
     NgMatToolsModule,
-    MonacoEditorModule,
+    NgeMonacoModule,
     // Cadmus
     NgToolsModule,
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusRefsAssertedIdsModule,
-    CadmusRefsAssertionModule,
+    AssertedCompositeIdsComponent,
+    AssertedIdsComponent,
+    AssertionComponent,
   ],
   exports: [
     RelatedPersonComponent,
     RelatedPersonsPartComponent,
-    RelatedPersonsPartFeatureComponent
+    RelatedPersonsPartFeatureComponent,
   ],
 })
 export class CadmusPartItineraRelatedPersonsModule {}

@@ -10,11 +10,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { NgeMonacoModule } from '@cisstech/nge/monaco';
 
 import { NgToolsModule } from '@myrmidon/ng-tools';
-import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
-import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -23,6 +21,8 @@ import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { ReferencedTextsPartComponent } from './referenced-texts-part/referenced-texts-part.component';
 import { ReferencedTextComponent } from './referenced-text/referenced-text.component';
 import { ReferencedTextsPartFeatureComponent } from './referenced-texts-part-feature/referenced-texts-part-feature.component';
+import { AssertedCompositeIdComponent, AssertedIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
 
 @NgModule({
   declarations: [
@@ -44,14 +44,15 @@ import { ReferencedTextsPartFeatureComponent } from './referenced-texts-part-fea
     MatTabsModule,
     MatTooltipModule,
     NgMatToolsModule,
-    MonacoEditorModule,
+    NgeMonacoModule,
     // Cadmus
     NgToolsModule,
-    CadmusRefsAssertedIdsModule,
+    AssertedCompositeIdComponent,
+    AssertedIdsComponent,
+    AssertionComponent,
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusRefsAssertionModule,
   ],
   exports: [
     ReferencedTextsPartComponent,

@@ -11,16 +11,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // cadmus
-import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+import { CodLociPartFeatureComponent } from './cod-loci-part-feature/cod-loci-part-feature.component';
 
 import { CodLociPartComponent } from './cod-loci-part/cod-loci-part.component';
 import { CodLocusComponent } from './cod-locus/cod-locus.component';
-import { CodLociPartFeatureComponent } from './cod-loci-part-feature/cod-loci-part-feature.component';
+import {
+  CodLocationComponent,
+  CodLocationPipe,
+  CodLocationRangePipe,
+} from '@myrmidon/cadmus-cod-location';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,9 @@ import { CodLociPartFeatureComponent } from './cod-loci-part-feature/cod-loci-pa
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusCodLocationModule,
+    CodLocationComponent,
+    CodLocationPipe,
+    CodLocationRangePipe,
     CadmusCodicologyUiModule,
   ],
   exports: [

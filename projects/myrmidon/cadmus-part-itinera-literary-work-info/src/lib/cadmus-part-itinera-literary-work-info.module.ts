@@ -11,17 +11,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { CadmusRefsAssertedIdsModule } from '@myrmidon/cadmus-refs-asserted-ids';
-import { CadmusRefsAssertionModule } from '@myrmidon/cadmus-refs-assertion';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
-import { CadmusUiFlagsPickerModule } from '@myrmidon/cadmus-ui-flags-picker';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { AssertedTitleComponent } from './asserted-title/asserted-title.component';
 import { LiteraryWorkInfoPartComponent } from './literary-work-info-part/literary-work-info-part.component';
 import { LiteraryWorkInfoPartFeatureComponent } from './literary-work-info-part-feature/literary-work-info-part-feature.component';
+import { AssertedCompositeIdComponent, AssertedCompositeIdsComponent, AssertedIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
+import { FlagsPickerComponent } from '@myrmidon/cadmus-ui-flags-picker';
 
 @NgModule({
   declarations: [
@@ -48,9 +48,11 @@ import { LiteraryWorkInfoPartFeatureComponent } from './literary-work-info-part-
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,
-    CadmusRefsAssertedIdsModule,
-    CadmusRefsAssertionModule,
-    CadmusUiFlagsPickerModule,
+    AssertedCompositeIdComponent,
+    AssertedCompositeIdsComponent,
+    AssertedIdsComponent,
+    AssertionComponent,
+    FlagsPickerComponent,
   ],
   exports: [
     LiteraryWorkInfoPartComponent,

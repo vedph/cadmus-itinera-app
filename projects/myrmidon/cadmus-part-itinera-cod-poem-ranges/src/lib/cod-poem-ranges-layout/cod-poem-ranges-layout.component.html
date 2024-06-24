@@ -10,20 +10,18 @@
       <button
         mat-icon-button
         type="button"
-        color="primary"
         (click)="setCheck($event)"
         matTooltip="Check this layout"
       >
-        <mat-icon>task_alt</mat-icon>
+        <mat-icon class="mat-primary">task_alt</mat-icon>
       </button>
       <button
         mat-icon-button
         type="button"
-        color="warn"
         (click)="clearLayout()"
         matTooltip="Clear this layout"
       >
-        <mat-icon>clear</mat-icon>
+        <mat-icon class="mat-warn">clear</mat-icon>
       </button>
       <button
         mat-icon-button
@@ -35,7 +33,7 @@
       </button>
     </div>
     <!-- indicators -->
-    <div class="form-row" matTooltip="{{layout.note || undefined}}">
+    <div class="form-row" matTooltip="{{ layout.note || undefined }}">
       <span class="poem-nr" [class.annotated]="layout.note">{{
         layout.nr.n + (layout.nr.a || "")
       }}</span>
@@ -52,11 +50,11 @@
         (keydown.esc)="cancelNote()"
         (keydown.enter)="saveNote()"
       />
-      <button mat-icon-button matSuffix (click)="cancelNote()" color="warn">
-        <mat-icon>clear</mat-icon>
+      <button mat-icon-button matSuffix (click)="cancelNote()">
+        <mat-icon class="mat-warn">clear</mat-icon>
       </button>
-      <button mat-icon-button matSuffix (click)="saveNote()" color="primary">
-        <mat-icon>check_circle</mat-icon>
+      <button mat-icon-button matSuffix (click)="saveNote()">
+        <mat-icon class="mat-primary">check_circle</mat-icon>
       </button>
       <mat-error
         *ngIf="$any(note).errors?.maxLength && (note.dirty || note.touched)"
