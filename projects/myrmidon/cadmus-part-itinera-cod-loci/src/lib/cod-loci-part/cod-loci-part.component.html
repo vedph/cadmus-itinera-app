@@ -19,7 +19,8 @@
               <mat-icon>add_circle</mat-icon> locus
             </button>
           </div>
-          <table *ngIf="loci?.value?.length">
+          @if (loci.value.length) {
+          <table>
             <thead>
               <tr>
                 <th></th>
@@ -28,14 +29,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
-                  let entry of loci?.value;
-                  let i = index;
-                  let first = first;
-                  let last = last
-                "
-              >
+              @for ( entry of loci.value; track entry; let i = $index; let
+              first = $first; let last = $last) {
+              <tr>
                 <td>
                   <button
                     type="button"
@@ -75,11 +71,14 @@
                 <td>{{ entry.citation }}</td>
                 <td>{{ entry.range | codLocationRange }}</td>
               </tr>
+              }
             </tbody>
           </table>
+          }
         </mat-tab>
 
-        <mat-tab label="locus" *ngIf="editedLocus">
+        @if (editedLocus) {
+        <mat-tab label="locus">
           <cadmus-cod-locus
             [locEntries]="locEntries"
             [imgTypeEntries]="imgTypeEntries"
@@ -88,6 +87,7 @@
             (editorClose)="onLocusClose()"
           ></cadmus-cod-locus>
         </mat-tab>
+        }
       </mat-tab-group>
     </mat-card-content>
     <mat-card-actions>

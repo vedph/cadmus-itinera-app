@@ -17,7 +17,8 @@
           <mat-icon>add_circle</mat-icon> witness
         </button>
       </div>
-      <table *ngIf="witnesses?.value?.length">
+      @if (witnesses.value.length) {
+      <table>
         <thead>
           <tr>
             <th></th>
@@ -26,14 +27,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="
-              let witness of witnesses?.value;
-              let i = index;
-              let first = first;
-              let last = last
-            "
-          >
+          @for ( witness of witnesses.value; track witness; let i = $index; let
+          first = $first; let last = $last) {
+          <tr>
             <td>
               <button
                 type="button"
@@ -73,8 +69,10 @@
             <td>{{ witness.id }}</td>
             <td>{{ witness.ranges | codLocationRange }}</td>
           </tr>
+          }
         </tbody>
       </table>
+      }
 
       <mat-expansion-panel
         [expanded]="editedWitness"

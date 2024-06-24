@@ -4,14 +4,11 @@
     <mat-form-field class="long-text">
       <mat-label>title</mat-label>
       <input matInput [formControl]="title" />
-      <mat-error
-        *ngIf="$any(title).errors?.required && (title.dirty || title.touched)"
-        >title required</mat-error
-      >
-      <mat-error
-        *ngIf="$any(title).errors?.maxLength && (title.dirty || title.touched)"
-        >title too long</mat-error
-      >
+      @if ($any(title).errors?.required && (title.dirty || title.touched)) {
+      <mat-error>title required</mat-error>
+      } @if ($any(title).errors?.maxLength && (title.dirty || title.touched)) {
+      <mat-error>title too long</mat-error>
+      }
     </mat-form-field>
   </div>
 
@@ -20,24 +17,24 @@
     <mat-form-field class="long-text">
       <mat-label>EID</mat-label>
       <input matInput [formControl]="eid" />
-      <mat-error
-        *ngIf="$any(eid).errors?.maxLength && (eid.dirty || eid.touched)"
-        >EID too long</mat-error
-      >
+      @if ($any(eid).errors?.maxLength && (eid.dirty || eid.touched)) {
+      <mat-error>EID too long</mat-error>
+      }
     </mat-form-field>
   </div>
 
   <!-- assertion -->
   <div>
     <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
+    @if (hasAssertion.value) {
     <cadmus-refs-assertion
-      *ngIf="hasAssertion.value"
       [assTagEntries]="assTagEntries"
       [refTagEntries]="refTagEntries"
       [refTypeEntries]="refTypeEntries"
       [assertion]="assertion.value"
       (assertionChange)="onAssertionChange($event)"
     ></cadmus-refs-assertion>
+    }
   </div>
 
   <!-- buttons -->

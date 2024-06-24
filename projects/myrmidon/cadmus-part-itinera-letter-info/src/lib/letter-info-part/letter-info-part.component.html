@@ -12,13 +12,10 @@
         <mat-form-field class="long-text">
           <mat-label>subject</mat-label>
           <textarea matInput [formControl]="subject"></textarea>
-          <mat-error
-            *ngIf="
-              $any(subject).errors?.maxLength &&
-              (subject.dirty || subject.touched)
-            "
-            >subject too long</mat-error
-          >
+          @if ( $any(subject).errors?.maxLength && (subject.dirty ||
+          subject.touched) ) {
+          <mat-error>subject too long</mat-error>
+          }
         </mat-form-field>
       </div>
 
@@ -27,12 +24,10 @@
         <mat-form-field class="long-text">
           <mat-label>header</mat-label>
           <input matInput [formControl]="header" />
-          <mat-error
-            *ngIf="
-              $any(header).errors?.maxLength && (header.dirty || header.touched)
-            "
-            >header too long</mat-error
-          >
+          @if ( $any(header).errors?.maxLength && (header.dirty ||
+          header.touched) ) {
+          <mat-error>header too long</mat-error>
+          }
         </mat-form-field>
       </div>
 
@@ -41,13 +36,10 @@
         <mat-form-field class="long-text">
           <mat-label>text date</mat-label>
           <input matInput [formControl]="textDate" />
-          <mat-error
-            *ngIf="
-              $any(textDate).errors?.maxLength &&
-              (textDate.dirty || textDate.touched)
-            "
-            >date too long</mat-error
-          >
+          @if ( $any(textDate).errors?.maxLength && (textDate.dirty ||
+          textDate.touched) ) {
+          <mat-error>date too long</mat-error>
+          }
         </mat-form-field>
       </div>
     </mat-card-content>

@@ -4,12 +4,11 @@
     <mat-form-field>
       <mat-label>ID</mat-label>
       <input matInput [formControl]="id" />
-      <mat-error *ngIf="$any(id).errors?.required && (id.dirty || id.touched)"
-        >ID required</mat-error
-      >
-      <mat-error *ngIf="$any(id).errors?.maxLength && (id.dirty || id.touched)"
-        >ID too long</mat-error
-      >
+      @if ($any(id).errors?.required && (id.dirty || id.touched)) {
+      <mat-error>ID required</mat-error>
+      } @if ($any(id).errors?.maxLength && (id.dirty || id.touched)) {
+      <mat-error>ID too long</mat-error>
+      }
     </mat-form-field>
   </div>
   <!-- ranges -->

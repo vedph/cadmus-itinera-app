@@ -9,31 +9,31 @@
     <mat-card-content>
       <div>
         <!-- sex (bound) -->
-        <mat-form-field *ngIf="sexEntries?.length">
+        @if (sexEntries?.length) {
+        <mat-form-field>
           <mat-label>sex</mat-label>
           <mat-select [formControl]="sex">
-            <mat-option *ngFor="let e of sexEntries" [value]="e.id">{{
-              e.value
-            }}</mat-option>
+            @for (e of sexEntries; track e.id) {
+            <mat-option [value]="e.id">{{ e.value }}</mat-option>
+            }
           </mat-select>
-          <mat-error
-            *ngIf="$any(sex).errors?.required && (sex.dirty || sex.touched)"
-            >sex required</mat-error
-          >
+          @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
+          <mat-error>sex required</mat-error>
+          }
         </mat-form-field>
+        }
         <!-- sex (free) -->
-        <mat-form-field *ngIf="!sexEntries?.length">
+        @if (!sexEntries?.length) {
+        <mat-form-field>
           <mat-label>sex</mat-label>
           <input matInput [formControl]="sex" />
-          <mat-error
-            *ngIf="$any(sex).errors?.required && (sex.dirty || sex.touched)"
-            >sex required</mat-error
-          >
-          <mat-error
-            *ngIf="$any(sex).errors?.maxLength && (sex.dirty || sex.touched)"
-            >sex too long</mat-error
-          >
+          @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
+          <mat-error>sex required</mat-error>
+          } @if ($any(sex).errors?.maxLength && (sex.dirty || sex.touched)) {
+          <mat-error>sex too long</mat-error>
+          }
         </mat-form-field>
+        }
       </div>
 
       <!-- bio -->
@@ -42,10 +42,9 @@
           style="--editor-height: 400px"
           (ready)="onCreateEditor($event)"
         />
-        <mat-error
-          *ngIf="$any(bio).errors?.maxLength && (bio.touched || bio.dirty)"
-          >too long</mat-error
-        >
+        @if ($any(bio).errors?.maxLength && (bio.touched || bio.dirty)) {
+        <mat-error>too long</mat-error>
+        }
       </div>
     </mat-card-content>
     <mat-card-actions>

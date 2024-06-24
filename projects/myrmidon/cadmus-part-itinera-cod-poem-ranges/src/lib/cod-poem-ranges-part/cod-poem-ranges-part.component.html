@@ -12,40 +12,34 @@
         <mat-tab label="ranges">
           <div>
             <!-- sortType (bound) -->
-            <mat-form-field *ngIf="sortEntries?.length" class="form-col">
+            @if (sortEntries?.length) {
+            <mat-form-field class="form-col">
               <mat-label>type</mat-label>
               <mat-select [formControl]="sortType">
-                <mat-option *ngFor="let e of sortEntries" [value]="e.id">{{
-                  e.value
-                }}</mat-option>
+                @for (e of sortEntries; track e.id) {
+                <mat-option [value]="e.id">{{ e.value }}</mat-option>
+                }
               </mat-select>
-              <mat-error
-                *ngIf="
-                  $any(sortType).errors?.required &&
-                  (sortType.dirty || sortType.touched)
-                "
-                >type required</mat-error
-              >
+              @if ( $any(sortType).errors?.required && (sortType.dirty ||
+              sortType.touched) ) {
+              <mat-error>type required</mat-error>
+              }
             </mat-form-field>
+            }
             <!-- sortType (free) -->
-            <mat-form-field *ngIf="!sortEntries?.length" class="form-col">
+            @if (!sortEntries?.length) {
+            <mat-form-field class="form-col">
               <mat-label>type</mat-label>
               <input matInput [formControl]="sortType" />
-              <mat-error
-                *ngIf="
-                  $any(sortType).errors?.required &&
-                  (sortType.dirty || sortType.touched)
-                "
-                >type required</mat-error
-              >
-              <mat-error
-                *ngIf="
-                  $any(sortType).errors?.maxLength &&
-                  (sortType.dirty || sortType.touched)
-                "
-                >type too long</mat-error
-              >
+              @if ( $any(sortType).errors?.required && (sortType.dirty ||
+              sortType.touched) ) {
+              <mat-error>type required</mat-error>
+              } @if ( $any(sortType).errors?.maxLength && (sortType.dirty ||
+              sortType.touched) ) {
+              <mat-error>type too long</mat-error>
+              }
             </mat-form-field>
+            }
           </div>
 
           <!-- ranges adder -->
@@ -87,14 +81,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
-                  let range of ranges?.value || [];
-                  let i = index;
-                  let first = first;
-                  let last = last
-                "
-              >
+              @for ( range of ranges.value || []; track range; let i = $index;
+              let first = $first; let last = $last) {
+              <tr>
                 <td>
                   <button
                     type="button"
@@ -125,6 +114,7 @@
                 </td>
                 <td>{{ range | alnumRange }}</td>
               </tr>
+              }
             </tbody>
           </table>
         </mat-tab>
@@ -143,36 +133,36 @@
         <mat-tab label="note">
           <div>
             <!-- tag (bound) -->
-            <mat-form-field *ngIf="tagEntries?.length">
+            @if (tagEntries?.length) {
+            <mat-form-field>
               <mat-label>tag</mat-label>
               <mat-select [formControl]="tag">
-                <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
-                  e.value
-                }}</mat-option>
+                @for (e of tagEntries; track e.id) {
+                <mat-option [value]="e.id">{{ e.value }}</mat-option>
+                }
               </mat-select>
             </mat-form-field>
+            }
             <!-- tag (free) -->
-            <mat-form-field *ngIf="!tagEntries?.length">
+            @if (!tagEntries?.length) {
+            <mat-form-field>
               <mat-label>tag</mat-label>
               <input matInput [formControl]="tag" />
-              <mat-error
-                *ngIf="
-                  $any(tag).errors?.maxLength && (tag.dirty || tag.touched)
-                "
-                >tag too long</mat-error
-              >
+              @if ( $any(tag).errors?.maxLength && (tag.dirty || tag.touched) )
+              {
+              <mat-error>tag too long</mat-error>
+              }
             </mat-form-field>
+            }
           </div>
           <div>
             <mat-form-field class="long-text">
               <mat-label>note</mat-label>
               <textarea rows="4" matInput [formControl]="note"></textarea>
-              <mat-error
-                *ngIf="
-                  $any(note).errors?.maxLength && (note.dirty || note.touched)
-                "
-                >note too long</mat-error
-              >
+              @if ( $any(note).errors?.maxLength && (note.dirty || note.touched)
+              ) {
+              <mat-error>note too long</mat-error>
+              }
             </mat-form-field>
           </div>
         </mat-tab>

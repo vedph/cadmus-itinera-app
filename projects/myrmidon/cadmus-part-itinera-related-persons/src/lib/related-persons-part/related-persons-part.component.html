@@ -19,7 +19,8 @@
               <mat-icon>add_circle</mat-icon> person
             </button>
           </div>
-          <table *ngIf="persons?.value?.length">
+          @if (persons.value.length) {
+          <table>
             <thead>
               <tr>
                 <th></th>
@@ -29,14 +30,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
-                  let person of persons?.value;
-                  let i = index;
-                  let first = first;
-                  let last = last
-                "
-              >
+              @for ( person of persons.value; track person; let i = $index; let
+              first = $first; let last = $last) {
+              <tr>
                 <td>
                   <button
                     type="button"
@@ -74,16 +70,21 @@
                   </button>
                 </td>
                 <td>
-                  {{ person.type | flatLookup: prsTypeEntries:"id":"value" }}
+                  {{
+                    person.type | flatLookup : prsTypeEntries : "id" : "value"
+                  }}
                 </td>
                 <td>{{ person.name }}</td>
                 <td>{{ person.ids?.length || 0 }}</td>
               </tr>
+              }
             </tbody>
           </table>
+          }
         </mat-tab>
 
-        <mat-tab label="person" *ngIf="editedPerson">
+        @if (editedPerson) {
+        <mat-tab label="person">
           <cadmus-related-person
             [idScopeEntries]="idScopeEntries"
             [idTagEntries]="idTagEntries"
@@ -99,6 +100,7 @@
             (editorClose)="onPersonClose()"
           ></cadmus-related-person>
         </mat-tab>
+        }
       </mat-tab-group>
     </mat-card-content>
     <mat-card-actions>

@@ -1,10 +1,11 @@
+@if (layout) {
 <div
   [style.background-color]="layout.checked ? '#ace0fa' : 'transparent'"
   class="layout"
-  *ngIf="layout"
 >
   <!-- toolbar -->
-  <div class="form-row" style="gap: 0" *ngIf="!editingNote">
+  @if (!editingNote) {
+  <div class="form-row" style="gap: 0">
     <!-- buttons -->
     <div>
       <button
@@ -40,8 +41,10 @@
       <span class="poem-layout">{{ layout.layout }}</span>
     </div>
   </div>
+  }
   <!-- note editor -->
-  <div *ngIf="editingNote">
+  @if (editingNote) {
+  <div>
     <mat-label>note</mat-label>
     <mat-form-field>
       <input
@@ -56,10 +59,11 @@
       <button mat-icon-button matSuffix (click)="saveNote()">
         <mat-icon class="mat-primary">check_circle</mat-icon>
       </button>
-      <mat-error
-        *ngIf="$any(note).errors?.maxLength && (note.dirty || note.touched)"
-        >note too long</mat-error
-      >
+      @if ($any(note).errors?.maxLength && (note.dirty || note.touched)) {
+      <mat-error>note too long</mat-error>
+      }
     </mat-form-field>
   </div>
+  }
 </div>
+}

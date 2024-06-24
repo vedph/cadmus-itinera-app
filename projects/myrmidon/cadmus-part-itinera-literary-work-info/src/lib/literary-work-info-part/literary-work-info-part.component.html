@@ -41,7 +41,8 @@
                 <mat-icon>add_circle</mat-icon> title
               </button>
             </div>
-            <table *ngIf="titles?.value?.length">
+            @if (titles.value.length) {
+            <table>
               <thead>
                 <tr>
                   <th></th>
@@ -50,14 +51,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  *ngFor="
-                    let title of titles?.value;
-                    let i = index;
-                    let first = first;
-                    let last = last
-                  "
-                >
+                @for ( title of titles.value; track title; let i = $index; let
+                first = $first; let last = $last) {
+                <tr>
                   <td>
                     <button
                       type="button"
@@ -97,8 +93,10 @@
                   <td>{{ title.language }}</td>
                   <td>{{ title.value }}</td>
                 </tr>
+                }
               </tbody>
             </table>
+            }
             <mat-expansion-panel
               [disabled]="!editedTitle"
               [expanded]="editedTitle"
@@ -128,12 +126,10 @@
             <mat-form-field class="long-text">
               <mat-label>note</mat-label>
               <input matInput [formControl]="note" />
-              <mat-error
-                *ngIf="
-                  $any(note).errors?.maxLength && (note.dirty || note.touched)
-                "
-                >note too long</mat-error
-              >
+              @if ( $any(note).errors?.maxLength && (note.dirty || note.touched)
+              ) {
+              <mat-error>note too long</mat-error>
+              }
             </mat-form-field>
           </div>
         </mat-tab>
@@ -152,32 +148,25 @@
           <!-- genre -->
           <fieldset>
             <legend>genre</legend>
-            <mat-form-field *ngIf="!genreEntries?.length">
+            @if (!genreEntries?.length) {
+            <mat-form-field>
               <mat-label>genre</mat-label>
               <input matInput [formControl]="genre" />
-              <mat-error
-                *ngIf="
-                  $any(genre).errors?.required && (genre.dirty || genre.touched)
-                "
-                >genre required</mat-error
-              >
-              <mat-error
-                *ngIf="
-                  $any(genre).errors?.maxLength &&
-                  (genre.dirty || genre.touched)
-                "
-                >genre too long</mat-error
-              >
+              @if ( $any(genre).errors?.required && (genre.dirty ||
+              genre.touched) ) {
+              <mat-error>genre required</mat-error>
+              } @if ( $any(genre).errors?.maxLength && (genre.dirty ||
+              genre.touched) ) {
+              <mat-error>genre too long</mat-error>
+              }
             </mat-form-field>
-
-            <div *ngIf="genreEntries?.length">
+            } @if (genreEntries?.length) {
+            <div>
               genre: <span class="pick">{{ pickedGenre }}</span>
-              <mat-error
-                *ngIf="
-                  $any(genre).errors?.required && (genre.dirty || genre.touched)
-                "
-                >genre required</mat-error
-              >
+              @if ( $any(genre).errors?.required && (genre.dirty ||
+              genre.touched) ) {
+              <mat-error>genre required</mat-error>
+              }
               <cadmus-thesaurus-tree
                 rootLabel="genre"
                 [renderLabel]="renderLabel"
@@ -185,21 +174,26 @@
                 (entryChange)="onEntryChange($event)"
               ></cadmus-thesaurus-tree>
             </div>
+            }
           </fieldset>
         </mat-tab>
 
         <!-- POETRY -->
         <mat-tab label="poetry">
           <!-- metres -->
-          <div *ngIf="mtrFlags$ | async as flags">
-            <fieldset *ngIf="flags?.length">
+          @if (mtrFlags$ | async; as flags) {
+          <div>
+            @if (flags?.length) {
+            <fieldset>
               <legend>metre(s)</legend>
               <cadmus-ui-flags-picker
                 [flags]="flags"
                 (flagsChange)="onMetreFlagsChange($event)"
               ></cadmus-ui-flags-picker>
             </fieldset>
+            }
           </div>
+          }
 
           <!-- strophes -->
           <div style="margin-top: 8px">
@@ -207,13 +201,10 @@
               <mat-label>strophes</mat-label>
               <textarea rows="3" matInput [formControl]="strophes"></textarea>
               <mat-hint>1 per line</mat-hint>
-              <mat-error
-                *ngIf="
-                  $any(strophes).errors?.maxLength &&
-                  (strophes.dirty || strophes.touched)
-                "
-                >strophes too long</mat-error
-              >
+              @if ( $any(strophes).errors?.maxLength && (strophes.dirty ||
+              strophes.touched) ) {
+              <mat-error>strophes too long</mat-error>
+              }
             </mat-form-field>
           </div>
         </mat-tab>

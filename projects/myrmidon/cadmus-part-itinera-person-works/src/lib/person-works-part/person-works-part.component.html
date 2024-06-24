@@ -19,7 +19,8 @@
               <mat-icon>add_circle</mat-icon> work
             </button>
           </div>
-          <table *ngIf="works?.value?.length">
+          @if (works.value.length) {
+          <table>
             <thead>
               <tr>
                 <th></th>
@@ -28,14 +29,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
-                  let work of works?.value;
-                  let i = index;
-                  let first = first;
-                  let last = last
-                "
-              >
+              @for ( work of works.value; track work; let i = $index; let first
+              = $first; let last = $last) {
+              <tr>
                 <td>
                   <button
                     type="button"
@@ -75,11 +71,14 @@
                 <td>{{ work.title }}</td>
                 <td>{{ work.eid }}</td>
               </tr>
+              }
             </tbody>
           </table>
+          }
         </mat-tab>
 
-        <mat-tab label="work" *ngIf="editedWork">
+        @if (editedWork) {
+        <mat-tab label="work">
           <cadmus-person-work
             [assTagEntries]="assTagEntries"
             [refTagEntries]="refTagEntries"
@@ -89,6 +88,7 @@
             (editorClose)="onWorkClose()"
           ></cadmus-person-work>
         </mat-tab>
+        }
       </mat-tab-group>
     </mat-card-content>
     <mat-card-actions>
