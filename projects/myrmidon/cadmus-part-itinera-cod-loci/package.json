@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-part-itinera-cod-loci",
-  "version": "2.1.0",
+  "version": "4.0.0",
   "description": "Cadmus Itinera - CodLociPart.",
   "keywords": [
     "Cadmus"
@@ -14,8 +14,8 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^16.0.0",
-    "@angular/core": "^16.0.0"
+    "@angular/common": "^18.0.0",
+    "@angular/core": "^18.0.0"
   },
   "dependencies": {
     "tslib": "^2.5.0"

@@ -30,9 +30,29 @@ div[class*=" it.vedph.token-text-layer|fr.it.vedph.apparatus"] {
   background-color: lightsalmon;
 }
 
+div[class^="it.vedph.token-text-layer|fr.it.vedph.chronology"],
+div[class*=" it.vedph.token-text-layer|fr.it.vedph.chronology"] {
+  background-color: palegoldenrod;
+}
+
 div[class^="it.vedph.token-text-layer|fr.it.vedph.comment"],
 div[class*=" it.vedph.token-text-layer|fr.it.vedph.comment"] {
   background-color: palegreen;
+}
+
+div[class^="it.vedph.token-text-layer|fr.it.vedph.orthography"],
+div[class*=" it.vedph.token-text-layer|fr.it.vedph.orthography"] {
+  background-color: palevioletred;
+}
+
+div[class^="it.vedph.token-text-layer|fr.it.vedph.quotations"],
+div[class*=" it.vedph.token-text-layer|fr.it.vedph.quotations"] {
+  background-color: paleturquoise;
+}
+
+div[class^="it.vedph.token-text-layer|fr.it.vedph.witnesses"],
+div[class*=" it.vedph.token-text-layer|fr.it.vedph.witnesses"] {
+  background-color: peachpuff;
 }
 
 /* note */
@@ -114,13 +134,13 @@ div[class*=" it.vedph.token-text-layer|fr.it.vedph.comment"] {
   column-width: 400px;
 }
 .comment-categories {
-  margin: 6px 0;
+    margin: 6px 0;
 }
 .comment-category {
-  background-color: #afd3ff;
-  border: 1px solid #afd3ff;
-  border-radius: 4px;
-  padding: 4px;
+    background-color: #afd3ff;
+    border: 1px solid #afd3ff;
+    border-radius: 4px;
+    padding: 4px;
 }
 .comment-keywords {
   line-height: 200%;

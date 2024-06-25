@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,6 +11,7 @@ import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
+import { CADMUS_TEXT_ED_BINDINGS_TOKEN, CadmusTextEdBindings, CadmusTextEdService } from '@myrmidon/cadmus-text-ed';
 
 /**
  * PersonInfo part editor component.
@@ -20,6 +21,9 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
   selector: 'cadmus-person-info-part',
   templateUrl: './person-info-part.component.html',
   styleUrls: ['./person-info-part.component.css'],
+  providers: [
+    CadmusTextEdService
+  ]
 })
 export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>
@@ -35,7 +39,14 @@ export class PersonInfoPartComponent
   // person-sex
   public sexEntries: ThesaurusEntry[] | undefined;
 
-  constructor(authService: AuthJwtService, formBuilder: FormBuilder) {
+  constructor(
+    authService: AuthJwtService,
+    formBuilder: FormBuilder,
+    private _editService: CadmusTextEdService,
+    @Inject(CADMUS_TEXT_ED_BINDINGS_TOKEN)
+    @Optional()
+    private _editorBindings?: CadmusTextEdBindings
+  ) {
     super(authService, formBuilder);
     // form
     this.sex = formBuilder.control(null, [
@@ -51,6 +62,29 @@ export class PersonInfoPartComponent
 
   public override ngOnDestroy() {
     this._disposables.forEach((d) => d.dispose());
+  }
+
+  private async applyEdit(selector: string) {
+    if (!this._editor) {
+      return;
+    }
+    const selection = this._editor.getSelection();
+    const text = selection
+      ? this._editor.getModel()!.getValueInRange(selection)
+      : '';
+
+    const result = await this._editService.edit({
+      selector,
+      text: text,
+    });
+
+    this._editor.executeEdits('my-source', [
+      {
+        range: selection!,
+        text: result.text,
+        forceMoveMarkers: true,
+      },
+    ]);
   }
 
   public onCreateEditor(editor: monaco.editor.IEditor) {
@@ -76,7 +110,17 @@ export class PersonInfoPartComponent
       })
     );
 
-    // TODO configure plugins
+    if (this._editorBindings) {
+      Object.keys(this._editorBindings).forEach((key) => {
+        const n = parseInt(key, 10);
+        console.log(
+          'Binding ' + n + ' to ' + this._editorBindings![key as any]
+        );
+        this._editor!.addCommand(n, () => {
+          this.applyEdit(this._editorBindings![key as any]);
+        });
+      });
+    }
   }
 
   protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {

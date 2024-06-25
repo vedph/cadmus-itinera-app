@@ -15,6 +15,7 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+import { CadmusTextEdService } from '@myrmidon/cadmus-text-ed';
 
 import { PersonInfoPartComponent } from './person-info-part/person-info-part.component';
 import { PersonInfoPartFeatureComponent } from './person-info-part-feature/person-info-part-feature.component';

@@ -1,39 +1,17 @@
-// @use "@angular/material" as mat;
+@use "@angular/material" as mat;
+@import "preview-styles.css";
 
-// @import "@angular/material/theming";
-@import "preview-styles.scss";
-/*
-// always include only once per project
 @include mat.core();
 
-// import our custom themes
-// @import "light-theme.scss";
-$light-primary: mat.define-palette($mat-light-blue, 900);
-$light-accent: mat.define-palette($mat-yellow, 600, 900, A400);
-$light-warn: mat.define-palette($mat-deep-orange);
-
-$light-theme: mat.define-light-theme(
+$light-theme: mat.define-theme(
   (
     color: (
-      primary: $light-primary,
-      accent: $light-accent,
-      warn: $light-warn,
+      theme-type: light,
+      primary: mat.$azure-palette,
     ),
-    density: -2,
   )
 );
 
-// theme classes: you can hardcode one of them
-// on the <body> tag, or switch dynamically at runtime
-// with [class] binding
-.light-theme {
-  @include angular-material-theme($light-theme);
-}
-*/
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
+html {
+  @include mat.all-component-themes($light-theme);
 }
