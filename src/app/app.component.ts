@@ -15,8 +15,10 @@ import { FormBuilder, FormControl } from '@angular/forms';
 
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
 import { ASSERTED_COMPOSITE_ID_CONFIGS_KEY } from '@myrmidon/cadmus-refs-asserted-ids';
-import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
 import { GeoNamesRefLookupService } from '@myrmidon/cadmus-refs-geonames-lookup';
+import { DbpediaRefLookupService } from '@myrmidon/cadmus-refs-dbpedia-lookup';
+
+import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
 
 @Component({
   selector: 'app-root',
@@ -44,6 +46,7 @@ export class AppComponent implements OnInit {
     env: EnvService,
     storage: RamStorageService,
     geonames: GeoNamesRefLookupService,
+    dbpedia: DbpediaRefLookupService,
     formBuilder: FormBuilder
   ) {
     this.version = env.get('version') || '';
@@ -67,6 +70,15 @@ export class AppComponent implements OnInit {
         service: viafService,
         itemIdGetter: (item: any) => item?.viafid,
         itemLabelGetter: (item: any) => item?.term,
+      },
+      {
+        name: 'DBpedia',
+        iconUrl: '/assets/img/dbpedia128.png',
+        description: 'DBpedia',
+        label: 'ID',
+        service: dbpedia,
+        itemIdGetter: (item: any) => item?.uri,
+        itemLabelGetter: (item: any) => item?.label,
       },
       {
         name: 'geonames',

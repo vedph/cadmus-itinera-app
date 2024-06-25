@@ -81,6 +81,7 @@
     "@myrmidon/cadmus-refs-asserted-ids": "^5.1.5",
     "@myrmidon/cadmus-refs-assertion": "5.1.1",
     "@myrmidon/cadmus-refs-chronotope": "5.1.0",
+    "@myrmidon/cadmus-refs-dbpedia-lookup": "^5.1.1",
     "@myrmidon/cadmus-refs-decorated-counts": "^5.1.1",
     "@myrmidon/cadmus-refs-doc-references": "^5.1.1",
     "@myrmidon/cadmus-refs-geonames-lookup": "^5.1.1",
