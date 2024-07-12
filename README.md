@@ -37,6 +37,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2024-07-12: updated Angular and packages.
+
 ### 7.0.1
 
 - 2024-06-25: added DBPedia provider.
