@@ -37,6 +37,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2024-07-19:
+  - updated Angular and packages.
+  - [refactored Gravatar](https://myrmex.github.io/overview/cadmus/dev/history/f-gravatar/)
 - 2024-07-12: updated Angular and packages.
 
 ### 7.0.1

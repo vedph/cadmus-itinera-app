@@ -116,10 +116,6 @@ export class AppComponent implements OnInit {
     return this._itemBrowserKeys[id] || id;
   }
 
-  public getGravatarUrl(email: string, size = 80): string | null {
-    return this._gravatarService.buildGravatarUrl(email, size);
-  }
-
   public logout(): void {
     if (!this.logged) {
       return;

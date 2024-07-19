@@ -6,201 +6,176 @@
     <a mat-button routerLink="/home">Cadmus Itinera</a>
 
     @if (logged && itemBrowsers) {
-      <button
-        type="button"
-        mat-button
-        [matMenuTriggerFor]="itemMenu"
-        >
-        Items
-      </button>
+    <button type="button" mat-button [matMenuTriggerFor]="itemMenu">
+      Items
+    </button>
     }
     <mat-menu #itemMenu>
       <a mat-menu-item routerLink="/items">Items</a>
       @for (entry of itemBrowsers; track entry) {
-        <a
-          mat-menu-item
-          [routerLink]="'item-browser/' + getItemBrowserRoute(entry.id)"
-          >{{ entry.value }}</a
-          >
-        }
-      </mat-menu>
-      @if (logged && !itemBrowsers) {
-        <a mat-button routerLink="/items">Items</a>
+      <a
+        mat-menu-item
+        [routerLink]="'item-browser/' + getItemBrowserRoute(entry.id)"
+        >{{ entry.value }}</a
+      >
       }
+    </mat-menu>
+    @if (logged && !itemBrowsers) {
+    <a mat-button routerLink="/items">Items</a>
+    }
 
-      <!-- search menu -->
-      @if (logged) {
-        <button type="button" mat-button routerLink="/search">
-          Search
-        </button>
-      }
-      <!-- graph menu -->
-      @if (logged) {
-        <button type="button" mat-button routerLink="/graph">
-          Graph
-        </button>
-      }
-      <!-- profile menu -->
-      @if (
-        user && (user.roles.includes('admin') || user.roles.includes('editor'))
-        ) {
-        <button type="button" mat-button [matMenuTriggerFor]="profileMenu">
-          Profile
-        </button>
-        <mat-menu #profileMenu>
-          <a mat-menu-item routerLink="/flags"> Flags </a>
-          <a mat-menu-item routerLink="/thesauri"> Thesauri </a>
-        </mat-menu>
-      }
-      <!-- biblio menu -->
-      @if (
-        user && (user.roles.includes('admin') || user.roles.includes('editor'))
-        ) {
-        <button
-          type="button"
-          mat-button
-          routerLink="/biblio"
-          >
-          Bibliography
-        </button>
-      }
+    <!-- search menu -->
+    @if (logged) {
+    <button type="button" mat-button routerLink="/search">Search</button>
+    }
+    <!-- graph menu -->
+    @if (logged) {
+    <button type="button" mat-button routerLink="/graph">Graph</button>
+    }
+    <!-- profile menu -->
+    @if ( user && (user.roles.includes('admin') ||
+    user.roles.includes('editor')) ) {
+    <button type="button" mat-button [matMenuTriggerFor]="profileMenu">
+      Profile
+    </button>
+    <mat-menu #profileMenu>
+      <a mat-menu-item routerLink="/flags"> Flags </a>
+      <a mat-menu-item routerLink="/thesauri"> Thesauri </a>
+    </mat-menu>
+    }
+    <!-- biblio menu -->
+    @if ( user && (user.roles.includes('admin') ||
+    user.roles.includes('editor')) ) {
+    <button type="button" mat-button routerLink="/biblio">Bibliography</button>
+    }
 
-      <span class="tb-fill-remaining-space"></span>
+    <span class="tb-fill-remaining-space"></span>
 
-      @if (user) {
-        <div fxLayout="row" fxLayoutAlign="start center">
-          <!-- sidenav -->
-          <mat-slide-toggle
-            [formControl]="snavToggle"
-            matTooltip="Toggle tools"
-          ></mat-slide-toggle>
-          <!-- indicators -->
-          <img [src]="getGravatarUrl(user.email, 32)" alt="{{ user.userName }}" />
-          @if (user && user.roles.includes('admin')) {
-            <mat-icon
-              class="small-icon"
-              title="admin"
-              >build</mat-icon
-              >
-            }
-            @if (user && !user.emailConfirmed) {
-              <mat-icon
-                class="small-icon"
+    @if (user) {
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <!-- sidenav -->
+      <mat-slide-toggle
+        [formControl]="snavToggle"
+        matTooltip="Toggle tools"
+      ></mat-slide-toggle>
+      <!-- indicators -->
+      <img [src]="user.email | gravatar : 32" alt="{{ user.userName }}" />
+      @if (user && user.roles.includes('admin')) {
+      <mat-icon class="small-icon" title="admin">build</mat-icon>
+      } @if (user && !user.emailConfirmed) {
+      <mat-icon
+        class="small-icon"
         title="You must verify your email address! Please check your mailbox {{
           user.email
         }}"
-                >feedback</mat-icon
-                >
-              }
-              <!-- user menu -->
-              <button type="button" mat-button [matMenuTriggerFor]="userMenu">
-                User
-              </button>
-              <mat-menu #userMenu>
-                <a mat-menu-item routerLink="/reset-password">Reset password</a>
-              </mat-menu>
-              <!-- admin menu -->
-              @if (user && user.roles.includes('admin')) {
-                <button
-                  type="button"
-                  mat-button
-                  [matMenuTriggerFor]="adminMenu"
-                  >
-                  Admin
-                </button>
-              }
-              <mat-menu #adminMenu>
-                <a mat-menu-item routerLink="/manage-users">Manage users</a>
-                <a mat-menu-item routerLink="/register-user">Register user</a>
-              </mat-menu>
-            </div>
-          }
+        >feedback</mat-icon
+      >
+      }
+      <!-- user menu -->
+      <button type="button" mat-button [matMenuTriggerFor]="userMenu">
+        User
+      </button>
+      <mat-menu #userMenu>
+        <a mat-menu-item routerLink="/reset-password">Reset password</a>
+      </mat-menu>
+      <!-- admin menu -->
+      @if (user && user.roles.includes('admin')) {
+      <button type="button" mat-button [matMenuTriggerFor]="adminMenu">
+        Admin
+      </button>
+      }
+      <mat-menu #adminMenu>
+        <a mat-menu-item routerLink="/manage-users">Manage users</a>
+        <a mat-menu-item routerLink="/register-user">Register user</a>
+      </mat-menu>
+    </div>
+    }
 
-          <!-- login -->
-          @if (!logged) {
-            <button type="button" mat-icon-button routerLink="/login">
-              <mat-icon>login</mat-icon>
-            </button>
-          }
-          <!-- logout -->
-          @if (logged) {
-            <button type="button" mat-icon-button (click)="logout()">
-              <mat-icon>logout</mat-icon>
-            </button>
-          }
-        </mat-toolbar>
-      </header>
+    <!-- login -->
+    @if (!logged) {
+    <button type="button" mat-icon-button routerLink="/login">
+      <mat-icon>login</mat-icon>
+    </button>
+    }
+    <!-- logout -->
+    @if (logged) {
+    <button type="button" mat-icon-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+    }
+  </mat-toolbar>
+</header>
 
-      <main>
-        <mat-sidenav-container>
-          <mat-sidenav id="sidenav" mode="side" [opened]="snavToggle.value">
-            <!-- cod location -->
-            <div class="tool" id="tool-loc">
-              <fieldset>
-                <legend>cod location</legend>
-                <cadmus-cod-location-converter></cadmus-cod-location-converter>
-              </fieldset>
-            </div>
-            <!-- pin lookup -->
-            <div class="tool" id="tool-pin">
-              <fieldset>
-                <legend>pin lookup</legend>
-                <cadmus-scoped-pin-lookup
-                  (idPick)="onIdPick($event)"
-                ></cadmus-scoped-pin-lookup>
-              </fieldset>
-            </div>
-            <!-- VIAF -->
-            <div class="tool" id="tool-viaf">
-              <fieldset>
-                <legend>VIAF</legend>
-                <cadmus-ref-lookup
-                  [service]="viafService"
-                  linkTemplate="http://www.viaf.org/viaf/{viafid}"
-                  label="VIAF"
-                  (itemChange)="onViafItemChange($event)"
-                ></cadmus-ref-lookup>
-              </fieldset>
-            </div>
-          </mat-sidenav>
-          <mat-sidenav-content>
-            <router-outlet></router-outlet>
-          </mat-sidenav-content>
-        </mat-sidenav-container>
-      </main>
+<main>
+  <mat-sidenav-container>
+    <mat-sidenav id="sidenav" mode="side" [opened]="snavToggle.value">
+      <!-- cod location -->
+      <div class="tool" id="tool-loc">
+        <fieldset>
+          <legend>cod location</legend>
+          <cadmus-cod-location-converter></cadmus-cod-location-converter>
+        </fieldset>
+      </div>
+      <!-- pin lookup -->
+      <div class="tool" id="tool-pin">
+        <fieldset>
+          <legend>pin lookup</legend>
+          <cadmus-scoped-pin-lookup
+            (idPick)="onIdPick($event)"
+          ></cadmus-scoped-pin-lookup>
+        </fieldset>
+      </div>
+      <!-- VIAF -->
+      <div class="tool" id="tool-viaf">
+        <fieldset>
+          <legend>VIAF</legend>
+          <cadmus-ref-lookup
+            [service]="viafService"
+            linkTemplate="http://www.viaf.org/viaf/{viafid}"
+            label="VIAF"
+            (itemChange)="onViafItemChange($event)"
+          ></cadmus-ref-lookup>
+        </fieldset>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</main>
 
-      <footer>
-        <div id="logos">
-          <img src="./assets/img/unisi-64.png" alt="Università di Siena" />
-          <img
-            src="./assets/img/unina-64.png"
-            alt="Università degli studi di Napoli"
-            />
-            <img
-              src="./assets/img/unirm3-64.png"
-              alt="Università degli studi di Roma 3"
-              />
-              <img
-                src="./assets/img/unistrapg-64.png"
-                alt="Università per stranieri di Perugia"
-                />
-              </div>
-              <div id="info">
-                <p>
-                  <a
-                    rel="noopener"
-                    href="https://www.unisi.it/ricerca/finanziamenti-prin/petrarch%E2%80%99s-itinera-italian-trecento-intellectual-network-and-european"
-                    target="_blank"
-                    >Petrarch's Itinera Project</a
-                    >
-                  </p>
-                  <p>
-                    Cadmus by
-                    <a rel="noopener" href="http://www.fusisoft.it" target="_blank"
-                      >Daniele Fusi</a
-                      >
-                      <br />
-                      version {{ version }}
-                    </p>
-                  </div>
-                </footer>
+<footer>
+  <div id="logos">
+    <img src="./assets/img/unisi-64.png" alt="Università di Siena" />
+    <img
+      src="./assets/img/unina-64.png"
+      alt="Università degli studi di Napoli"
+    />
+    <img
+      src="./assets/img/unirm3-64.png"
+      alt="Università degli studi di Roma 3"
+    />
+    <img
+      src="./assets/img/unistrapg-64.png"
+      alt="Università per stranieri di Perugia"
+    />
+  </div>
+  <div id="info">
+    <p>
+      <a
+        rel="noopener"
+        href="https://www.unisi.it/ricerca/finanziamenti-prin/petrarch%E2%80%99s-itinera-italian-trecento-intellectual-network-and-european"
+        target="_blank"
+        >Petrarch's Itinera Project</a
+      >
+    </p>
+    <p>
+      Cadmus by
+      <a rel="noopener" href="http://www.fusisoft.it" target="_blank"
+        >Daniele Fusi</a
+      >
+      <br />
+      version {{ version }}
+    </p>
+  </div>
+</footer>
