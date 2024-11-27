@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { deepCopy, NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
@@ -23,6 +23,7 @@ import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
   selector: 'cadmus-cod-loci-part',
   templateUrl: './cod-loci-part.component.html',
   styleUrls: ['./cod-loci-part.component.css'],
+  standalone: false,
 })
 export class CodLociPartComponent
   extends ModelEditorComponentBase<CodLociPart>

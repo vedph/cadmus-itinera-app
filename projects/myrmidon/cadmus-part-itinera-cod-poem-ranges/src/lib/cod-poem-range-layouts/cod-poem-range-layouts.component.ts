@@ -39,6 +39,7 @@ const PRESETS = [
   selector: 'cadmus-cod-poem-range-layouts',
   templateUrl: './cod-poem-range-layouts.component.html',
   styleUrls: ['./cod-poem-range-layouts.component.css'],
+  standalone: false,
 })
 export class CodPoemRangeLayoutsComponent implements OnInit {
   private readonly _table: PoemLayoutTable;

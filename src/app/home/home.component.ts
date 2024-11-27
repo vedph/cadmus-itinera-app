@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   selector: 'cadmus-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  standalone: false,
 })
 export class HomeComponent {
   public user$: Observable<User | null>;

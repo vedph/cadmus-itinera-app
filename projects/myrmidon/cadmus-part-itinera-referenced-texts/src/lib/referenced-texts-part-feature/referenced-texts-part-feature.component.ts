@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-referenced-texts-part-feature',
   templateUrl: './referenced-texts-part-feature.component.html',
   styleUrls: ['./referenced-texts-part-feature.component.css'],
+  standalone: false,
 })
 export class ReferencedTextsPartFeatureComponent
   extends EditPartFeatureBase

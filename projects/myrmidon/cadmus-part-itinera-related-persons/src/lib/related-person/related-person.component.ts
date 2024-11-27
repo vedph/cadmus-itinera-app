@@ -14,6 +14,7 @@ import { RelatedPerson } from '../related-persons-part';
   selector: 'cadmus-related-person',
   templateUrl: './related-person.component.html',
   styleUrls: ['./related-person.component.css'],
+  standalone: false,
 })
 export class RelatedPersonComponent implements OnInit {
   private _person: RelatedPerson | undefined;

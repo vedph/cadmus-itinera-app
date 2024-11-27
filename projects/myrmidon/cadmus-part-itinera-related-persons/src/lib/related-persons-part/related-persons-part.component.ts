@@ -29,6 +29,7 @@ import {
   selector: 'cadmus-related-persons-part',
   templateUrl: './related-persons-part.component.html',
   styleUrls: ['./related-persons-part.component.css'],
+  standalone: false,
 })
 export class RelatedPersonsPartComponent
   extends ModelEditorComponentBase<RelatedPersonsPart>

@@ -18,6 +18,7 @@ import {
   selector: 'cadmus-cod-poem-ranges-layout',
   templateUrl: './cod-poem-ranges-layout.component.html',
   styleUrls: ['./cod-poem-ranges-layout.component.css'],
+  standalone: false,
 })
 export class CodPoemRangesLayoutComponent implements OnInit {
   private _layout: PoemLayoutRow | undefined;

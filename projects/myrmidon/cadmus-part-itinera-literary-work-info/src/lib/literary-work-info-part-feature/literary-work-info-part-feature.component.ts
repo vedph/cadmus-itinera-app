@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-literary-work-info-part-feature',
   templateUrl: './literary-work-info-part-feature.component.html',
   styleUrls: ['./literary-work-info-part-feature.component.css'],
+  standalone: false,
 })
 export class LiteraryWorkInfoPartFeatureComponent
   extends EditPartFeatureBase
@@ -42,7 +43,7 @@ export class LiteraryWorkInfoPartFeatureComponent
       'doc-reference-tags',
       'asserted-id-scopes',
       'asserted-id-tags',
-      'pin-link-settings'
+      'pin-link-settings',
     ];
   }
 }

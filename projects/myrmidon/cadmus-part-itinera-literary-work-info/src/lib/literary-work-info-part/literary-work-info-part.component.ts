@@ -44,6 +44,7 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
   selector: 'cadmus-literary-work-info-part',
   templateUrl: './literary-work-info-part.component.html',
   styleUrls: ['./literary-work-info-part.component.css'],
+  standalone: false,
 })
 export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>

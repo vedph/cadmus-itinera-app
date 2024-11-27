@@ -14,6 +14,7 @@ import { AssertedTitle } from '../literary-work-info-part';
   selector: 'cadmus-asserted-title',
   templateUrl: './asserted-title.component.html',
   styleUrls: ['./asserted-title.component.css'],
+  standalone: false,
 })
 export class AssertedTitleComponent implements OnInit {
   private _title: AssertedTitle | undefined;

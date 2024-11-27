@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-related-persons-part-feature',
   templateUrl: './related-persons-part-feature.component.html',
   styleUrls: ['./related-persons-part-feature.component.css'],
+  standalone: false,
 })
 export class RelatedPersonsPartFeatureComponent
   extends EditPartFeatureBase
@@ -40,7 +41,7 @@ export class RelatedPersonsPartFeatureComponent
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
-      'pin-link-settings'
+      'pin-link-settings',
     ];
   }
 }

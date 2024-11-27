@@ -19,6 +19,7 @@ import { LetterInfoPart, LETTER_INFO_PART_TYPEID } from '../letter-info-part';
   selector: 'cadmus-letter-info-part',
   templateUrl: './letter-info-part.component.html',
   styleUrls: ['./letter-info-part.component.css'],
+  standalone: false,
 })
 export class LetterInfoPartComponent
   extends ModelEditorComponentBase<LetterInfoPart>

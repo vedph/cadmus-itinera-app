@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-witnesses-part-feature',
   templateUrl: './witnesses-part-feature.component.html',
   styleUrls: ['./witnesses-part-feature.component.css'],
+  standalone: false,
 })
 export class WitnessesPartFeatureComponent
   extends EditPartFeatureBase

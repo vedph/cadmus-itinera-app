@@ -14,6 +14,7 @@ import { Witness } from '../witnesses-part';
   selector: 'cadmus-witness',
   templateUrl: './witness.component.html',
   styleUrls: ['./witness.component.css'],
+  standalone: false,
 })
 export class WitnessComponent implements OnInit {
   private _witness: Witness | undefined;

@@ -16,6 +16,7 @@ import { CodLocus } from '../cod-loci-part';
   selector: 'cadmus-cod-locus',
   templateUrl: './cod-locus.component.html',
   styleUrls: ['./cod-locus.component.css'],
+  standalone: false,
 })
 export class CodLocusComponent implements OnInit {
   private _locus: CodLocus | undefined;

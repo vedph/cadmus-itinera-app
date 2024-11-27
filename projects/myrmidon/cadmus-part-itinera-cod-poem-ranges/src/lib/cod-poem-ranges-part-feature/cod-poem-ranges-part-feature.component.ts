@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-cod-poem-ranges-part-feature',
   templateUrl: './cod-poem-ranges-part-feature.component.html',
   styleUrls: ['./cod-poem-ranges-part-feature.component.css'],
+  standalone: false,
 })
 export class CodPoemRangesPartFeatureComponent
   extends EditPartFeatureBase

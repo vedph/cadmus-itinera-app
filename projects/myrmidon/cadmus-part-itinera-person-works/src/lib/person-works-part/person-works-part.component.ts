@@ -27,6 +27,7 @@ import {
   selector: 'cadmus-person-works-part',
   templateUrl: './person-works-part.component.html',
   styleUrls: ['./person-works-part.component.css'],
+  standalone: false,
 })
 export class PersonWorksPartComponent
   extends ModelEditorComponentBase<PersonWorksPart>

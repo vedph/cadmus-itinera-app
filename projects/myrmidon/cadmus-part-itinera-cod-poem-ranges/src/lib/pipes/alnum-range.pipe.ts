@@ -3,6 +3,7 @@ import { AlnumRange } from '../services/alnum-range.service';
 
 @Pipe({
   name: 'alnumRange',
+  standalone: false,
 })
 export class AlnumRangePipe implements PipeTransform {
   transform(value: unknown, ...args: unknown[]): unknown {

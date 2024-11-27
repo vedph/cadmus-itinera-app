@@ -29,6 +29,7 @@ import {
   selector: 'cadmus-referenced-texts-part',
   templateUrl: './referenced-texts-part.component.html',
   styleUrls: ['./referenced-texts-part.component.css'],
+  standalone: false,
 })
 export class ReferencedTextsPartComponent
   extends ModelEditorComponentBase<ReferencedTextsPart>

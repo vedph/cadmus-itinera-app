@@ -14,6 +14,7 @@ import { ReferencedText } from '../referenced-texts-part';
   selector: 'cadmus-referenced-text',
   templateUrl: './referenced-text.component.html',
   styleUrls: ['./referenced-text.component.css'],
+  standalone: false,
 })
 export class ReferencedTextComponent implements OnInit {
   private _text: ReferencedText | undefined;

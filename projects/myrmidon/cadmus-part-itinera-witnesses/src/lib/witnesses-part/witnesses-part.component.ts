@@ -26,6 +26,7 @@ import {
   selector: 'cadmus-witnesses-part',
   templateUrl: './witnesses-part.component.html',
   styleUrls: ['./witnesses-part.component.css'],
+  standalone: false,
 })
 export class WitnessesPartComponent
   extends ModelEditorComponentBase<WitnessesPart>

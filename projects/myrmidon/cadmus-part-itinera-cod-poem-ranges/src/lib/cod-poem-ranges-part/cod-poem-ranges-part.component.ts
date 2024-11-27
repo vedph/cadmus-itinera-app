@@ -35,6 +35,7 @@ import {
   selector: 'cadmus-cod-poem-ranges-part',
   templateUrl: './cod-poem-ranges-part.component.html',
   styleUrls: ['./cod-poem-ranges-part.component.css'],
+  standalone: false,
 })
 export class CodPoemRangesPartComponent
   extends ModelEditorComponentBase<CodPoemRangesPart>

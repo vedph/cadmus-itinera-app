@@ -11,7 +11,11 @@ import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
-import { CADMUS_TEXT_ED_BINDINGS_TOKEN, CadmusTextEdBindings, CadmusTextEdService } from '@myrmidon/cadmus-text-ed';
+import {
+  CADMUS_TEXT_ED_BINDINGS_TOKEN,
+  CadmusTextEdBindings,
+  CadmusTextEdService,
+} from '@myrmidon/cadmus-text-ed';
 
 /**
  * PersonInfo part editor component.
@@ -21,9 +25,8 @@ import { CADMUS_TEXT_ED_BINDINGS_TOKEN, CadmusTextEdBindings, CadmusTextEdServic
   selector: 'cadmus-person-info-part',
   templateUrl: './person-info-part.component.html',
   styleUrls: ['./person-info-part.component.css'],
-  providers: [
-    CadmusTextEdService
-  ]
+  providers: [CadmusTextEdService],
+  standalone: false,
 })
 export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>

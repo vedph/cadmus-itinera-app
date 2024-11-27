@@ -24,6 +24,7 @@ import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
 export class AppComponent implements OnInit {
   public user?: User;

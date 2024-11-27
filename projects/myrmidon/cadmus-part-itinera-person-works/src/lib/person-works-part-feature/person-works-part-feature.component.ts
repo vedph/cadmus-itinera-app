@@ -9,6 +9,7 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
   selector: 'cadmus-person-works-feature',
   templateUrl: './person-works-part-feature.component.html',
   styleUrls: ['./person-works-part-feature.component.css'],
+  standalone: false,
 })
 export class PersonWorksPartFeatureComponent
   extends EditPartFeatureBase

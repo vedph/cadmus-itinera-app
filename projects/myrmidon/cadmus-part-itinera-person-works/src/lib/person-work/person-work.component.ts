@@ -14,6 +14,7 @@ import { PersonWork } from '../person-works-part';
   selector: 'cadmus-person-work',
   templateUrl: './person-work.component.html',
   styleUrls: ['./person-work.component.css'],
+  standalone: false,
 })
 export class PersonWorkComponent implements OnInit {
   private _work: PersonWork | undefined;
