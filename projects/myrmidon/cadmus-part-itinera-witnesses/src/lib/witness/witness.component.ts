@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CodLocationRange } from '@myrmidon/cadmus-cod-location';
-import { NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 
 import { Witness } from '../witnesses-part';
 
@@ -49,7 +49,7 @@ export class WitnessComponent implements OnInit {
       Validators.maxLength(500),
     ]);
     this.ranges = formBuilder.control([], {
-      validators: NgToolsValidators.strictMinLengthValidator(1),
+      validators: NgxToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
     this.form = formBuilder.group({

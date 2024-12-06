@@ -8,7 +8,7 @@ import {
 import { CodLocationRange } from '@myrmidon/cadmus-cod-location';
 import { CodImage } from '@myrmidon/cadmus-codicology-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { NgToolsValidators } from '@myrmidon/ng-tools';
+import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 
 import { CodLocus } from '../cod-loci-part';
 
@@ -61,7 +61,7 @@ export class CodLocusComponent implements OnInit {
       Validators.maxLength(50),
     ]);
     this.ranges = formBuilder.control([], {
-      validators: NgToolsValidators.strictMinLengthValidator(1),
+      validators: NgxToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
     this.text = formBuilder.control(null, Validators.maxLength(1000));

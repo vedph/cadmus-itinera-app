@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { Observable, take } from 'rxjs';
 
-import { NgToolsValidators } from '@myrmidon/ng-tools';
-import { DialogService } from '@myrmidon/ng-mat-tools';
+import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   EditedObject,
@@ -132,7 +132,7 @@ export class LiteraryWorkInfoPartComponent
     this._editedIndex = -1;
     // form
     this.languages = formBuilder.control([], {
-      validators: NgToolsValidators.strictMinLengthValidator(1),
+      validators: NgxToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
     this.genre = formBuilder.control(null, [
@@ -144,7 +144,7 @@ export class LiteraryWorkInfoPartComponent
     this.isLost = formBuilder.control(false, { nonNullable: true });
     this.authorIds = formBuilder.control([], { nonNullable: true });
     this.titles = formBuilder.control([], {
-      validators: NgToolsValidators.strictMinLengthValidator(1),
+      validators: NgxToolsValidators.strictMinLengthValidator(1),
       nonNullable: true,
     });
     this.note = formBuilder.control(null, Validators.maxLength(1000));

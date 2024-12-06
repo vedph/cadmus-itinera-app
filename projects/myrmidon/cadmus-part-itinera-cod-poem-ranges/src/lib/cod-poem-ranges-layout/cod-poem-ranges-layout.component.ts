@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { deepCopy } from '@myrmidon/ng-tools';
+import { deepCopy } from '@myrmidon/ngx-tools';
 import {
   CodPoemLayoutCheckMode,
   PoemLayoutRow,

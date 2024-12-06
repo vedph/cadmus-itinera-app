@@ -10,8 +10,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
-
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -41,7 +39,6 @@ import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    NgMatToolsModule,
     // bricks
     FlagsPickerComponent,
     AssertionComponent,

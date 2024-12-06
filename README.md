@@ -37,6 +37,12 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 9.0.0
+
+- 2024-12-06:
+  - ⚠️ updated core dependencies.
+  - M3 theme.
+
 ### 8.0.0
 
 - 2024-11-27: ⚠️ upgraded to Angular 19.

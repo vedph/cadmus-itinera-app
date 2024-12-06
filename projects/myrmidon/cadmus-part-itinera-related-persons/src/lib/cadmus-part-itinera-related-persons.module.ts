@@ -12,8 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NgeMonacoModule } from '@cisstech/nge/monaco';
 
-import { NgToolsModule } from '@myrmidon/ng-tools';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+import { FlatLookupPipe } from '@myrmidon/ngx-tools';
 
 import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
 import { AssertedCompositeIdsComponent, AssertedIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
@@ -45,10 +44,9 @@ import { RelatedPersonsPartFeatureComponent } from './related-persons-part-featu
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    NgMatToolsModule,
     NgeMonacoModule,
+    FlatLookupPipe,
     // Cadmus
-    NgToolsModule,
     CadmusStateModule,
     CadmusUiModule,
     CadmusUiPgModule,

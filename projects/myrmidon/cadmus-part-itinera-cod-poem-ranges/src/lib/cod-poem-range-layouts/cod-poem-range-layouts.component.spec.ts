@@ -13,7 +13,6 @@ import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts.component';
 
@@ -36,7 +35,6 @@ describe('CodPoemRangeLayoutsComponent', () => {
         MatSelectModule,
         MatTabsModule,
         MatTooltipModule,
-        NgMatToolsModule,
         // Cadmus
         CadmusStateModule,
         CadmusUiModule,

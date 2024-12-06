@@ -12,11 +12,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { NgeMonacoModule } from '@cisstech/nge/monaco';
 
-import { NgToolsModule } from '@myrmidon/ng-tools';
+import { FlatLookupPipe } from '@myrmidon/ngx-tools';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { ReferencedTextsPartComponent } from './referenced-texts-part/referenced-texts-part.component';
 import { ReferencedTextComponent } from './referenced-text/referenced-text.component';
@@ -43,10 +42,9 @@ import { AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    NgMatToolsModule,
     NgeMonacoModule,
+    FlatLookupPipe,
     // Cadmus
-    NgToolsModule,
     AssertedCompositeIdComponent,
     AssertedIdsComponent,
     AssertionComponent,

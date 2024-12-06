@@ -10,7 +10,7 @@ import {
   GravatarService,
   User,
 } from '@myrmidon/auth-jwt-login';
-import { EnvService, RamStorageService } from '@myrmidon/ng-tools';
+import { EnvService, RamStorageService } from '@myrmidon/ngx-tools';
 import { FormBuilder, FormControl } from '@angular/forms';
 
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';

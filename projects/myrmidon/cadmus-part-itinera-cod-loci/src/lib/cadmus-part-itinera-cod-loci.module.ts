@@ -15,7 +15,6 @@ import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { CodLociPartFeatureComponent } from './cod-loci-part-feature/cod-loci-part-feature.component';
 
 import { CodLociPartComponent } from './cod-loci-part/cod-loci-part.component';
@@ -44,7 +43,6 @@ import {
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    NgMatToolsModule,
     // Cadmus
     CadmusStateModule,
     CadmusUiModule,

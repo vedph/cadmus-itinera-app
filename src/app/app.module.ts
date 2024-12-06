@@ -47,17 +47,28 @@ import { NgeMonacoModule } from '@cisstech/nge/monaco';
 import { MarkdownModule } from 'ngx-markdown';
 
 // myrmidon
-import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import {
-  AuthJwtLoginModule,
+  EllipsisPipe,
+  EnvServiceProvider,
+  FlatLookupPipe,
+  SafeHtmlPipe,
+} from '@myrmidon/ngx-tools';
+import {
   authJwtInterceptor,
+  AuthJwtLoginComponent,
+  GravatarPipe,
 } from '@myrmidon/auth-jwt-login';
-import { AuthJwtAdminModule } from '@myrmidon/auth-jwt-admin';
+import {
+  AuthJwtRegistrationComponent,
+  UserListComponent,
+} from '@myrmidon/auth-jwt-admin';
 
 // cadmus bricks
 import { GEONAMES_USERNAME_TOKEN } from '@myrmidon/cadmus-refs-geonames-lookup';
-import { AssertedIdsComponent, ScopedPinLookupComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import {
+  AssertedIdsComponent,
+  ScopedPinLookupComponent,
+} from '@myrmidon/cadmus-refs-asserted-ids';
 import { DocReferencesComponent } from '@myrmidon/cadmus-refs-doc-references';
 import { HistoricalDateComponent } from '@myrmidon/cadmus-refs-historical-date';
 import { RefLookupComponent } from '@myrmidon/cadmus-refs-lookup';
@@ -157,10 +168,13 @@ import { BiblioPageComponent } from './biblio-page/biblio-page.component';
     // markdown
     MarkdownModule.forRoot(),
     // myrmidon
-    NgToolsModule,
-    NgMatToolsModule,
-    AuthJwtLoginModule,
-    AuthJwtAdminModule,
+    EllipsisPipe,
+    FlatLookupPipe,
+    SafeHtmlPipe,
+    AuthJwtLoginComponent,
+    AuthJwtRegistrationComponent,
+    UserListComponent,
+    GravatarPipe,
     // cadmus bricks
     AssertedIdsComponent,
     ScopedPinLookupComponent,

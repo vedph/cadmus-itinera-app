@@ -11,7 +11,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
-import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { LetterInfoPartComponent } from './letter-info-part/letter-info-part.component';
 import { LetterInfoPartFeatureComponent } from './letter-info-part-feature/letter-info-part-feature.component';
 
@@ -29,7 +28,6 @@ import { LetterInfoPartFeatureComponent } from './letter-info-part-feature/lette
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    NgMatToolsModule,
     // Cadmus
     CadmusStateModule,
     CadmusUiModule,
