@@ -1,10 +1,10 @@
-# Cadmus Itinera
+# CadmusItineraApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
 
 This is the frontend for the second generation of the Cadmus Itinera editor.
 
-The codicological parts in this project will be imported from an [independent library](https://github.com/vedph/cadmus-codicology).
+The codicological parts in this project are imported from an [independent library](https://github.com/vedph/cadmus-codicology).
 
 ## Docker
 
@@ -13,6 +13,28 @@ The codicological parts in this project will be imported from an [independent li
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
 3. `docker build . -t vedph2020/cadmus-itinera-app:7.0.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+
+## Setup
+
+This workspace has been built with the following commands:
+
+```sh
+ng new cadmus-itinera-app
+cd cadmus-itinera-app
+ng add @angular/material
+ng add @angular/localize
+
+ng g library @myrmidon/cadmus-part-itinera-cod-loci --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-cod-poem-ranges --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-letter-info --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-literary-work-info --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-person-info --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-person-works --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-pg --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-referenced-texts --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-related-persons --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-witnesses --prefix cadmus --force
+```
 
 ## Production
 
@@ -36,6 +58,13 @@ window.__env.mapbox_token = "the token for this project";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 10.0.0
+
+- 2025-01-06:
+  - ⚠️ standalone components.
+  - updated Angular.
+  - refactored app for modern Angular.
 
 ### 9.0.0
 

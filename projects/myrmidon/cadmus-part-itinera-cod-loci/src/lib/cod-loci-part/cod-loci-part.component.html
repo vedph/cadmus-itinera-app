@@ -85,7 +85,7 @@
             [locus]="editedLocus"
             (locusChange)="onLocusSave($event)"
             (editorClose)="onLocusClose()"
-          ></cadmus-cod-locus>
+          />
         </mat-tab>
         }
       </mat-tab-group>
@@ -95,7 +95,7 @@
         [form]="form"
         [noSave]="userLevel < 2"
         (closeRequest)="close()"
-      ></cadmus-close-save-buttons>
+      />
     </mat-card-actions>
   </mat-card>
 </form>

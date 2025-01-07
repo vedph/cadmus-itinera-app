@@ -1,20 +1,33 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { Assertion } from '@myrmidon/cadmus-refs-assertion';
+import { Assertion, AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
 
 import { PersonWork } from '../person-works-part';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'cadmus-person-work',
-  templateUrl: './person-work.component.html',
-  styleUrls: ['./person-work.component.css'],
-  standalone: false,
+    selector: 'cadmus-person-work',
+    templateUrl: './person-work.component.html',
+    styleUrls: ['./person-work.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        MatCheckbox,
+        AssertionComponent,
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+    ],
 })
 export class PersonWorkComponent implements OnInit {
   private _work: PersonWork | undefined;

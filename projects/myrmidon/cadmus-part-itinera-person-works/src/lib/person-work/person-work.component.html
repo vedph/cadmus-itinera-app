@@ -31,9 +31,9 @@
       [assTagEntries]="assTagEntries"
       [refTagEntries]="refTagEntries"
       [refTypeEntries]="refTypeEntries"
-      [assertion]="assertion.value"
+      [assertion]="assertion.value || undefined"
       (assertionChange)="onAssertionChange($event)"
-    ></cadmus-refs-assertion>
+    />
     }
   </div>
 

@@ -1,20 +1,35 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
+import { AssertedCompositeId, AssertedCompositeIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { RelatedPerson } from '../related-persons-part';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'cadmus-related-person',
-  templateUrl: './related-person.component.html',
-  styleUrls: ['./related-person.component.css'],
-  standalone: false,
+    selector: 'cadmus-related-person',
+    templateUrl: './related-person.component.html',
+    styleUrls: ['./related-person.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatError,
+        MatInput,
+        AssertedCompositeIdsComponent,
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+    ],
 })
 export class RelatedPersonComponent implements OnInit {
   private _person: RelatedPerson | undefined;

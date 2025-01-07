@@ -4,12 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
+import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
+import { LiteraryWorkInfoPartComponent } from '../literary-work-info-part/literary-work-info-part.component';
 
 @Component({
-  selector: 'cadmus-literary-work-info-part-feature',
-  templateUrl: './literary-work-info-part-feature.component.html',
-  styleUrls: ['./literary-work-info-part-feature.component.css'],
-  standalone: false,
+    selector: 'cadmus-literary-work-info-part-feature',
+    templateUrl: './literary-work-info-part-feature.component.html',
+    styleUrls: ['./literary-work-info-part-feature.component.css'],
+    imports: [CurrentItemBarComponent, LiteraryWorkInfoPartComponent],
 })
 export class LiteraryWorkInfoPartFeatureComponent
   extends EditPartFeatureBase

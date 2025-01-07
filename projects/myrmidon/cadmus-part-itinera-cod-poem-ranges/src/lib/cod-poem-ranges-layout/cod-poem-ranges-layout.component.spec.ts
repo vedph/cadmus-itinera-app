@@ -8,8 +8,8 @@ describe('CodPoemRangesLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodPoemRangesLayoutComponent ]
-    })
+    imports: [CodPoemRangesLayoutComponent]
+})
     .compileComponents();
   });
 

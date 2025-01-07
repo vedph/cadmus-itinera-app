@@ -8,11 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CadmusCodLocationModule } from '@myrmidon/cadmus-cod-location';
-import { CadmusCodicologyUiModule } from '@myrmidon/cadmus-codicology-ui';
-import { CadmusStateModule } from '@myrmidon/cadmus-state';
-import { CadmusUiModule } from '@myrmidon/cadmus-ui';
-import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 
 import { CodPoemRangeLayoutsComponent } from './cod-poem-range-layouts.component';
 
@@ -22,8 +17,7 @@ describe('CodPoemRangeLayoutsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodPoemRangeLayoutsComponent ],
-      imports: [
+    imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
@@ -35,15 +29,9 @@ describe('CodPoemRangeLayoutsComponent', () => {
         MatSelectModule,
         MatTabsModule,
         MatTooltipModule,
-        // Cadmus
-        CadmusStateModule,
-        CadmusUiModule,
-        CadmusUiPgModule,
-        CadmusCodLocationModule,
-        CadmusCodicologyUiModule,
-      ]
-    })
-    .compileComponents();
+        CodPoemRangeLayoutsComponent,
+    ],
+}).compileComponents();
   });
 
   beforeEach(() => {

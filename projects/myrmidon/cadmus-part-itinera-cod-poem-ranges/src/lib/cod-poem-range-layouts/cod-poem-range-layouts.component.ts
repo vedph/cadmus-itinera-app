@@ -1,10 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { Observable } from 'rxjs';
 
@@ -16,6 +11,15 @@ import {
   PoemLayoutRow,
   PoemLayoutTable,
 } from '../services/poem-layout-table';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { CodPoemRangesLayoutComponent } from '../cod-poem-ranges-layout/cod-poem-ranges-layout.component';
+import { AsyncPipe } from '@angular/common';
 
 const PRESETS = [
   // sonetto
@@ -36,10 +40,25 @@ const PRESETS = [
  * and apply them a selected layout.
  */
 @Component({
-  selector: 'cadmus-cod-poem-range-layouts',
-  templateUrl: './cod-poem-range-layouts.component.html',
-  styleUrls: ['./cod-poem-range-layouts.component.css'],
-  standalone: false,
+    selector: 'cadmus-cod-poem-range-layouts',
+    templateUrl: './cod-poem-range-layouts.component.html',
+    styleUrls: ['./cod-poem-range-layouts.component.css'],
+    imports: [
+        FormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        ReactiveFormsModule,
+        MatOption,
+        MatInput,
+        MatError,
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+        CodPoemRangesLayoutComponent,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class CodPoemRangeLayoutsComponent implements OnInit {
   private readonly _table: PoemLayoutTable;

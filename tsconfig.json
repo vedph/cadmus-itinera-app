@@ -1,70 +1,54 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
       "@myrmidon/cadmus-part-itinera-cod-loci": [
-        "dist/myrmidon/cadmus-part-itinera-cod-loci/myrmidon-cadmus-part-itinera-cod-loci",
-        "dist/myrmidon/cadmus-part-itinera-cod-loci"
+        "./dist/myrmidon/cadmus-part-itinera-cod-loci"
       ],
       "@myrmidon/cadmus-part-itinera-cod-poem-ranges": [
-        "dist/myrmidon/cadmus-part-itinera-cod-poem-ranges/myrmidon-cadmus-part-itinera-cod-poem-ranges",
-        "dist/myrmidon/cadmus-part-itinera-cod-poem-ranges"
+        "./dist/myrmidon/cadmus-part-itinera-cod-poem-ranges"
       ],
       "@myrmidon/cadmus-part-itinera-letter-info": [
-        "dist/myrmidon/cadmus-part-itinera-letter-info/myrmidon-cadmus-part-itinera-letter-info",
-        "dist/myrmidon/cadmus-part-itinera-letter-info"
+        "./dist/myrmidon/cadmus-part-itinera-letter-info"
       ],
       "@myrmidon/cadmus-part-itinera-literary-work-info": [
-        "dist/myrmidon/cadmus-part-itinera-literary-work-info/myrmidon-cadmus-part-itinera-literary-work-info",
-        "dist/myrmidon/cadmus-part-itinera-literary-work-info"
+        "./dist/myrmidon/cadmus-part-itinera-literary-work-info"
       ],
       "@myrmidon/cadmus-part-itinera-person-info": [
-        "dist/myrmidon/cadmus-part-itinera-person-info/myrmidon-cadmus-part-itinera-person-info",
-        "dist/myrmidon/cadmus-part-itinera-person-info"
+        "./dist/myrmidon/cadmus-part-itinera-person-info"
       ],
       "@myrmidon/cadmus-part-itinera-person-works": [
-        "dist/myrmidon/cadmus-part-itinera-person-works/myrmidon-cadmus-part-itinera-person-works",
-        "dist/myrmidon/cadmus-part-itinera-person-works"
+        "./dist/myrmidon/cadmus-part-itinera-person-works"
       ],
       "@myrmidon/cadmus-part-itinera-pg": [
-        "dist/myrmidon/cadmus-part-itinera-pg/myrmidon-cadmus-part-itinera-pg",
-        "dist/myrmidon/cadmus-part-itinera-pg"
+        "./dist/myrmidon/cadmus-part-itinera-pg"
       ],
       "@myrmidon/cadmus-part-itinera-referenced-texts": [
-        "dist/myrmidon/cadmus-part-itinera-referenced-texts/myrmidon-cadmus-part-itinera-referenced-texts",
-        "dist/myrmidon/cadmus-part-itinera-referenced-texts"
+        "./dist/myrmidon/cadmus-part-itinera-referenced-texts"
       ],
       "@myrmidon/cadmus-part-itinera-related-persons": [
-        "dist/myrmidon/cadmus-part-itinera-related-persons/myrmidon-cadmus-part-itinera-related-persons",
-        "dist/myrmidon/cadmus-part-itinera-related-persons"
+        "./dist/myrmidon/cadmus-part-itinera-related-persons"
       ],
       "@myrmidon/cadmus-part-itinera-witnesses": [
-        "dist/myrmidon/cadmus-part-itinera-witnesses/myrmidon-cadmus-part-itinera-witnesses",
-        "dist/myrmidon/cadmus-part-itinera-witnesses"
+        "./dist/myrmidon/cadmus-part-itinera-witnesses"
       ]
     },
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "useDefineForClassFields": false
+    "module": "ES2022"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

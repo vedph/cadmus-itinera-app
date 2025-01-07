@@ -25,7 +25,7 @@
               [internalDefault]="true"
               [ids]="authorIds.value"
               (idsChange)="onAuthorIdsChange($event)"
-            ></cadmus-refs-asserted-composite-ids>
+            />
           </fieldset>
 
           <!-- titles -->
@@ -112,7 +112,7 @@
                 [title]="editedTitle"
                 (titleChange)="onTitleSave($event)"
                 (editorClose)="onTitleClose()"
-              ></cadmus-asserted-title>
+              />
             </mat-expansion-panel>
           </fieldset>
 
@@ -139,10 +139,11 @@
           <!-- languages -->
           <fieldset>
             <legend>language(s)</legend>
-            <cadmus-ui-flags-picker
-              [flags]="langFlags$ | async"
-              (flagsChange)="onLanguageFlagsChange($event)"
-            ></cadmus-ui-flags-picker>
+            <cadmus-ui-flag-set
+              [flags]="langFlags"
+              [checkedIds]="languages.value"
+              (checkedIdsChange)="onLanguageIdsChange($event)"
+            />
           </fieldset>
 
           <!-- genre -->
@@ -172,7 +173,7 @@
                 [renderLabel]="renderLabel"
                 [entries]="genreEntries"
                 (entryChange)="onEntryChange($event)"
-              ></cadmus-thesaurus-tree>
+              />
             </div>
             }
           </fieldset>
@@ -181,17 +182,16 @@
         <!-- POETRY -->
         <mat-tab label="poetry">
           <!-- metres -->
-          @if (mtrFlags$ | async; as flags) {
+          @if (mtrFlags.length) {
           <div>
-            @if (flags?.length) {
             <fieldset>
               <legend>metre(s)</legend>
-              <cadmus-ui-flags-picker
-                [flags]="flags"
-                (flagsChange)="onMetreFlagsChange($event)"
-              ></cadmus-ui-flags-picker>
+              <cadmus-ui-flag-set
+                [flags]="mtrFlags"
+                [checkedIds]="metres.value"
+                (checkedIdsChange)="onMetreIdsChange($event)"
+              />
             </fieldset>
-            }
           </div>
           }
 
@@ -215,7 +215,7 @@
         [form]="form"
         [noSave]="userLevel < 2"
         (closeRequest)="close()"
-      ></cadmus-close-save-buttons>
+      />
     </mat-card-actions>
   </mat-card>
 </form>

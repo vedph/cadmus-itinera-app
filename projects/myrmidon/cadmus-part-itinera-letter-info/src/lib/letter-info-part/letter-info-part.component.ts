@@ -1,25 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormControl, FormBuilder, Validators, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
 
 import { LetterInfoPart, LETTER_INFO_PART_TYPEID } from '../letter-info-part';
+import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 /**
  * LetterInfo part editor component.
  */
 @Component({
-  selector: 'cadmus-letter-info-part',
-  templateUrl: './letter-info-part.component.html',
-  styleUrls: ['./letter-info-part.component.css'],
-  standalone: false,
+    selector: 'cadmus-letter-info-part',
+    templateUrl: './letter-info-part.component.html',
+    styleUrls: ['./letter-info-part.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCard,
+        MatCardHeader,
+        MatCardAvatar,
+        MatIcon,
+        MatCardTitle,
+        MatCardContent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        MatCardActions,
+        CloseSaveButtonsComponent,
+    ],
 })
 export class LetterInfoPartComponent
   extends ModelEditorComponentBase<LetterInfoPart>

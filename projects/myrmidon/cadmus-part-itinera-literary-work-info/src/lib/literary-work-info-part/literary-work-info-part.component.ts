@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { Observable, take } from 'rxjs';
+import { FormControl, FormBuilder, Validators, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import {
-  EditedObject,
-  ModelEditorComponentBase,
-  renderLabelFromLastColon,
-} from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase, renderLabelFromLastColon, ThesaurusTreeComponent, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { AssertedCompositeId, AssertedCompositeIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import { Flag, FlagSetComponent } from '@myrmidon/cadmus-ui-flag-set';
 
 import {
   AssertedTitle,
   LiteraryWorkInfoPart,
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
-import { Flag, FlagsPickerAdapter } from '@myrmidon/cadmus-ui-flags-picker';
-import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
+import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { AssertedTitleComponent } from '../asserted-title/asserted-title.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 function entryToFlag(entry: ThesaurusEntry): Flag {
   return {
@@ -41,33 +41,60 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
  * pin-link-settings (all optional).
  */
 @Component({
-  selector: 'cadmus-literary-work-info-part',
-  templateUrl: './literary-work-info-part.component.html',
-  styleUrls: ['./literary-work-info-part.component.css'],
-  standalone: false,
+    selector: 'cadmus-literary-work-info-part',
+    templateUrl: './literary-work-info-part.component.html',
+    styleUrls: ['./literary-work-info-part.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCard,
+        MatCardHeader,
+        MatCardAvatar,
+        MatIcon,
+        MatCardTitle,
+        MatCardContent,
+        MatTabGroup,
+        MatTab,
+        AssertedCompositeIdsComponent,
+        MatButton,
+        MatIconButton,
+        MatTooltip,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        AssertedTitleComponent,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        FlagSetComponent,
+        ThesaurusTreeComponent,
+        MatHint,
+        MatCardActions,
+        CloseSaveButtonsComponent,
+    ],
 })
 export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>
   implements OnInit
 {
-  private readonly _flagAdapter: FlagsPickerAdapter;
   private _editedIndex;
   private _langEntries: ThesaurusEntry[];
   private _mtrEntries: ThesaurusEntry[];
 
   public editedTitle: AssertedTitle | undefined;
 
-  public languages: FormControl<Flag[]>;
+  public languages: FormControl<string[]>;
   public genre: FormControl<string | null>;
-  public metres: FormControl<Flag[]>;
+  public metres: FormControl<string[]>;
   public strophes: FormControl<string | null>;
   public isLost: FormControl<boolean>;
   public authorIds: FormControl<AssertedCompositeId[]>;
   public titles: FormControl<AssertedTitle[]>;
   public note: FormControl<string | null>;
 
-  public langFlags$: Observable<Flag[]>;
-  public mtrFlags$: Observable<Flag[]>;
+  public langFlags: Flag[] = [];
+  public mtrFlags: Flag[] = [];
 
   public pickedGenre?: string;
 
@@ -82,10 +109,7 @@ export class LiteraryWorkInfoPartComponent
       return;
     }
     this._langEntries = value || [];
-    this._flagAdapter.setSlotFlags(
-      'languages',
-      this._langEntries.map(entryToFlag)
-    );
+    this.langFlags = this._langEntries.map(entryToFlag);
   }
   // literary-work-metres
   public get mtrEntries(): ThesaurusEntry[] | undefined {
@@ -96,7 +120,7 @@ export class LiteraryWorkInfoPartComponent
       return;
     }
     this._mtrEntries = value || [];
-    this._flagAdapter.setSlotFlags('metres', this._mtrEntries.map(entryToFlag));
+    this.mtrFlags = this._mtrEntries.map(entryToFlag);
   }
 
   // assertion-tags
@@ -126,9 +150,6 @@ export class LiteraryWorkInfoPartComponent
     // flags
     this._langEntries = [];
     this._mtrEntries = [];
-    this._flagAdapter = new FlagsPickerAdapter();
-    this.langFlags$ = this._flagAdapter.selectFlags('languages');
-    this.mtrFlags$ = this._flagAdapter.selectFlags('metres');
     this._editedIndex = -1;
     // form
     this.languages = formBuilder.control([], {
@@ -245,16 +266,12 @@ export class LiteraryWorkInfoPartComponent
       this.pickedGenre = undefined;
       return;
     }
-    this.languages.setValue(
-      this._flagAdapter.setSlotChecks('languages', part.languages)
-    );
+    this.languages.setValue(part.languages || []);
     this.genre.setValue(part.genre);
     this.pickedGenre = this.genreEntries?.find(
       (e) => e.id === part.genre
     )?.value;
-    this.metres.setValue(
-      this._flagAdapter.setSlotChecks('metres', part.metres || [])
-    );
+    this.metres.setValue(part.metres || []);
     this.strophes.setValue(
       part.strophes?.length ? part.strophes.join('\n') : ''
     );
@@ -296,9 +313,9 @@ export class LiteraryWorkInfoPartComponent
     let part = this.getEditedPart(
       LITERARY_WORK_INFO_PART_TYPEID
     ) as LiteraryWorkInfoPart;
-    part.languages = this._flagAdapter.getCheckedFlagIds('languages');
+    part.languages = this.languages.value || [];
     part.genre = this.genre.value?.trim() || '';
-    part.metres = this._flagAdapter.getOptionalCheckedFlagIds('metres');
+    part.metres = this.metres.value?.length ? this.metres.value : undefined;
     part.strophes = this.parseStrophes(this.strophes.value);
     part.isLost = this.isLost.value ? true : undefined;
     part.authorIds = this.authorIds.value.length
@@ -310,14 +327,14 @@ export class LiteraryWorkInfoPartComponent
     return part;
   }
 
-  public onLanguageFlagsChange(flags: Flag[]): void {
-    this.languages.setValue(flags);
+  public onLanguageIdsChange(ids: string[]): void {
+    this.languages.setValue(ids);
     this.languages.updateValueAndValidity();
     this.languages.markAsDirty();
   }
 
-  public onMetreFlagsChange(flags: Flag[]): void {
-    this.metres.setValue(flags);
+  public onMetreIdsChange(ids: string[]): void {
+    this.metres.setValue(ids);
     this.metres.updateValueAndValidity();
     this.metres.markAsDirty();
   }

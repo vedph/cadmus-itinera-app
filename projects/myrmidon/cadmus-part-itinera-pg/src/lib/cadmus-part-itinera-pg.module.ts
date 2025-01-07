@@ -4,16 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // cadmus
-import { CadmusCoreModule, PendingChangesGuard } from '@myrmidon/cadmus-core';
+import { PendingChangesGuard } from '@myrmidon/cadmus-core';
 import {
   COD_LOCI_PART_TYPEID,
   CodLociPartFeatureComponent,
-  CadmusPartItineraCodLociModule,
 } from '@myrmidon/cadmus-part-itinera-cod-loci';
 import {
   COD_POEM_RANGES_PART_TYPEID,
   CodPoemRangesPartFeatureComponent,
-  CadmusPartItineraCodPoemRangesModule,
 } from '@myrmidon/cadmus-part-itinera-cod-poem-ranges';
 import {
   LetterInfoPartFeatureComponent,
@@ -43,9 +41,6 @@ import {
   WitnessesPartFeatureComponent,
   WITNESSES_PART_TYPEID,
 } from '@myrmidon/cadmus-part-itinera-witnesses';
-import { CadmusStateModule } from '@myrmidon/cadmus-state';
-import { CadmusUiModule } from '@myrmidon/cadmus-ui';
-import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 
 export const RouterModuleForChild = RouterModule.forChild([
   {
@@ -112,13 +107,6 @@ export const RouterModuleForChild = RouterModule.forChild([
     ReactiveFormsModule,
     // Cadmus
     RouterModuleForChild,
-    CadmusCoreModule,
-    CadmusStateModule,
-    CadmusUiModule,
-    CadmusUiPgModule,
-    // Itinera
-    CadmusPartItineraCodLociModule,
-    CadmusPartItineraCodPoemRangesModule,
   ],
   exports: [],
 })

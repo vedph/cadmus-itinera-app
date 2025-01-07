@@ -98,7 +98,7 @@
             [person]="editedPerson"
             (personChange)="onPersonSave($event)"
             (editorClose)="onPersonClose()"
-          ></cadmus-related-person>
+          />
         </mat-tab>
         }
       </mat-tab-group>
@@ -108,7 +108,7 @@
         [form]="form"
         [noSave]="userLevel < 2"
         (closeRequest)="close()"
-      ></cadmus-close-save-buttons>
+      />
     </mat-card-actions>
   </mat-card>
 </form>

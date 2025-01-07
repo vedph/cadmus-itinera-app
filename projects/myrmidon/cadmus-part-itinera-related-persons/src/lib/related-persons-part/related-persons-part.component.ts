@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsValidators, FlatLookupPipe } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -18,6 +13,12 @@ import {
   RelatedPersonsPart,
   RELATED_PERSONS_PART_TYPEID,
 } from '../related-persons-part';
+import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RelatedPersonComponent } from '../related-person/related-person.component';
 
 /**
  * RelatedPersonsPart editor component.
@@ -26,10 +27,28 @@ import {
  * pin-link-settings (all optional).
  */
 @Component({
-  selector: 'cadmus-related-persons-part',
-  templateUrl: './related-persons-part.component.html',
-  styleUrls: ['./related-persons-part.component.css'],
-  standalone: false,
+    selector: 'cadmus-related-persons-part',
+    templateUrl: './related-persons-part.component.html',
+    styleUrls: ['./related-persons-part.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCard,
+        MatCardHeader,
+        MatCardAvatar,
+        MatIcon,
+        MatCardTitle,
+        MatCardContent,
+        MatTabGroup,
+        MatTab,
+        MatButton,
+        MatIconButton,
+        MatTooltip,
+        RelatedPersonComponent,
+        MatCardActions,
+        CloseSaveButtonsComponent,
+        FlatLookupPipe,
+    ],
 })
 export class RelatedPersonsPartComponent
   extends ModelEditorComponentBase<RelatedPersonsPart>

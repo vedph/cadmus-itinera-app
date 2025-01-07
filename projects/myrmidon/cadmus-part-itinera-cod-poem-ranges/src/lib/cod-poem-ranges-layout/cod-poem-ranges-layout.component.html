@@ -53,10 +53,10 @@
         (keydown.esc)="cancelNote()"
         (keydown.enter)="saveNote()"
       />
-      <button mat-icon-button matSuffix (click)="cancelNote()">
+      <button type="button" mat-icon-button matSuffix (click)="cancelNote()">
         <mat-icon class="mat-warn">clear</mat-icon>
       </button>
-      <button mat-icon-button matSuffix (click)="saveNote()">
+      <button type="button" mat-icon-button matSuffix (click)="saveNote()">
         <mat-icon class="mat-primary">check_circle</mat-icon>
       </button>
       @if ($any(note).errors?.maxLength && (note.dirty || note.touched)) {

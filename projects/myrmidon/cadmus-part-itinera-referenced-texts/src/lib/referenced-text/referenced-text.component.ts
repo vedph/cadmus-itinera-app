@@ -1,20 +1,36 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AssertedCompositeId } from '@myrmidon/cadmus-refs-asserted-ids';
+import { AssertedCompositeId, AssertedCompositeIdComponent } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { ReferencedText } from '../referenced-texts-part';
+import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'cadmus-referenced-text',
-  templateUrl: './referenced-text.component.html',
-  styleUrls: ['./referenced-text.component.css'],
-  standalone: false,
+    selector: 'cadmus-referenced-text',
+    templateUrl: './referenced-text.component.html',
+    styleUrls: ['./referenced-text.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatError,
+        MatInput,
+        AssertedCompositeIdComponent,
+        MatHint,
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+    ],
 })
 export class ReferencedTextComponent implements OnInit {
   private _text: ReferencedText | undefined;

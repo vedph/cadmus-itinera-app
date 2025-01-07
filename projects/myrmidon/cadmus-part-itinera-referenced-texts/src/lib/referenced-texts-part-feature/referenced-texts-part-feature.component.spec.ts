@@ -8,8 +8,8 @@ describe('ReferencedTextsPartFeatureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReferencedTextsPartFeatureComponent ]
-    })
+    imports: [ReferencedTextsPartFeatureComponent]
+})
     .compileComponents();
   });
 

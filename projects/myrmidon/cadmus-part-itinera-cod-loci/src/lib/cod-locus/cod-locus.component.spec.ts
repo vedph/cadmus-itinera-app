@@ -8,8 +8,8 @@ describe('CodLocusComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodLocusComponent ]
-    })
+    imports: [CodLocusComponent]
+})
     .compileComponents();
   });
 

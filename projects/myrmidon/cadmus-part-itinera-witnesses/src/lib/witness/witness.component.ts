@@ -1,20 +1,31 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { CodLocationRange } from '@myrmidon/cadmus-cod-location';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CodLocationRange, CodLocationComponent } from '@myrmidon/cadmus-cod-location';
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 
 import { Witness } from '../witnesses-part';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'cadmus-witness',
-  templateUrl: './witness.component.html',
-  styleUrls: ['./witness.component.css'],
-  standalone: false,
+    selector: 'cadmus-witness',
+    templateUrl: './witness.component.html',
+    styleUrls: ['./witness.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        CodLocationComponent,
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+    ],
 })
 export class WitnessComponent implements OnInit {
   private _witness: Witness | undefined;

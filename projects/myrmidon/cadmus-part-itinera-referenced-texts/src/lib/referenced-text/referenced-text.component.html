@@ -33,7 +33,7 @@
     <fieldset>
       <legend>target ID</legend>
       <cadmus-refs-asserted-composite-id
-        [id]="targetId.value"
+        [id]="targetId.value || undefined"
         [idScopeEntries]="idScopeEntries"
         [idTagEntries]="idTagEntries"
         [assTagEntries]="assTagEntries"
@@ -43,8 +43,8 @@
         [canSwitchMode]="canSwitchMode"
         [canEditTarget]="canEditTarget"
         [internalDefault]="true"
-        (idChange)="onIdChange($event)"
-      ></cadmus-refs-asserted-composite-id>
+        (idChange)="onIdChange($event!)"
+      />
     </fieldset>
 
     <!-- targetCitation -->

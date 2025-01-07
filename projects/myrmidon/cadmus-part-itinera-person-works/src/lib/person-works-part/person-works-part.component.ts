@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -18,16 +13,39 @@ import {
   PersonWorksPart,
   PERSON_WORKS_PART_TYPEID,
 } from '../person-works-part';
+import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { PersonWorkComponent } from '../person-work/person-work.component';
 
 /**
  * PersonWorksPart editor component.
  * Thesauri: assertion-tags, doc-reference-types, doc-reference-tags (all optional).
  */
 @Component({
-  selector: 'cadmus-person-works-part',
-  templateUrl: './person-works-part.component.html',
-  styleUrls: ['./person-works-part.component.css'],
-  standalone: false,
+    selector: 'cadmus-person-works-part',
+    templateUrl: './person-works-part.component.html',
+    styleUrls: ['./person-works-part.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCard,
+        MatCardHeader,
+        MatCardAvatar,
+        MatIcon,
+        MatCardTitle,
+        MatCardContent,
+        MatTabGroup,
+        MatTab,
+        MatButton,
+        MatIconButton,
+        MatTooltip,
+        PersonWorkComponent,
+        MatCardActions,
+        CloseSaveButtonsComponent,
+    ],
 })
 export class PersonWorksPartComponent
   extends ModelEditorComponentBase<PersonWorksPart>

@@ -8,8 +8,8 @@ describe('ReferencedTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReferencedTextComponent ]
-    })
+    imports: [ReferencedTextComponent]
+})
     .compileComponents();
   });
 

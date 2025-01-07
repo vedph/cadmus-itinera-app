@@ -8,8 +8,8 @@ describe('LiteraryWorkInfoPartFeatureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LiteraryWorkInfoPartFeatureComponent ]
-    })
+    imports: [LiteraryWorkInfoPartFeatureComponent]
+})
     .compileComponents();
   });
 

@@ -8,8 +8,8 @@ describe('LetterInfoPartFeatureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LetterInfoPartFeatureComponent ]
-    })
+    imports: [LetterInfoPartFeatureComponent]
+})
     .compileComponents();
   });
 

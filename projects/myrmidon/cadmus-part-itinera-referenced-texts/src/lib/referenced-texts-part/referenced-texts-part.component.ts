@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsValidators, FlatLookupPipe } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -18,6 +13,12 @@ import {
   ReferencedTextsPart,
   REFERENCED_TEXTS_PART_TYPEID,
 } from '../referenced-texts-part';
+import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ReferencedTextComponent } from '../referenced-text/referenced-text.component';
 
 /**
  * ReferencedTextsPart editor component.
@@ -26,10 +27,28 @@ import {
  * pin-link-settings.
  */
 @Component({
-  selector: 'cadmus-referenced-texts-part',
-  templateUrl: './referenced-texts-part.component.html',
-  styleUrls: ['./referenced-texts-part.component.css'],
-  standalone: false,
+    selector: 'cadmus-referenced-texts-part',
+    templateUrl: './referenced-texts-part.component.html',
+    styleUrls: ['./referenced-texts-part.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCard,
+        MatCardHeader,
+        MatCardAvatar,
+        MatIcon,
+        MatCardTitle,
+        MatCardContent,
+        MatTabGroup,
+        MatTab,
+        MatButton,
+        MatIconButton,
+        MatTooltip,
+        ReferencedTextComponent,
+        MatCardActions,
+        CloseSaveButtonsComponent,
+        FlatLookupPipe,
+    ],
 })
 export class ReferencedTextsPartComponent
   extends ModelEditorComponentBase<ReferencedTextsPart>

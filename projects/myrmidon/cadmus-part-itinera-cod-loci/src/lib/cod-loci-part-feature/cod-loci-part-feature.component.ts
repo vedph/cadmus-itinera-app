@@ -4,12 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
+import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
+import { CodLociPartComponent } from '../cod-loci-part/cod-loci-part.component';
 
 @Component({
   selector: 'cadmus-cod-loci-part-feature',
   templateUrl: './cod-loci-part-feature.component.html',
   styleUrls: ['./cod-loci-part-feature.component.css'],
-  standalone: false,
+  imports: [CurrentItemBarComponent, CodLociPartComponent],
 })
 export class CodLociPartFeatureComponent
   extends EditPartFeatureBase

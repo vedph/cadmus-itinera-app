@@ -4,12 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
+import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
+import { RelatedPersonsPartComponent } from '../related-persons-part/related-persons-part.component';
 
 @Component({
-  selector: 'cadmus-related-persons-part-feature',
-  templateUrl: './related-persons-part-feature.component.html',
-  styleUrls: ['./related-persons-part-feature.component.css'],
-  standalone: false,
+    selector: 'cadmus-related-persons-part-feature',
+    templateUrl: './related-persons-part-feature.component.html',
+    styleUrls: ['./related-persons-part-feature.component.css'],
+    imports: [CurrentItemBarComponent, RelatedPersonsPartComponent],
 })
 export class RelatedPersonsPartFeatureComponent
   extends EditPartFeatureBase

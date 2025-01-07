@@ -4,16 +4,36 @@ import {
   FormBuilder,
   FormGroup,
   UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { CodLocusComponent } from '../cod-locus/cod-locus.component';
+import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 /**
  * CodLociPart editor component.
@@ -23,7 +43,25 @@ import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
   selector: 'cadmus-cod-loci-part',
   templateUrl: './cod-loci-part.component.html',
   styleUrls: ['./cod-loci-part.component.css'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatTabGroup,
+    MatTab,
+    MatButton,
+    MatIconButton,
+    MatTooltip,
+    CodLocusComponent,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+    CodLocationRangePipe,
+  ],
 })
 export class CodLociPartComponent
   extends ModelEditorComponentBase<CodLociPart>

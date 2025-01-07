@@ -1,24 +1,35 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { deepCopy } from '@myrmidon/ngx-tools';
 import {
   CodPoemLayoutCheckMode,
   PoemLayoutRow,
 } from '../services/poem-layout-table';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatLabel, MatFormField, MatSuffix, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 /**
  * An editable poem range layout.
  */
 @Component({
-  selector: 'cadmus-cod-poem-ranges-layout',
-  templateUrl: './cod-poem-ranges-layout.component.html',
-  styleUrls: ['./cod-poem-ranges-layout.component.css'],
-  standalone: false,
+    selector: 'cadmus-cod-poem-ranges-layout',
+    templateUrl: './cod-poem-ranges-layout.component.html',
+    styleUrls: ['./cod-poem-ranges-layout.component.css'],
+    imports: [
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+        MatLabel,
+        MatFormField,
+        MatInput,
+        FormsModule,
+        ReactiveFormsModule,
+        MatSuffix,
+        MatError,
+    ],
 })
 export class CodPoemRangesLayoutComponent implements OnInit {
   private _layout: PoemLayoutRow | undefined;

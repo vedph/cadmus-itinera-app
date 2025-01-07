@@ -4,12 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EditPartFeatureBase, PartEditorService } from '@myrmidon/cadmus-state';
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
+import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
+import { ReferencedTextsPartComponent } from '../referenced-texts-part/referenced-texts-part.component';
 
 @Component({
-  selector: 'cadmus-referenced-texts-part-feature',
-  templateUrl: './referenced-texts-part-feature.component.html',
-  styleUrls: ['./referenced-texts-part-feature.component.css'],
-  standalone: false,
+    selector: 'cadmus-referenced-texts-part-feature',
+    templateUrl: './referenced-texts-part-feature.component.html',
+    styleUrls: ['./referenced-texts-part-feature.component.css'],
+    imports: [CurrentItemBarComponent, ReferencedTextsPartComponent],
 })
 export class ReferencedTextsPartFeatureComponent
   extends EditPartFeatureBase
