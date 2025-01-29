@@ -1,11 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
+
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { NgxToolsValidators, FlatLookupPipe } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -13,11 +37,6 @@ import {
   RelatedPersonsPart,
   RELATED_PERSONS_PART_TYPEID,
 } from '../related-persons-part';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
 import { RelatedPersonComponent } from '../related-person/related-person.component';
 
 /**
@@ -27,36 +46,33 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
  * pin-link-settings (all optional).
  */
 @Component({
-    selector: 'cadmus-related-persons-part',
-    templateUrl: './related-persons-part.component.html',
-    styleUrls: ['./related-persons-part.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatTabGroup,
-        MatTab,
-        MatButton,
-        MatIconButton,
-        MatTooltip,
-        RelatedPersonComponent,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-        FlatLookupPipe,
-    ],
+  selector: 'cadmus-related-persons-part',
+  templateUrl: './related-persons-part.component.html',
+  styleUrls: ['./related-persons-part.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatExpansionModule,
+    MatButton,
+    MatIconButton,
+    MatTooltip,
+    RelatedPersonComponent,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+    FlatLookupPipe,
+  ],
 })
 export class RelatedPersonsPartComponent
   extends ModelEditorComponentBase<RelatedPersonsPart>
   implements OnInit
 {
-  private _editedIndex: number;
-
-  public tabIndex: number;
+  public editedIndex: number;
   public editedPerson: RelatedPerson | undefined;
 
   // related-person-types
@@ -87,8 +103,7 @@ export class RelatedPersonsPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this._editedIndex = -1;
-    this.tabIndex = 0;
+    this.editedIndex = -1;
     // form
     this.persons = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -206,22 +221,18 @@ export class RelatedPersonsPartComponent
 
   public editPerson(index: number): void {
     if (index < 0) {
-      this._editedIndex = -1;
-      this.tabIndex = 0;
+      this.editedIndex = -1;
       this.editedPerson = undefined;
     } else {
-      this._editedIndex = index;
+      this.editedIndex = index;
       this.editedPerson = this.persons.value[index];
-      setTimeout(() => {
-        this.tabIndex = 1;
-      }, 300);
     }
   }
 
   public onPersonSave(entry: RelatedPerson): void {
     this.persons.setValue(
       this.persons.value.map((e: RelatedPerson, i: number) =>
-        i === this._editedIndex ? entry : e
+        i === this.editedIndex ? entry : e
       )
     );
     this.persons.updateValueAndValidity();

@@ -1,9 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, input, model, output } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { Assertion, AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
 
-import { AssertedTitle } from '../literary-work-info-part';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
@@ -13,58 +19,41 @@ import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 
-@Component({
-    selector: 'cadmus-asserted-title',
-    templateUrl: './asserted-title.component.html',
-    styleUrls: ['./asserted-title.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatError,
-        MatInput,
-        MatCheckbox,
-        AssertionComponent,
-        MatIconButton,
-        MatTooltip,
-        MatIcon,
-    ],
-})
-export class AssertedTitleComponent implements OnInit {
-  private _title: AssertedTitle | undefined;
+import { AssertedTitle } from '../literary-work-info-part';
 
-  @Input()
-  public get title(): AssertedTitle | undefined {
-    return this._title;
-  }
-  public set title(value: AssertedTitle | undefined) {
-    if (this._title === value) {
-      return;
-    }
-    this._title = value;
-    this.updateForm(value);
-  }
+@Component({
+  selector: 'cadmus-asserted-title',
+  templateUrl: './asserted-title.component.html',
+  styleUrls: ['./asserted-title.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatInput,
+    MatCheckbox,
+    AssertionComponent,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+  ],
+})
+export class AssertedTitleComponent {
+  public readonly title = model<AssertedTitle>();
 
   // literary-work-languages
-  @Input()
-  public langEntries: ThesaurusEntry[] | undefined;
+  public readonly langEntries = input<ThesaurusEntry[]>();
   // assertion-tags
-  @Input()
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = input<ThesaurusEntry[]>();
   // doc-reference-types
-  @Input()
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = input<ThesaurusEntry[]>();
   // doc-reference-tags
-  @Input()
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = input<ThesaurusEntry[]>();
 
-  @Output()
-  public titleChange: EventEmitter<AssertedTitle>;
-  @Output()
-  public editorClose: EventEmitter<any>;
+  public readonly editorClose = output();
 
   public language: FormControl<string | null>;
   public value: FormControl<string | null>;
@@ -73,9 +62,6 @@ export class AssertedTitleComponent implements OnInit {
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
-    this.titleChange = new EventEmitter<AssertedTitle>();
-    this.editorClose = new EventEmitter<any>();
-    // form
     this.language = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -92,12 +78,10 @@ export class AssertedTitleComponent implements OnInit {
       hasAssertion: this.hasAssertion,
       assertion: this.assertion,
     });
-  }
 
-  ngOnInit(): void {
-    if (this._title) {
-      this.updateForm(this._title);
-    }
+    effect(() => {
+      this.updateForm(this.title());
+    });
   }
 
   private updateForm(model: AssertedTitle | undefined): void {
@@ -113,7 +97,7 @@ export class AssertedTitleComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  private getModel(): AssertedTitle {
+  private getTitle(): AssertedTitle {
     return {
       language: this.language.value?.trim() || '',
       value: this.value.value?.trim() || '',
@@ -137,7 +121,6 @@ export class AssertedTitleComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this._title = this.getModel();
-    this.titleChange.emit(this._title);
+    this.title.set(this.getTitle());
   }
 }

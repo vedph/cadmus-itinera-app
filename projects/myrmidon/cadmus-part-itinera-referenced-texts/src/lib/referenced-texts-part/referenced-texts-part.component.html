@@ -94,7 +94,7 @@
             [pinByTypeMode]="pinByTypeMode"
             [canSwitchMode]="canSwitchMode"
             [canEditTarget]="canEditTarget"
-            (textChange)="onTextSave($event)"
+            (textChange)="onTextSave($event!)"
             (editorClose)="closeText()"
           >
           </cadmus-referenced-text>

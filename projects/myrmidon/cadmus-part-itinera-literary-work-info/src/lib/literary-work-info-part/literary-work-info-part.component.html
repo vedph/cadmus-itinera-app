@@ -110,7 +110,7 @@
                 [refTagEntries]="refTagEntries"
                 [refTypeEntries]="refTypeEntries"
                 [title]="editedTitle"
-                (titleChange)="onTitleSave($event)"
+                (titleChange)="onTitleSave($event!)"
                 (editorClose)="onTitleClose()"
               />
             </mat-expansion-panel>

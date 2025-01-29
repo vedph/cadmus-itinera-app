@@ -1,60 +1,53 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CodLocationRange, CodLocationComponent } from '@myrmidon/cadmus-cod-location';
+import { Component, effect, model, output } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  CodLocationRange,
+  CodLocationComponent,
+} from '@myrmidon/cadmus-cod-location';
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 
-import { Witness } from '../witnesses-part';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 
+import { Witness } from '../witnesses-part';
+
 @Component({
-    selector: 'cadmus-witness',
-    templateUrl: './witness.component.html',
-    styleUrls: ['./witness.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatError,
-        CodLocationComponent,
-        MatIconButton,
-        MatTooltip,
-        MatIcon,
-    ],
+  selector: 'cadmus-witness',
+  templateUrl: './witness.component.html',
+  styleUrls: ['./witness.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    CodLocationComponent,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+  ],
 })
-export class WitnessComponent implements OnInit {
-  private _witness: Witness | undefined;
+export class WitnessComponent {
+  public readonly witness = model<Witness>();
 
-  @Input()
-  public get witness(): Witness | undefined {
-    return this._witness;
-  }
-  public set witness(value: Witness | undefined) {
-    if (this._witness === value) {
-      return;
-    }
-    this._witness = value;
-    this.updateForm(value);
-  }
-
-  @Output()
-  public witnessChange: EventEmitter<Witness>;
-  @Output()
-  public editorClose: EventEmitter<any>;
+  public readonly editorClose = output();
 
   public id: FormControl<string | null>;
   public ranges: FormControl<CodLocationRange[]>;
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
-    this.witnessChange = new EventEmitter<Witness>();
-    this.editorClose = new EventEmitter<any>();
-    // form
     this.id = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(500),
@@ -67,12 +60,10 @@ export class WitnessComponent implements OnInit {
       id: this.id,
       ranges: this.ranges,
     });
-  }
 
-  ngOnInit(): void {
-    if (this._witness) {
-      this.updateForm(this._witness);
-    }
+    effect(() => {
+      this.updateForm(this.witness());
+    });
   }
 
   private updateForm(model: Witness | undefined): void {
@@ -92,7 +83,7 @@ export class WitnessComponent implements OnInit {
     this.ranges.markAsDirty();
   }
 
-  private getModel(): Witness {
+  private getWitness(): Witness {
     return {
       id: this.id.value?.trim() || '',
       ranges: this.ranges.value ?? [],
@@ -107,7 +98,6 @@ export class WitnessComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this._witness = this.getModel();
-    this.witnessChange.emit(this._witness);
+    this.witness.set(this.getWitness());
   }
 }

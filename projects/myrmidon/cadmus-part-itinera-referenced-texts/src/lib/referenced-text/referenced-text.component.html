@@ -1,11 +1,11 @@
 <form [formGroup]="form" (submit)="save()">
   <div>
     <!-- type (bound) -->
-    @if (txtTypeEntries?.length) {
+    @if (txtTypeEntries()?.length) {
     <mat-form-field>
       <mat-label>type</mat-label>
       <mat-select [formControl]="type">
-        @for (e of txtTypeEntries; track e.id) {
+        @for (e of txtTypeEntries(); track e.id) {
         <mat-option [value]="e.id">{{ e.value }}</mat-option>
         }
       </mat-select>
@@ -15,7 +15,7 @@
     </mat-form-field>
     }
     <!-- type (free) -->
-    @if (!txtTypeEntries?.length) {
+    @else {
     <mat-form-field>
       <mat-label>type</mat-label>
       <input matInput [formControl]="type" />
@@ -34,14 +34,14 @@
       <legend>target ID</legend>
       <cadmus-refs-asserted-composite-id
         [id]="targetId.value || undefined"
-        [idScopeEntries]="idScopeEntries"
-        [idTagEntries]="idTagEntries"
-        [assTagEntries]="assTagEntries"
-        [refTypeEntries]="refTypeEntries"
-        [refTagEntries]="refTagEntries"
-        [pinByTypeMode]="pinByTypeMode"
-        [canSwitchMode]="canSwitchMode"
-        [canEditTarget]="canEditTarget"
+        [idScopeEntries]="idScopeEntries()"
+        [idTagEntries]="idTagEntries()"
+        [assTagEntries]="assTagEntries()"
+        [refTypeEntries]="refTypeEntries()"
+        [refTagEntries]="refTagEntries()"
+        [pinByTypeMode]="pinByTypeMode()"
+        [canSwitchMode]="canSwitchMode()"
+        [canEditTarget]="canEditTarget()"
         [internalDefault]="true"
         (idChange)="onIdChange($event!)"
       />

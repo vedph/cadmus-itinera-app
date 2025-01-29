@@ -1,13 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  Validators,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { take } from 'rxjs';
+
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { AssertedTitleComponent } from '../asserted-title/asserted-title.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import {
+  MatFormField,
+  MatLabel,
+  MatError,
+  MatHint,
+} from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, renderLabelFromLastColon, ThesaurusTreeComponent, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  renderLabelFromLastColon,
+  ThesaurusTreeComponent,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
+
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AssertedCompositeId, AssertedCompositeIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import {
+  AssertedCompositeId,
+  AssertedCompositeIdsComponent,
+} from '@myrmidon/cadmus-refs-asserted-ids';
 import { Flag, FlagSetComponent } from '@myrmidon/cadmus-ui-flag-set';
 
 import {
@@ -15,16 +59,6 @@ import {
   LiteraryWorkInfoPart,
   LITERARY_WORK_INFO_PART_TYPEID,
 } from '../literary-work-info-part';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
-import { AssertedTitleComponent } from '../asserted-title/asserted-title.component';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 
 function entryToFlag(entry: ThesaurusEntry): Flag {
   return {
@@ -41,38 +75,38 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
  * pin-link-settings (all optional).
  */
 @Component({
-    selector: 'cadmus-literary-work-info-part',
-    templateUrl: './literary-work-info-part.component.html',
-    styleUrls: ['./literary-work-info-part.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatTabGroup,
-        MatTab,
-        AssertedCompositeIdsComponent,
-        MatButton,
-        MatIconButton,
-        MatTooltip,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        AssertedTitleComponent,
-        MatCheckbox,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatError,
-        FlagSetComponent,
-        ThesaurusTreeComponent,
-        MatHint,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-    ],
+  selector: 'cadmus-literary-work-info-part',
+  templateUrl: './literary-work-info-part.component.html',
+  styleUrls: ['./literary-work-info-part.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatTabGroup,
+    MatTab,
+    AssertedCompositeIdsComponent,
+    MatButton,
+    MatIconButton,
+    MatTooltip,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    AssertedTitleComponent,
+    MatCheckbox,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    FlagSetComponent,
+    ThesaurusTreeComponent,
+    MatHint,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+  ],
 })
 export class LiteraryWorkInfoPartComponent
   extends ModelEditorComponentBase<LiteraryWorkInfoPart>

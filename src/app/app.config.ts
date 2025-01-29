@@ -8,7 +8,7 @@ import {
   withInterceptors,
   withJsonpSupport,
 } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -37,7 +37,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
     provideHttpClient(
       withInterceptors([authJwtInterceptor]),

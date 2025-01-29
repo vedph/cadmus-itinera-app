@@ -1,11 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
+
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -13,11 +37,6 @@ import {
   PersonWorksPart,
   PERSON_WORKS_PART_TYPEID,
 } from '../person-works-part';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
 import { PersonWorkComponent } from '../person-work/person-work.component';
 
 /**
@@ -25,35 +44,32 @@ import { PersonWorkComponent } from '../person-work/person-work.component';
  * Thesauri: assertion-tags, doc-reference-types, doc-reference-tags (all optional).
  */
 @Component({
-    selector: 'cadmus-person-works-part',
-    templateUrl: './person-works-part.component.html',
-    styleUrls: ['./person-works-part.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatTabGroup,
-        MatTab,
-        MatButton,
-        MatIconButton,
-        MatTooltip,
-        PersonWorkComponent,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-    ],
+  selector: 'cadmus-person-works-part',
+  templateUrl: './person-works-part.component.html',
+  styleUrls: ['./person-works-part.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatExpansionModule,
+    MatButton,
+    MatIconButton,
+    MatTooltip,
+    PersonWorkComponent,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+  ],
 })
 export class PersonWorksPartComponent
   extends ModelEditorComponentBase<PersonWorksPart>
   implements OnInit
 {
-  private _editedIndex: number;
-
-  public tabIndex: number;
+  public editedIndex: number;
   public editedWork: PersonWork | undefined;
 
   // assertion-tags
@@ -71,8 +87,7 @@ export class PersonWorksPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this._editedIndex = -1;
-    this.tabIndex = 0;
+    this.editedIndex = -1;
     // form
     this.works = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -148,22 +163,18 @@ export class PersonWorksPartComponent
 
   public editWork(index: number): void {
     if (index < 0) {
-      this._editedIndex = -1;
-      this.tabIndex = 0;
+      this.editedIndex = -1;
       this.editedWork = undefined;
     } else {
-      this._editedIndex = index;
+      this.editedIndex = index;
       this.editedWork = this.works.value[index];
-      setTimeout(() => {
-        this.tabIndex = 1;
-      }, 300);
     }
   }
 
   public onWorkSave(work: PersonWork): void {
     this.works.setValue(
       this.works.value.map((e: PersonWork, i: number) =>
-        i === this._editedIndex ? work : e
+        i === this.editedIndex ? work : e
       )
     );
     this.works.updateValueAndValidity();

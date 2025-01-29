@@ -1,11 +1,11 @@
 <form [formGroup]="form" (submit)="save()">
   <div class="form-row">
     <!-- citation (bound) -->
-    @if (locEntries?.length) {
+    @if (locEntries()?.length) {
     <mat-form-field>
       <mat-label>citation</mat-label>
       <mat-select [formControl]="citation">
-        @for (e of locEntries; track e.id) {
+        @for (e of locEntries(); track e.id) {
         <mat-option [value]="e.id">{{ e.value }}</mat-option>
         }
       </mat-select>
@@ -16,7 +16,7 @@
     </mat-form-field>
     }
     <!-- citation (free) -->
-    @if (!locEntries?.length) {
+    @else {
     <mat-form-field>
       <mat-label>citation</mat-label>
       <input matInput [formControl]="citation" />
@@ -35,7 +35,7 @@
       [required]="true"
       [location]="ranges.value"
       (locationChange)="onLocationChange($event)"
-    ></cadmus-cod-location>
+    />
   </div>
 
   <div>
@@ -65,7 +65,7 @@
   <div>
     <!-- images -->
     <cadmus-cod-images
-      [typeEntries]="imgTypeEntries"
+      [typeEntries]="imgTypeEntries()"
       [images]="images.value"
       (imagesChange)="onImagesChange($event)"
     />

@@ -1,51 +1,73 @@
 import { Component, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
-import { FormControl, FormBuilder, Validators, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
-import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
 import {
-  CADMUS_TEXT_ED_BINDINGS_TOKEN,
-  CadmusTextEdBindings,
-  CadmusTextEdService,
-} from '@myrmidon/cadmus-text-ed';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+  FormControl,
+  FormBuilder,
+  Validators,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { MatInput } from '@angular/material/input';
+
 import { NgeMonacoModule } from '@cisstech/nge/monaco';
+
+import { AuthJwtService } from '@myrmidon/auth-jwt-login';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
+import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  CADMUS_TEXT_ED_BINDINGS_TOKEN,
+  CadmusTextEdBindings,
+  CadmusTextEdService,
+} from '@myrmidon/cadmus-text-ed';
+
+import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
 
 /**
  * PersonInfo part editor component.
  * Thesauri: person-sex (optional).
  */
 @Component({
-    selector: 'cadmus-person-info-part',
-    templateUrl: './person-info-part.component.html',
-    styleUrls: ['./person-info-part.component.css'],
-    providers: [CadmusTextEdService],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatError,
-        MatInput,
-        NgeMonacoModule,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-    ],
+  selector: 'cadmus-person-info-part',
+  templateUrl: './person-info-part.component.html',
+  styleUrls: ['./person-info-part.component.css'],
+  providers: [CadmusTextEdService],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatInput,
+    NgeMonacoModule,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+  ],
 })
 export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>

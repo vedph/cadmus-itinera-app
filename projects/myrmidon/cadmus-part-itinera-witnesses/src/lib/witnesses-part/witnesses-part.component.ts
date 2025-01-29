@@ -1,52 +1,75 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { take } from 'rxjs/operators';
+
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
 
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
+
+import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 import {
   Witness,
   WitnessesPart,
   WITNESSES_PART_TYPEID,
 } from '../witnesses-part';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { WitnessComponent } from '../witness/witness.component';
-import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 /**
  * WitnessesPart editor component.
  * Thesauri: none.
  */
 @Component({
-    selector: 'cadmus-witnesses-part',
-    templateUrl: './witnesses-part.component.html',
-    styleUrls: ['./witnesses-part.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatButton,
-        MatIconButton,
-        MatTooltip,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        WitnessComponent,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-        CodLocationRangePipe,
-    ],
+  selector: 'cadmus-witnesses-part',
+  templateUrl: './witnesses-part.component.html',
+  styleUrls: ['./witnesses-part.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatButton,
+    MatIconButton,
+    MatTooltip,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    WitnessComponent,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+    CodLocationRangePipe,
+  ],
 })
 export class WitnessesPartComponent
   extends ModelEditorComponentBase<WitnessesPart>

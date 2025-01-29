@@ -1,7 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { Component, effect, input, model } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import { CodPoemLayout } from '../cod-poem-ranges-part';
 import { Alnum } from '../services/alnum';
@@ -11,15 +28,7 @@ import {
   PoemLayoutRow,
   PoemLayoutTable,
 } from '../services/poem-layout-table';
-import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/core';
-import { MatInput } from '@angular/material/input';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { CodPoemRangesLayoutComponent } from '../cod-poem-ranges-layout/cod-poem-ranges-layout.component';
-import { AsyncPipe } from '@angular/common';
 
 const PRESETS = [
   // sonetto
@@ -40,30 +49,28 @@ const PRESETS = [
  * and apply them a selected layout.
  */
 @Component({
-    selector: 'cadmus-cod-poem-range-layouts',
-    templateUrl: './cod-poem-range-layouts.component.html',
-    styleUrls: ['./cod-poem-range-layouts.component.css'],
-    imports: [
-        FormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        ReactiveFormsModule,
-        MatOption,
-        MatInput,
-        MatError,
-        MatIconButton,
-        MatTooltip,
-        MatIcon,
-        CodPoemRangesLayoutComponent,
-        MatButton,
-        AsyncPipe,
-    ],
+  selector: 'cadmus-cod-poem-range-layouts',
+  templateUrl: './cod-poem-range-layouts.component.html',
+  styleUrls: ['./cod-poem-range-layouts.component.css'],
+  imports: [
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    ReactiveFormsModule,
+    MatOption,
+    MatInput,
+    MatError,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    CodPoemRangesLayoutComponent,
+    MatButton,
+    AsyncPipe,
+  ],
 })
-export class CodPoemRangeLayoutsComponent implements OnInit {
+export class CodPoemRangeLayoutsComponent {
   private readonly _table: PoemLayoutTable;
-  private _ranges: AlnumRange[];
-  private _layouts: CodPoemLayout[];
 
   public rows$: Observable<PoemLayoutRow[]>;
 
@@ -74,48 +81,22 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
   /**
    * The ranges defined for poems.
    */
-  @Input()
-  public get ranges(): AlnumRange[] {
-    return this._ranges;
-  }
-  public set ranges(value: AlnumRange[]) {
-    this._ranges = value;
-    this.updateTable();
-  }
+  public readonly ranges = model<AlnumRange[]>([]);
 
   /**
    * The layouts to edit.
    */
-  @Input()
-  public get layouts(): CodPoemLayout[] {
-    return this._layouts;
-  }
-  public set layouts(value: CodPoemLayout[]) {
-    this._layouts = value;
-    if (this._ranges.length) {
-      this.updateTable();
-    }
-  }
+  public readonly layouts = model<CodPoemLayout[]>([]);
 
   // cod-poem-range-layouts
-  @Input()
-  public layoutEntries: ThesaurusEntry[] | undefined;
-
-  /**
-   * Emitted when layouts are saved.
-   */
-  @Output()
-  public layoutsChange: EventEmitter<CodPoemLayout[]>;
+  public readonly layoutEntries = input<ThesaurusEntry[]>();
 
   constructor(
     formBuilder: FormBuilder,
     private _alnumService: AlnumRangeService
   ) {
     this._table = new PoemLayoutTable();
-    this._ranges = [];
-    this._layouts = [];
     this.rows$ = this._table.rows$;
-    this.layoutsChange = new EventEmitter<CodPoemLayout[]>();
     // form
     this.layout = formBuilder.control(null, Validators.maxLength(50));
     this.presets = formBuilder.control(null);
@@ -123,26 +104,28 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
       layout: this.layout,
       presets: this.presets,
     });
+
+    effect(() => {
+      this.updateTable(this.ranges(), this.layouts());
+    });
   }
 
-  ngOnInit(): void {}
-
-  private updateTable(): void {
-    this._table.setRows(this._ranges);
-    this._table.setLayouts(this._layouts);
+  private updateTable(ranges: AlnumRange[], layouts: CodPoemLayout[]): void {
+    this._table.setRows(ranges);
+    this._table.setLayouts(layouts);
   }
 
   public onLayoutCheck(event: {
-    layout: PoemLayoutRow;
+    row: PoemLayoutRow;
     mode: CodPoemLayoutCheckMode;
   }): void {
-    const i = this._table.getRowIndex(event.layout);
+    const i = this._table.getRowIndex(event.row);
     if (i > -1) {
       this._table.setChecked(i, event.mode);
     }
   }
 
-  public onLayoutSave(row: PoemLayoutRow): void {
+  public onLayoutRowChange(row: PoemLayoutRow): void {
     const i = this._table.getRowIndex(row);
     if (i > -1) {
       this._table.setRow(i, row);
@@ -178,6 +161,6 @@ export class CodPoemRangeLayoutsComponent implements OnInit {
   }
 
   public save(): void {
-    this.layoutsChange.emit(this._table.getLayouts());
+    this.layouts.set(this._table.getLayouts());
   }
 }

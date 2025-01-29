@@ -28,9 +28,9 @@
     <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
     @if (hasAssertion.value) {
     <cadmus-refs-assertion
-      [assTagEntries]="assTagEntries"
-      [refTagEntries]="refTagEntries"
-      [refTypeEntries]="refTypeEntries"
+      [assTagEntries]="assTagEntries()"
+      [refTagEntries]="refTagEntries()"
+      [refTypeEntries]="refTypeEntries()"
       [assertion]="assertion.value || undefined"
       (assertionChange)="onAssertionChange($event)"
     />

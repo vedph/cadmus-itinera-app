@@ -1,6 +1,6 @@
-@if (layout) {
+@if (row()) {
 <div
-  [style.background-color]="layout.checked ? '#ace0fa' : 'transparent'"
+  [style.background-color]="row()!.checked ? '#ace0fa' : 'transparent'"
   class="layout"
 >
   <!-- toolbar -->
@@ -34,11 +34,11 @@
       </button>
     </div>
     <!-- indicators -->
-    <div class="form-row" matTooltip="{{ layout.note || undefined }}">
-      <span class="poem-nr" [class.annotated]="layout.note">{{
-        layout.nr.n + (layout.nr.a || "")
+    <div class="form-row" matTooltip="{{ row()!.note || undefined }}">
+      <span class="poem-nr" [class.annotated]="row()!.note">{{
+        row()!.nr.n + (row()!.nr.a || "")
       }}</span>
-      <span class="poem-layout">{{ layout.layout }}</span>
+      <span class="poem-layout">{{ row()!.layout }}</span>
     </div>
   </div>
   }

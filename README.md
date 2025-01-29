@@ -59,6 +59,12 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 11.0.0
+
+- 2025-01-29:
+  - updated Angular.
+  - ⚠️ updated signal dependencies and migrated to signals.
+
 ### 10.0.0
 
 - 2025-01-06:

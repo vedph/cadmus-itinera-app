@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, input, model, output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -46,32 +46,15 @@ import { CodLocus } from '../cod-loci-part';
     MatIcon,
   ],
 })
-export class CodLocusComponent implements OnInit {
-  private _locus: CodLocus | undefined;
-
-  @Input()
-  public get locus(): CodLocus | undefined {
-    return this._locus;
-  }
-  public set locus(value: CodLocus | undefined) {
-    if (this._locus === value) {
-      return;
-    }
-    this._locus = value;
-    this.updateForm(value);
-  }
+export class CodLocusComponent {
+  public readonly locus = model<CodLocus>();
 
   // cod-loci
-  @Input()
-  public locEntries: ThesaurusEntry[] | undefined;
+  public readonly locEntries = input<ThesaurusEntry[]>();
   // cod-image-types
-  @Input()
-  public imgTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly imgTypeEntries = input<ThesaurusEntry[]>();
 
-  @Output()
-  public locusChange: EventEmitter<CodLocus>;
-  @Output()
-  public editorClose: EventEmitter<any>;
+  public readonly editorClose = output();
 
   public citation: FormControl<string | null>;
   public ranges: FormControl<CodLocationRange[]>;
@@ -81,9 +64,6 @@ export class CodLocusComponent implements OnInit {
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
-    this.locusChange = new EventEmitter<CodLocus>();
-    this.editorClose = new EventEmitter<any>();
-    // form
     this.citation = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -103,12 +83,10 @@ export class CodLocusComponent implements OnInit {
       note: this.note,
       images: this.images,
     });
-  }
 
-  ngOnInit(): void {
-    if (this._locus) {
-      this.updateForm(this._locus);
-    }
+    effect(() => {
+      this.updateForm(this.locus());
+    });
   }
 
   private updateForm(model: CodLocus | undefined): void {
@@ -125,7 +103,7 @@ export class CodLocusComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  private getModel(): CodLocus {
+  private getLocus(): CodLocus {
     return {
       citation: this.citation.value?.trim() || '',
       range: this.ranges.value.length ? this.ranges.value[0] : (null as any),
@@ -155,7 +133,6 @@ export class CodLocusComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this._locus = this.getModel();
-    this.locusChange.emit(this._locus);
+    this.locus.set(this.getLocus());
   }
 }

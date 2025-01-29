@@ -81,7 +81,7 @@
         <mat-expansion-panel-header>witness</mat-expansion-panel-header>
         <cadmus-witness
           [witness]="editedWitness"
-          (witnessChange)="onWitnessSave($event)"
+          (witnessChange)="onWitnessSave($event!)"
           (editorClose)="onWitnessClose()"
         />
       </mat-expansion-panel>

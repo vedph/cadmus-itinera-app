@@ -1,9 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, input, model, output } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AssertedCompositeId, AssertedCompositeIdsComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import {
+  AssertedCompositeId,
+  AssertedCompositeIdsComponent,
+} from '@myrmidon/cadmus-refs-asserted-ids';
 
-import { RelatedPerson } from '../related-persons-part';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
@@ -12,74 +21,52 @@ import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 
-@Component({
-    selector: 'cadmus-related-person',
-    templateUrl: './related-person.component.html',
-    styleUrls: ['./related-person.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatError,
-        MatInput,
-        AssertedCompositeIdsComponent,
-        MatIconButton,
-        MatTooltip,
-        MatIcon,
-    ],
-})
-export class RelatedPersonComponent implements OnInit {
-  private _person: RelatedPerson | undefined;
+import { RelatedPerson } from '../related-persons-part';
 
-  @Input()
-  public get person(): RelatedPerson | undefined {
-    return this._person;
-  }
-  public set person(value: RelatedPerson | undefined) {
-    if (this._person === value) {
-      return;
-    }
-    this._person = value;
-    this.updateForm(value);
-  }
+@Component({
+  selector: 'cadmus-related-person',
+  templateUrl: './related-person.component.html',
+  styleUrls: ['./related-person.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatInput,
+    AssertedCompositeIdsComponent,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+  ],
+})
+export class RelatedPersonComponent {
+  public readonly person = model<RelatedPerson>();
 
   // related-person-types
-  @Input()
-  public prsTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly prsTypeEntries = input<ThesaurusEntry[]>();
   // asserted-id-tags
-  @Input()
-  public idTagEntries: ThesaurusEntry[] | undefined;
+  public readonly idTagEntries = input<ThesaurusEntry[]>();
   // asserted-id-scopes
-  @Input()
-  public idScopeEntries: ThesaurusEntry[] | undefined;
+  public readonly idScopeEntries = input<ThesaurusEntry[]>();
   // assertion-tags
-  @Input()
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = input<ThesaurusEntry[]>();
   // doc-reference-types
-  @Input()
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = input<ThesaurusEntry[]>();
   // doc-reference-tags
-  @Input()
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = input<ThesaurusEntry[]>();
 
   // settings
   // by-type: true/false
-  @Input()
-  public pinByTypeMode?: boolean;
+  public readonly pinByTypeMode = input<boolean>();
   // switch-mode: true/false
-  @Input()
-  public canSwitchMode?: boolean;
+  public readonly canSwitchMode = input<boolean>();
   // edit-target: true/false
-  @Input()
-  public canEditTarget?: boolean;
+  public readonly canEditTarget = input<boolean>();
 
-  @Output()
-  public personChange: EventEmitter<RelatedPerson>;
-  @Output()
-  public editorClose: EventEmitter<any>;
+  public readonly editorClose = output();
 
   public type: FormControl<string | null>;
   public name: FormControl<string | null>;
@@ -87,9 +74,6 @@ export class RelatedPersonComponent implements OnInit {
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
-    this.personChange = new EventEmitter<RelatedPerson>();
-    this.editorClose = new EventEmitter<any>();
-    // form
     this.type = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -104,9 +88,11 @@ export class RelatedPersonComponent implements OnInit {
       name: this.name,
       ids: this.ids,
     });
-  }
 
-  ngOnInit(): void {}
+    effect(() => {
+      this.updateForm(this.person());
+    });
+  }
 
   private updateForm(model: RelatedPerson | undefined): void {
     if (!model) {
@@ -120,7 +106,7 @@ export class RelatedPersonComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  private getModel(): RelatedPerson {
+  private getPerson(): RelatedPerson {
     return {
       type: this.type.value?.trim() || '',
       name: this.name.value?.trim() || '',
@@ -142,7 +128,6 @@ export class RelatedPersonComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this._person = this.getModel();
-    this.personChange.emit(this._person);
+    this.person.set(this.getPerson());
   }
 }

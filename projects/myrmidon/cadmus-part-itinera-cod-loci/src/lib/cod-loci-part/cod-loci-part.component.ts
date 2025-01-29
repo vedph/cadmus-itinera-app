@@ -9,6 +9,11 @@ import {
 } from '@angular/forms';
 import { take } from 'rxjs/operators';
 
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+
 import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
@@ -18,6 +23,7 @@ import {
   CloseSaveButtonsComponent,
 } from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
 import {
@@ -28,12 +34,7 @@ import {
   MatCardContent,
   MatCardActions,
 } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
 import { CodLocusComponent } from '../cod-locus/cod-locus.component';
-import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 /**
  * CodLociPart editor component.

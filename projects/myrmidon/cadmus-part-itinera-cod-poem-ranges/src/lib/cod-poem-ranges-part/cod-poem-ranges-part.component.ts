@@ -1,12 +1,40 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormBuilder, Validators, FormGroup, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  Validators,
+  FormGroup,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { take } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardAvatar,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject, ModelEditorComponentBase, CloseSaveButtonsComponent } from '@myrmidon/cadmus-ui';
+import {
+  EditedObject,
+  ModelEditorComponentBase,
+  CloseSaveButtonsComponent,
+} from '@myrmidon/cadmus-ui';
 import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
@@ -19,15 +47,6 @@ import {
   AlnumRangeService,
   ALNUM_RANGE_PATTERN,
 } from '../services/alnum-range.service';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/core';
-import { MatInput } from '@angular/material/input';
-import { MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
 import { CodPoemRangeLayoutsComponent } from '../cod-poem-range-layouts/cod-poem-range-layouts.component';
 import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
 
@@ -37,33 +56,33 @@ import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
  * (all optional).
  */
 @Component({
-    selector: 'cadmus-cod-poem-ranges-part',
-    templateUrl: './cod-poem-ranges-part.component.html',
-    styleUrls: ['./cod-poem-ranges-part.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatCard,
-        MatCardHeader,
-        MatCardAvatar,
-        MatIcon,
-        MatCardTitle,
-        MatCardContent,
-        MatTabGroup,
-        MatTab,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatError,
-        MatInput,
-        MatIconButton,
-        MatTooltip,
-        CodPoemRangeLayoutsComponent,
-        MatCardActions,
-        CloseSaveButtonsComponent,
-        AlnumRangePipe,
-    ],
+  selector: 'cadmus-cod-poem-ranges-part',
+  templateUrl: './cod-poem-ranges-part.component.html',
+  styleUrls: ['./cod-poem-ranges-part.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardHeader,
+    MatCardAvatar,
+    MatIcon,
+    MatCardTitle,
+    MatCardContent,
+    MatTabGroup,
+    MatTab,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatInput,
+    MatIconButton,
+    MatTooltip,
+    CodPoemRangeLayoutsComponent,
+    MatCardActions,
+    CloseSaveButtonsComponent,
+    AlnumRangePipe,
+  ],
 })
 export class CodPoemRangesPartComponent
   extends ModelEditorComponentBase<CodPoemRangesPart>

@@ -1,10 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AssertedCompositeId, AssertedCompositeIdComponent } from '@myrmidon/cadmus-refs-asserted-ids';
+import { Component, effect, input, model, output } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
-import { ReferencedText } from '../referenced-texts-part';
-import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatError,
+  MatHint,
+} from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { MatInput } from '@angular/material/input';
@@ -12,78 +21,61 @@ import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 
-@Component({
-    selector: 'cadmus-referenced-text',
-    templateUrl: './referenced-text.component.html',
-    styleUrls: ['./referenced-text.component.css'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatError,
-        MatInput,
-        AssertedCompositeIdComponent,
-        MatHint,
-        MatIconButton,
-        MatTooltip,
-        MatIcon,
-    ],
-})
-export class ReferencedTextComponent implements OnInit {
-  private _text: ReferencedText | undefined;
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  AssertedCompositeId,
+  AssertedCompositeIdComponent,
+} from '@myrmidon/cadmus-refs-asserted-ids';
 
-  @Input()
-  public get text(): ReferencedText | undefined {
-    return this._text;
-  }
-  public set text(value: ReferencedText | undefined) {
-    if (this._text === value) {
-      return;
-    }
-    this._text = value;
-    this.updateForm(value);
-  }
+import { ReferencedText } from '../referenced-texts-part';
+
+@Component({
+  selector: 'cadmus-referenced-text',
+  templateUrl: './referenced-text.component.html',
+  styleUrls: ['./referenced-text.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatInput,
+    AssertedCompositeIdComponent,
+    MatHint,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+  ],
+})
+export class ReferencedTextComponent {
+  public readonly text = model<ReferencedText>();
 
   // related-text-types
-  @Input()
-  public txtTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly txtTypeEntries = input<ThesaurusEntry[]>();
   // asserted-id-scopes
-  @Input()
-  public idScopeEntries: ThesaurusEntry[] | undefined;
+  public readonly idScopeEntries = input<ThesaurusEntry[]>();
   // asserted-id-tags
-  @Input()
-  public idTagEntries: ThesaurusEntry[] | undefined;
+  public readonly idTagEntries = input<ThesaurusEntry[]>();
   // assertion-tags
-  @Input()
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = input<ThesaurusEntry[]>();
   // doc-reference-types
-  @Input()
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = input<ThesaurusEntry[]>();
   // doc-reference-tags
-  @Input()
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = input<ThesaurusEntry[]>();
 
-  @Input()
-  public noLookup?: boolean;
+  // public readonly noLookup = input<boolean>();
 
   // pin link settings
   // by-type: true/false
-  @Input()
-  public pinByTypeMode?: boolean;
+  public readonly pinByTypeMode = input<boolean>();
   // switch-mode: true/false
-  @Input()
-  public canSwitchMode?: boolean;
+  public readonly canSwitchMode = input<boolean>();
   // edit-target: true/false
-  @Input()
-  public canEditTarget?: boolean;
+  public readonly canEditTarget = input<boolean>();
 
-  @Output()
-  public textChange: EventEmitter<ReferencedText>;
-  @Output()
-  public editorClose: EventEmitter<any>;
+  public readonly editorClose = output();
 
   public type: FormControl<string | null>;
   public targetId: FormControl<AssertedCompositeId | null>;
@@ -92,9 +84,6 @@ export class ReferencedTextComponent implements OnInit {
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
-    this.textChange = new EventEmitter<ReferencedText>();
-    this.editorClose = new EventEmitter<any>();
-    // form
     this.type = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -114,9 +103,11 @@ export class ReferencedTextComponent implements OnInit {
       targetCitation: this.targetCitation,
       sourceCitations: this.sourceCitations,
     });
-  }
 
-  ngOnInit(): void {}
+    effect(() => {
+      this.updateForm(this.text());
+    });
+  }
 
   private updateForm(model: ReferencedText | undefined): void {
     if (!model) {
@@ -148,7 +139,7 @@ export class ReferencedTextComponent implements OnInit {
     return citations.length ? citations : undefined;
   }
 
-  private getModel(): ReferencedText {
+  private getText(): ReferencedText {
     return {
       type: this.type.value?.trim() || '',
       targetId: this.targetId.value!,
@@ -171,7 +162,6 @@ export class ReferencedTextComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this._text = this.getModel();
-    this.textChange.emit(this._text);
+    this.text.set(this.getText());
   }
 }

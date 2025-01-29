@@ -83,7 +83,7 @@
             [locEntries]="locEntries"
             [imgTypeEntries]="imgTypeEntries"
             [locus]="editedLocus"
-            (locusChange)="onLocusSave($event)"
+            (locusChange)="onLocusSave($event!)"
             (editorClose)="onLocusClose()"
           />
         </mat-tab>
