@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormGroup,
@@ -25,7 +24,6 @@ import { AuthJwtAccountService } from '@myrmidon/auth-jwt-admin';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,

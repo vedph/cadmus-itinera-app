@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, Inject } from '@angular/core';
 import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AppRepository } from '@myrmidon/cadmus-state';
@@ -33,7 +32,6 @@ import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterModule,
     MatButtonModule,

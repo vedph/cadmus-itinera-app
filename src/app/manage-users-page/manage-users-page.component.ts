@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -18,7 +17,6 @@ import { UserListComponent } from '@myrmidon/auth-jwt-admin';
   templateUrl: './manage-users-page.component.html',
   styleUrls: ['./manage-users-page.component.css'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,

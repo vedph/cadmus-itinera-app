@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-part-itinera-pg",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Cadmus Itinera - part editors pages.",
   "keywords": [
     "Cadmus"
@@ -14,8 +14,17 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^19.0.0",
-    "@angular/core": "^19.0.0"
+    "@angular/common": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@myrmidon/cadmus-part-itinera-cod-loci": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-cod-poem-ranges": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-letter-info": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-literary-work-info": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-person-info": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-person-works": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-referenced-texts": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-related-persons": "^6.0.0",
+    "@myrmidon/cadmus-part-itinera-witnesses": "^6.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
