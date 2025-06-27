@@ -14,21 +14,20 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthJwtRegistrationComponent } from '@myrmidon/auth-jwt-admin';
 
 @Component({
-  selector: 'app-register-user-page',
-  standalone: true,
-  templateUrl: './register-user-page.component.html',
-  styleUrls: ['./register-user-page.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    AuthJwtRegistrationComponent,
-  ],
+    selector: 'app-register-user-page',
+    templateUrl: './register-user-page.component.html',
+    styleUrls: ['./register-user-page.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        AuthJwtRegistrationComponent,
+    ]
 })
 export class RegisterUserPageComponent {
   constructor(private _router: Router) {}

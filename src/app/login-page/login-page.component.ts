@@ -18,20 +18,19 @@ import {
 } from '@myrmidon/auth-jwt-login';
 
 @Component({
-  selector: 'app-login-page',
-  standalone: true,
-  templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatTooltipModule,
-    AuthJwtLoginComponent
-],
+    selector: 'app-login-page',
+    templateUrl: './login-page.component.html',
+    styleUrls: ['./login-page.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTooltipModule,
+        AuthJwtLoginComponent
+    ]
 })
 export class LoginPageComponent {
   public busy = false;

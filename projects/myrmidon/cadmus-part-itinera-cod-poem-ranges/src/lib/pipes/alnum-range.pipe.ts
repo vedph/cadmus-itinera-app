@@ -1,7 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { AlnumRange } from '../services/alnum-range.service';
 
-@Pipe({ name: 'alnumRange', })
+@Pipe({
+    name: 'alnumRange',
+    standalone: false
+})
 export class AlnumRangePipe implements PipeTransform {
   transform(value: unknown, ...args: unknown[]): unknown {
     const range = value as AlnumRange;
