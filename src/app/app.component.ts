@@ -18,15 +18,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { EnvService, RamStorageService } from '@myrmidon/ngx-tools';
 import { AuthJwtService, GravatarPipe, User } from '@myrmidon/auth-jwt-login';
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
-import {
-  ASSERTED_COMPOSITE_ID_CONFIGS_KEY,
-  ScopedPinLookupComponent,
-} from '@myrmidon/cadmus-refs-asserted-ids';
+import { ScopedPinLookupComponent } from '@myrmidon/cadmus-refs-asserted-ids';
 import { GeoNamesRefLookupService } from '@myrmidon/cadmus-refs-geonames-lookup';
 import { DbpediaRefLookupService } from '@myrmidon/cadmus-refs-dbpedia-lookup';
 
 import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
-import { RefLookupComponent } from '@myrmidon/cadmus-refs-lookup';
+import {
+  LOOKUP_CONFIGS_KEY,
+  RefLookupComponent,
+} from '@myrmidon/cadmus-refs-lookup';
 import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-sheet-labels';
 
 @Component({
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
     this.version = env.get('version') || '';
     this.snavToggle = formBuilder.control(false, { nonNullable: true });
     // configure external lookup for asserted composite IDs
-    storage.store(ASSERTED_COMPOSITE_ID_CONFIGS_KEY, [
+    storage.store(LOOKUP_CONFIGS_KEY, [
       {
         name: 'biblio',
         iconUrl: '/img/biblio128.png',

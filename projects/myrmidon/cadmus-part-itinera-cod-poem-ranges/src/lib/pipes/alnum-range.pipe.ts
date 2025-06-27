@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { AlnumRange } from '../services/alnum-range.service';
 
 @Pipe({
-    name: 'alnumRange',
-    standalone: false
+  name: 'alnumRange',
 })
 export class AlnumRangePipe implements PipeTransform {
   transform(value: unknown, ...args: unknown[]): unknown {
