@@ -18,11 +18,14 @@ import { NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
-  EditedObject,
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
 } from '@myrmidon/cadmus-ui';
-import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  ThesauriSet,
+  ThesaurusEntry,
+  EditedObject,
+} from '@myrmidon/cadmus-core';
 import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';

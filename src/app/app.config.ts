@@ -5,8 +5,8 @@ import {
 } from '@angular/core';
 import {
   provideHttpClient,
+  withFetch,
   withInterceptors,
-  withJsonpSupport,
 } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
@@ -41,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(
       withInterceptors([authJwtInterceptor]),
-      withJsonpSupport()
+      withFetch()
     ),
     provideNativeDateAdapter(),
     importProvidersFrom(NgeMonacoModule.forRoot({})),

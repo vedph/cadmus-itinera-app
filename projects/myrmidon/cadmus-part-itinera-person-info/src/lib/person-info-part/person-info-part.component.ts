@@ -27,11 +27,14 @@ import { NgeMonacoModule } from '@cisstech/nge/monaco';
 
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
-  EditedObject,
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
 } from '@myrmidon/cadmus-ui';
-import { ThesauriSet, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  ThesauriSet,
+  ThesaurusEntry,
+  EditedObject,
+} from '@myrmidon/cadmus-core';
 import {
   CADMUS_TEXT_ED_BINDINGS_TOKEN,
   CadmusTextEdBindings,
