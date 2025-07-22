@@ -14,6 +14,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 
 import { NgeMonacoModule } from '@cisstech/nge/monaco';
 import { NgeMarkdownModule } from '@cisstech/nge/markdown';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { authJwtInterceptor } from '@myrmidon/auth-jwt-login';
@@ -39,13 +40,15 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
-    provideHttpClient(
-      withInterceptors([authJwtInterceptor]),
-      withFetch()
-    ),
+    provideHttpClient(withInterceptors([authJwtInterceptor]), withFetch()),
     provideNativeDateAdapter(),
     importProvidersFrom(NgeMonacoModule.forRoot({})),
     importProvidersFrom(NgeMarkdownModule),
+    importProvidersFrom(
+      NgxEchartsModule.forRoot({
+        echarts: () => import('echarts'),
+      })
+    ),
     // parts and fragments type IDs to editor group keys mappings
     // https://github.com/nrwl/nx/issues/208#issuecomment-384102058
     // inject like: @Inject('partEditorKeys') partEditorKeys: PartEditorKeys

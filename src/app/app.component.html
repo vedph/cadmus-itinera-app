@@ -1,8 +1,6 @@
 <header>
   <mat-toolbar>
-    <span id="logo"
-      ><img src="./img/logo-black-40.png" alt="Fusisoft"
-    /></span>
+    <span id="logo"><img src="./img/logo-black-40.png" alt="Fusisoft" /></span>
     <a mat-button routerLink="/home">Cadmus Itinera</a>
 
     @if (logged && itemBrowsers) {
@@ -32,17 +30,11 @@
     @if (logged) {
     <button type="button" mat-button routerLink="/graph">Graph</button>
     }
-    <!-- profile menu -->
-    @if ( user && (user.roles.includes('admin') ||
-    user.roles.includes('editor')) ) {
-    <button type="button" mat-button [matMenuTriggerFor]="profileMenu">
-      Profile
-    </button>
-    <mat-menu #profileMenu>
-      <a mat-menu-item routerLink="/flags"> Flags </a>
-      <a mat-menu-item routerLink="/thesauri"> Thesauri </a>
-    </mat-menu>
+    <!-- stats menu -->
+    @if (logged) {
+    <button type="button" mat-button routerLink="/stats">Stats</button>
     }
+
     <!-- biblio menu -->
     @if ( user && (user.roles.includes('admin') ||
     user.roles.includes('editor')) ) {
@@ -54,10 +46,7 @@
     @if (user) {
     <div>
       <!-- sidenav -->
-      <mat-slide-toggle
-        [formControl]="snavToggle"
-        matTooltip="Toggle tools"
-      />
+      <mat-slide-toggle [formControl]="snavToggle" matTooltip="Toggle tools" />
       <!-- indicators -->
       <img [src]="user.email | gravatar : 32" alt="{{ user.userName }}" />
       @if (user && user.roles.includes('admin')) {
@@ -87,6 +76,8 @@
       <mat-menu #adminMenu>
         <a mat-menu-item routerLink="/manage-users">Manage users</a>
         <a mat-menu-item routerLink="/register-user">Register user</a>
+        <a mat-menu-item routerLink="/flags"> Flags </a>
+        <a mat-menu-item routerLink="/thesauri"> Thesauri </a>
       </mat-menu>
     </div>
     }
@@ -145,14 +136,8 @@
 <footer>
   <div id="logos">
     <img src="./img/unisi-64.png" alt="Università di Siena" />
-    <img
-      src="./img/unina-64.png"
-      alt="Università degli studi di Napoli"
-    />
-    <img
-      src="./img/unirm3-64.png"
-      alt="Università degli studi di Roma 3"
-    />
+    <img src="./img/unina-64.png" alt="Università degli studi di Napoli" />
+    <img src="./img/unirm3-64.png" alt="Università degli studi di Roma 3" />
     <img
       src="./img/unistrapg-64.png"
       alt="Università per stranieri di Perugia"
