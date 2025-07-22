@@ -59,6 +59,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-07-22:
+  - updated Angular and packages.
+  - added stats page and menu.
+  - refactored styles.
 - 2025-07-17: updated Angular and packages.
 - 2025-06-03:
   - ⚠️ upgraded to Angular 20.
