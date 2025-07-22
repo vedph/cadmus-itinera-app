@@ -4,6 +4,7 @@ import { AppRepository } from '@myrmidon/cadmus-state';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { take } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -55,6 +56,7 @@ export class AppComponent implements OnInit {
   public itemBrowsers?: ThesaurusEntry[];
   public version: string;
   public snavToggle: FormControl<boolean>;
+  public isHome = false;
 
   constructor(
     @Inject('itemBrowserKeys')
@@ -74,6 +76,11 @@ export class AppComponent implements OnInit {
   ) {
     this.version = env.get('version') || '';
     this.snavToggle = formBuilder.control(false, { nonNullable: true });
+
+    this._router.events.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.isHome = this._router.url === '/home' || this._router.url === '/';
+    });
+
     // configure external lookup for asserted composite IDs
     storage.store(LOOKUP_CONFIGS_KEY, [
       {
