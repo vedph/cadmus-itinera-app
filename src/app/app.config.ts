@@ -21,6 +21,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {
   AUTH_JWT_EXCLUDED_URLS,
   authJwtInterceptor,
+  jwtInterceptor,
 } from '@myrmidon/auth-jwt-login';
 import {
   CADMUS_TEXT_ED_SERVICE_OPTIONS_TOKEN,
@@ -45,7 +46,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authJwtInterceptor]), withFetch()),
+    provideHttpClient(withInterceptors([jwtInterceptor]), withFetch()),
     provideNativeDateAdapter(),
     // vendors
     importProvidersFrom(NgeMonacoModule.forRoot({})),
@@ -76,7 +77,7 @@ export const appConfig: ApplicationConfig = {
     // URLs excluded from JWT auth
     {
       provide: AUTH_JWT_EXCLUDED_URLS,
-      useValue: ['https://viaf.org/viaf/AutoSuggest'],
+      useValue: ['https://viaf.org/viaf/'],
     },
     // text editor plugins
     // https://github.com/vedph/cadmus-bricks-shell-v2/blob/master/projects/myrmidon/cadmus-text-ed/README.md

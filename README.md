@@ -61,7 +61,10 @@ window.__env.mapbox_token = "the token for this project";
 
 ### 13.0.0
 
-- 2025-07-24: updated Angular and packages.
+- 2025-07-24:
+  - updated Angular and packages.
+  - replaced guards and interceptors with function-based counterparts.
+  - 👉 added JWT interceptor URI exception for VIAF. Note that this is essential to make the service work, because the public VIAF service will reject a request with a bearer token.
 - 2025-07-23: ⚠️ rebased on Angular 20 workspace.
 
 ### 12.0.0
