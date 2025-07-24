@@ -20,7 +20,6 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   AUTH_JWT_EXCLUDED_URLS,
-  authJwtInterceptor,
   jwtInterceptor,
 } from '@myrmidon/auth-jwt-login';
 import {
