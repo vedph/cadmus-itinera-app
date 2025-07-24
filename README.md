@@ -61,6 +61,7 @@ window.__env.mapbox_token = "the token for this project";
 
 ### 13.0.0
 
+- 2025-07-24: updated Angular and packages.
 - 2025-07-23: ⚠️ rebased on Angular 20 workspace.
 
 ### 12.0.0
