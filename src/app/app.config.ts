@@ -18,7 +18,10 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { authJwtInterceptor } from '@myrmidon/auth-jwt-login';
+import {
+  AUTH_JWT_EXCLUDED_URLS,
+  authJwtInterceptor,
+} from '@myrmidon/auth-jwt-login';
 import {
   CADMUS_TEXT_ED_SERVICE_OPTIONS_TOKEN,
   CADMUS_TEXT_ED_BINDINGS_TOKEN,
@@ -69,6 +72,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: 'itemBrowserKeys',
       useValue: ITEM_BROWSER_KEYS,
+    },
+    // URLs excluded from JWT auth
+    {
+      provide: AUTH_JWT_EXCLUDED_URLS,
+      useValue: ['https://viaf.org/viaf/AutoSuggest'],
     },
     // text editor plugins
     // https://github.com/vedph/cadmus-bricks-shell-v2/blob/master/projects/myrmidon/cadmus-text-ed/README.md

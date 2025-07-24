@@ -43,7 +43,7 @@
     "@auth0/angular-jwt": "^5.2.0",
     "@cisstech/nge": "^18.2.1",
     "@myrmidon/auth-jwt-admin": "^8.0.0",
-    "@myrmidon/auth-jwt-login": "^8.0.0",
+    "@myrmidon/auth-jwt-login": "^8.0.1",
     "@myrmidon/cadmus-api": "^14.0.2",
     "@myrmidon/cadmus-biblio-api": "^10.0.0",
     "@myrmidon/cadmus-biblio-core": "^10.0.0",
