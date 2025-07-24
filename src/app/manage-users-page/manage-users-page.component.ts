@@ -12,20 +12,20 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserListComponent } from '@myrmidon/auth-jwt-admin';
 
 @Component({
-    selector: 'app-manage-users-page',
-    templateUrl: './manage-users-page.component.html',
-    styleUrls: ['./manage-users-page.component.css'],
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatProgressBarModule,
-        MatTooltipModule,
-        UserListComponent,
-    ]
+  selector: 'app-manage-users-page',
+  templateUrl: './manage-users-page.component.html',
+  styleUrls: ['./manage-users-page.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatTooltipModule,
+    UserListComponent,
+  ],
 })
 export class ManageUsersPageComponent implements OnInit {
   constructor() {}

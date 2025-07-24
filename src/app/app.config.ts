@@ -1,6 +1,7 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
+  provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
@@ -28,20 +29,22 @@ import {
   MdLinkCtePlugin,
 } from '@myrmidon/cadmus-text-ed-md';
 import { TxtEmojiCtePlugin } from '@myrmidon/cadmus-text-ed-txt';
-import { GEONAMES_USERNAME_TOKEN } from '@myrmidon/cadmus-refs-geonames-lookup';
 
 import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
 import { ITEM_BROWSER_KEYS } from './item-browser-keys';
 import { PART_EDITOR_KEYS } from './part-editor-keys';
+
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authJwtInterceptor]), withFetch()),
     provideNativeDateAdapter(),
+    // vendors
     importProvidersFrom(NgeMonacoModule.forRoot({})),
     importProvidersFrom(NgeMarkdownModule),
     importProvidersFrom(
@@ -66,11 +69,6 @@ export const appConfig: ApplicationConfig = {
     {
       provide: 'itemBrowserKeys',
       useValue: ITEM_BROWSER_KEYS,
-    },
-    // GeoNames lookup (see environment.prod.ts for the username)
-    {
-      provide: GEONAMES_USERNAME_TOKEN,
-      useValue: 'myrmex',
     },
     // text editor plugins
     // https://github.com/vedph/cadmus-bricks-shell-v2/blob/master/projects/myrmidon/cadmus-text-ed/README.md

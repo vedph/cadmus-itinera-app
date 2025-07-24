@@ -1,6 +1,6 @@
-# CadmusItineraApp
+# Cadmus Itinera App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
 
 This is the frontend for the second generation of the Cadmus Itinera editor.
 
@@ -30,10 +30,10 @@ ng g library @myrmidon/cadmus-part-itinera-letter-info --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-literary-work-info --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-person-info --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-person-works --prefix cadmus --force
-ng g library @myrmidon/cadmus-part-itinera-pg --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-referenced-texts --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-related-persons --prefix cadmus --force
 ng g library @myrmidon/cadmus-part-itinera-witnesses --prefix cadmus --force
+ng g library @myrmidon/cadmus-part-itinera-pg --prefix cadmus --force
 ```
 
 ## Production
@@ -58,6 +58,10 @@ window.__env.mapbox_token = "the token for this project";
 (3) build a new image for production: `docker build . -t vedph2020/cadmus-itinera-app:3.0.6-prod`. The production version is labeled like this one, with `-prod` suffix.
 
 ## History
+
+### 13.0.0
+
+- 2025-07-23: ⚠️ rebased on Angular 20 workspace.
 
 ### 12.0.0
 

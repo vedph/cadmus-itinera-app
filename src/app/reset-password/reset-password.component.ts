@@ -19,19 +19,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthJwtAccountService } from '@myrmidon/auth-jwt-admin';
 
 @Component({
-    selector: 'cadmus-reset-password',
-    templateUrl: './reset-password.component.html',
-    styleUrls: ['./reset-password.component.css'],
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatProgressBarModule,
-        MatTooltipModule,
-    ]
+  selector: 'cadmus-reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatTooltipModule,
+  ],
 })
 export class ResetPasswordComponent {
   public busy: boolean | undefined;

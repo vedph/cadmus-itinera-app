@@ -20,8 +20,6 @@ import { EnvService, RamStorageService } from '@myrmidon/ngx-tools';
 import { AuthJwtService, GravatarPipe, User } from '@myrmidon/auth-jwt-login';
 import { ViafRefLookupService } from '@myrmidon/cadmus-refs-viaf-lookup';
 import { ScopedPinLookupComponent } from '@myrmidon/cadmus-refs-asserted-ids';
-import { GeoNamesRefLookupService } from '@myrmidon/cadmus-refs-geonames-lookup';
-import { DbpediaRefLookupService } from '@myrmidon/cadmus-refs-dbpedia-lookup';
 
 import { WorkRefLookupService } from '@myrmidon/cadmus-biblio-ui';
 import {
@@ -47,10 +45,10 @@ import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-
     CodLocationConverterComponent,
     GravatarPipe,
   ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
-export class AppComponent implements OnInit {
+export class App implements OnInit {
   public user?: User;
   public logged?: boolean;
   public itemBrowsers?: ThesaurusEntry[];
@@ -70,8 +68,6 @@ export class AppComponent implements OnInit {
     workService: WorkRefLookupService,
     env: EnvService,
     storage: RamStorageService,
-    geonames: GeoNamesRefLookupService,
-    dbpedia: DbpediaRefLookupService,
     formBuilder: FormBuilder
   ) {
     this.version = env.get('version') || '';
@@ -100,24 +96,6 @@ export class AppComponent implements OnInit {
         service: viafService,
         itemIdGetter: (item: any) => item?.viafid,
         itemLabelGetter: (item: any) => item?.term,
-      },
-      {
-        name: 'DBpedia',
-        iconUrl: '/img/dbpedia128.png',
-        description: 'DBpedia',
-        label: 'ID',
-        service: dbpedia,
-        itemIdGetter: (item: any) => item?.uri,
-        itemLabelGetter: (item: any) => item?.label,
-      },
-      {
-        name: 'geonames',
-        iconUrl: '/img/geonames128.png',
-        description: 'GeoNames',
-        label: 'ID',
-        service: geonames,
-        itemIdGetter: (item: any) => item?.geonameId,
-        itemLabelGetter: (item: any) => item?.name,
       },
     ]);
   }

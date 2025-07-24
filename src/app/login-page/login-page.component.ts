@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,19 +17,19 @@ import {
 } from '@myrmidon/auth-jwt-login';
 
 @Component({
-    selector: 'app-login-page',
-    templateUrl: './login-page.component.html',
-    styleUrls: ['./login-page.component.css'],
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatTooltipModule,
-        AuthJwtLoginComponent
-    ]
+  selector: 'app-login-page',
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatTooltipModule,
+    AuthJwtLoginComponent,
+  ],
 })
 export class LoginPageComponent {
   public busy = false;
@@ -48,7 +47,7 @@ export class LoginPageComponent {
     this._authService.login(credentials.name, credentials.password).subscribe({
       next: (user) => {
         console.log('User logged in', user);
-        this._router.navigate([credentials.returnUrl || '/home']);
+        this._router.navigate([credentials.returnUrl || '/items']);
       },
       error: (error) => {
         this.error = 'Login failed';
@@ -62,6 +61,7 @@ export class LoginPageComponent {
       },
     });
   }
+
   public onResetRequest(): void {
     this._router.navigate(['/reset-password']);
   }

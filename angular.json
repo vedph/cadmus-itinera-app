@@ -17,8 +17,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/cadmus-itinera-app",
-            "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
@@ -30,11 +28,8 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
             "allowedCommonJsDependencies": [
               "leaflet",
-              "dagre",
-              "webcola",
               "ngraph.graph",
               "ngraph.forcelayout"
             ]
@@ -94,8 +89,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"],
-            "scripts": []
+            "styles": ["src/styles.scss"]
           }
         }
       }
@@ -108,9 +102,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-cod-loci/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.prod.json"
@@ -125,7 +116,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -138,9 +132,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.prod.json"
@@ -155,7 +146,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -168,9 +162,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-letter-info/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.prod.json"
@@ -185,7 +176,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -198,9 +192,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-literary-work-info/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.prod.json"
@@ -215,7 +206,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -228,9 +222,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-person-info/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.prod.json"
@@ -245,7 +236,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -258,9 +252,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-person-works/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.prod.json"
@@ -275,37 +266,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
-          }
-        }
-      }
-    },
-    "@myrmidon/cadmus-part-itinera-pg": {
-      "projectType": "library",
-      "root": "projects/myrmidon/cadmus-part-itinera-pg",
-      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-pg/src",
-      "prefix": "cadmus",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-pg/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -318,9 +282,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-referenced-texts/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.prod.json"
@@ -335,7 +296,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -348,9 +312,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-related-persons/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.prod.json"
@@ -365,7 +326,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
@@ -378,9 +342,6 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/myrmidon/cadmus-part-itinera-witnesses/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.prod.json"
@@ -395,36 +356,43 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
-    }
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "type": "component"
     },
-    "@schematics/angular:directive": {
-      "type": "directive"
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
+    "@myrmidon/cadmus-part-itinera-pg": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-part-itinera-pg",
+      "sourceRoot": "projects/myrmidon/cadmus-part-itinera-pg/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   }
 }

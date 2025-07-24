@@ -35,7 +35,6 @@
         "./dist/myrmidon/cadmus-part-itinera-witnesses"
       ]
     },
-    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -43,17 +42,85 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
     "strictTemplates": true
-  }
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-pg/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json"
+    }
+  ]
 }
