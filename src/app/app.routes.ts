@@ -5,7 +5,7 @@ import {
   jwtGuard,
   jwtAdminGuard,
 } from '@myrmidon/auth-jwt-login';
-import { EditorGuardService } from '@myrmidon/cadmus-api';
+import { editorGuard, EditorGuardService } from '@myrmidon/cadmus-api';
 import { PendingChangesGuard } from '@myrmidon/cadmus-core';
 
 import { BiblioPageComponent } from './biblio-page/biblio-page.component';
@@ -73,7 +73,7 @@ export const routes: Routes = [
       import('@myrmidon/cadmus-thesaurus-editor').then(
         (module) => module.ThesaurusEditorFeatureComponent
       ),
-    canActivate: [EditorGuardService],
+    canActivate: [editorGuard],
   },
   {
     path: 'thesauri',
@@ -81,7 +81,7 @@ export const routes: Routes = [
       import('@myrmidon/cadmus-thesaurus-list').then(
         (module) => module.ThesaurusListComponent
       ),
-    canActivate: [EditorGuardService],
+    canActivate: [editorGuard],
   },
   // cadmus - flags
   {
