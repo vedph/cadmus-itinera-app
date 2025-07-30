@@ -59,6 +59,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-07-30: updated packages (fixes to refs lookup brick and asserted chronotopes).
+
 ### 13.0.0
 
 - 2025-07-25: added MUFI URI.
