@@ -73,8 +73,8 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
  * LiteraryWorkInfo part editor component.
  * Thesauri: literary-work-languages, literary-work-genres,
  * literary-work-metres, assertion-tags, doc-reference-types,
- * doc-reference-tags, asserted-id-scopes, asserted-id-tags,
- * pin-link-settings (all optional).
+ * doc-reference-tags, asserted-id-scopes, asserted-id-tags
+ * (all optional).
  */
 @Component({
   selector: 'cadmus-literary-work-info-part',
@@ -169,13 +169,6 @@ export class LiteraryWorkInfoPartComponent
   public idScopeEntries?: ThesaurusEntry[] | undefined;
   // asserted-id-tags
   public idTagEntries?: ThesaurusEntry[] | undefined;
-  // settings
-  // by-type: true/false
-  public pinByTypeMode?: boolean;
-  // switch-mode: true/false
-  public canSwitchMode?: boolean;
-  // edit-target: true/false
-  public canEditTarget?: boolean;
 
   constructor(
     authService: AuthJwtService,
@@ -222,25 +215,6 @@ export class LiteraryWorkInfoPartComponent
       titles: this.titles,
       note: this.note,
     });
-  }
-
-  /**
-   * Load settings from thesaurus entries.
-   *
-   * @param entries The thesaurus entries if any.
-   */
-  private loadSettings(entries?: ThesaurusEntry[]): void {
-    if (!entries?.length) {
-      this.pinByTypeMode = undefined;
-      this.canSwitchMode = undefined;
-      this.canEditTarget = undefined;
-    }
-    this.pinByTypeMode =
-      entries?.find((e) => e.id === 'by-type')?.value === 'true';
-    this.canSwitchMode =
-      entries?.find((e) => e.id === 'switch-mode')?.value === 'true';
-    this.canEditTarget =
-      entries?.find((e) => e.id === 'edit-target')?.value === 'true';
   }
 
   private updateThesauri(thesauri: ThesauriSet): void {
@@ -292,8 +266,6 @@ export class LiteraryWorkInfoPartComponent
     } else {
       this.idTagEntries = undefined;
     }
-    // load settings from thesaurus
-    this.loadSettings(thesauri['pin-link-settings']?.entries);
   }
 
   private updateForm(part?: LiteraryWorkInfoPart | null): void {

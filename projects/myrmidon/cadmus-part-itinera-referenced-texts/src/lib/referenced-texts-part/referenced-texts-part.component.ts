@@ -45,8 +45,7 @@ import { ReferencedTextComponent } from '../referenced-text/referenced-text.comp
 /**
  * ReferencedTextsPart editor component.
  * Thesauri: related-text-types, asserted-id-scopes, asserted-id-tags,
- * assertion-tags, doc-reference-types, doc-reference-tags,
- * pin-link-settings.
+ * assertion-tags, doc-reference-types, doc-reference-tags.
  */
 @Component({
   selector: 'cadmus-referenced-texts-part',
@@ -93,14 +92,6 @@ export class ReferencedTextsPartComponent
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
 
-  // pin link settings
-  // by-type: true/false
-  public pinByTypeMode?: boolean;
-  // switch-mode: true/false
-  public canSwitchMode?: boolean;
-  // edit-target: true/false
-  public canEditTarget?: boolean;
-
   public texts: FormControl<ReferencedText[]>;
 
   constructor(
@@ -126,25 +117,6 @@ export class ReferencedTextsPartComponent
     return formBuilder.group({
       entries: this.texts,
     });
-  }
-
-  /**
-   * Load settings from thesaurus entries.
-   *
-   * @param entries The thesaurus entries if any.
-   */
-  private loadSettings(entries?: ThesaurusEntry[]): void {
-    if (!entries?.length) {
-      this.pinByTypeMode = undefined;
-      this.canSwitchMode = undefined;
-      this.canEditTarget = undefined;
-    }
-    this.pinByTypeMode =
-      entries?.find((e) => e.id === 'by-type')?.value === 'true';
-    this.canSwitchMode =
-      entries?.find((e) => e.id === 'switch-mode')?.value === 'true';
-    this.canEditTarget =
-      entries?.find((e) => e.id === 'edit-target')?.value === 'true';
   }
 
   private updateThesauri(thesauri: ThesauriSet): void {
@@ -184,8 +156,6 @@ export class ReferencedTextsPartComponent
     } else {
       this.refTagEntries = undefined;
     }
-    // load settings from thesaurus
-    this.loadSettings(thesauri['pin-link-settings']?.entries);
   }
 
   private updateForm(part?: ReferencedTextsPart | null): void {

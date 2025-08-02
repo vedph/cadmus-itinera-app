@@ -59,6 +59,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-08-02:
+  - removed from Itinera parts legacy settings for pin links.
+  - updated packages and added codicology UI and cod-layout-view.
 - 2025-07-30: updated packages (fixes to refs lookup brick and asserted chronotopes).
 
 ### 13.0.0

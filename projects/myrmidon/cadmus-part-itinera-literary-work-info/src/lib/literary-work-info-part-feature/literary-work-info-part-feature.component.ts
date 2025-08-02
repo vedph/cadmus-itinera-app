@@ -8,10 +8,10 @@ import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
 import { LiteraryWorkInfoPartComponent } from '../literary-work-info-part/literary-work-info-part.component';
 
 @Component({
-    selector: 'cadmus-literary-work-info-part-feature',
-    templateUrl: './literary-work-info-part-feature.component.html',
-    styleUrls: ['./literary-work-info-part-feature.component.css'],
-    imports: [CurrentItemBarComponent, LiteraryWorkInfoPartComponent],
+  selector: 'cadmus-literary-work-info-part-feature',
+  templateUrl: './literary-work-info-part-feature.component.html',
+  styleUrls: ['./literary-work-info-part-feature.component.css'],
+  imports: [CurrentItemBarComponent, LiteraryWorkInfoPartComponent],
 })
 export class LiteraryWorkInfoPartFeatureComponent
   extends EditPartFeatureBase
@@ -45,7 +45,6 @@ export class LiteraryWorkInfoPartFeatureComponent
       'doc-reference-tags',
       'asserted-id-scopes',
       'asserted-id-tags',
-      'pin-link-settings',
     ];
   }
 }

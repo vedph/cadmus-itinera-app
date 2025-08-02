@@ -45,8 +45,8 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
 /**
  * RelatedPersonsPart editor component.
  * Thesauri: related-person-types, assertion-tags, doc-reference-types,
- * doc-reference-tags, asserted-id-tags, asserted-id-scopes,
- * pin-link-settings (all optional).
+ * doc-reference-tags, asserted-id-tags, asserted-id-scopes
+ * (all optional).
  */
 @Component({
   selector: 'cadmus-related-persons-part',
@@ -90,13 +90,6 @@ export class RelatedPersonsPartComponent
   public refTypeEntries: ThesaurusEntry[] | undefined;
   // doc-reference-tags
   public refTagEntries: ThesaurusEntry[] | undefined;
-  // settings
-  // by-type: true/false
-  public pinByTypeMode?: boolean;
-  // switch-mode: true/false
-  public canSwitchMode?: boolean;
-  // edit-target: true/false
-  public canEditTarget?: boolean;
 
   public persons: FormControl<RelatedPerson[]>;
 
@@ -122,25 +115,6 @@ export class RelatedPersonsPartComponent
     return formBuilder.group({
       entries: this.persons,
     });
-  }
-
-  /**
-   * Load settings from thesaurus entries.
-   *
-   * @param entries The thesaurus entries if any.
-   */
-  private loadSettings(entries?: ThesaurusEntry[]): void {
-    if (!entries?.length) {
-      this.pinByTypeMode = undefined;
-      this.canSwitchMode = undefined;
-      this.canEditTarget = undefined;
-    }
-    this.pinByTypeMode =
-      entries?.find((e) => e.id === 'by-type')?.value === 'true';
-    this.canSwitchMode =
-      entries?.find((e) => e.id === 'switch-mode')?.value === 'true';
-    this.canEditTarget =
-      entries?.find((e) => e.id === 'edit-target')?.value === 'true';
   }
 
   private updateThesauri(thesauri: ThesauriSet): void {
@@ -180,8 +154,6 @@ export class RelatedPersonsPartComponent
     } else {
       this.refTagEntries = undefined;
     }
-    // load settings from thesaurus
-    this.loadSettings(thesauri['pin-link-settings']?.entries);
   }
 
   private updateForm(part?: RelatedPersonsPart | null): void {

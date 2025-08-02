@@ -8,10 +8,10 @@ import { CurrentItemBarComponent } from '@myrmidon/cadmus-ui-pg';
 import { ReferencedTextsPartComponent } from '../referenced-texts-part/referenced-texts-part.component';
 
 @Component({
-    selector: 'cadmus-referenced-texts-part-feature',
-    templateUrl: './referenced-texts-part-feature.component.html',
-    styleUrls: ['./referenced-texts-part-feature.component.css'],
-    imports: [CurrentItemBarComponent, ReferencedTextsPartComponent],
+  selector: 'cadmus-referenced-texts-part-feature',
+  templateUrl: './referenced-texts-part-feature.component.html',
+  styleUrls: ['./referenced-texts-part-feature.component.css'],
+  imports: [CurrentItemBarComponent, ReferencedTextsPartComponent],
 })
 export class ReferencedTextsPartFeatureComponent
   extends EditPartFeatureBase
@@ -43,7 +43,6 @@ export class ReferencedTextsPartFeatureComponent
       'assertion-tags',
       'doc-reference-types',
       'doc-reference-tags',
-      'pin-link-settings',
     ];
   }
 }
