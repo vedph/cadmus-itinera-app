@@ -12,7 +12,7 @@ The codicological parts in this project are imported from an [independent librar
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:13.0.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:13.0.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Setup
 
@@ -59,9 +59,12 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+### 13.0.1
+
 - 2025-08-02:
   - removed from Itinera parts legacy settings for pin links.
   - updated packages and added codicology UI and cod-layout-view.
+  - configured bibliography item ID getter to use key instead of ID (falling back to ID if key not set, which should never happen).
 - 2025-07-30: updated packages (fixes to refs lookup brick and asserted chronotopes).
 
 ### 13.0.0

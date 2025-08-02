@@ -5,7 +5,7 @@
   // environment-dependent settings
   window.__env.apiUrl = "http://localhost:5052/api/";
   window.__env.biblioApiUrl = "http://localhost:5000/api/";
-  window.__env.version = "13.0.0";
+  window.__env.version = "13.0.1";
   // enable thesaurus import in thesaurus list for admins
   window.__env.thesImportEnabled = true;
     // MUFI

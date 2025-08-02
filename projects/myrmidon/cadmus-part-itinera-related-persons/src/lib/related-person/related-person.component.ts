@@ -58,14 +58,6 @@ export class RelatedPersonComponent {
   // doc-reference-tags
   public readonly refTagEntries = input<ThesaurusEntry[]>();
 
-  // settings
-  // by-type: true/false
-  public readonly pinByTypeMode = input<boolean>();
-  // switch-mode: true/false
-  public readonly canSwitchMode = input<boolean>();
-  // edit-target: true/false
-  public readonly canEditTarget = input<boolean>();
-
   public readonly editorClose = output();
 
   public type: FormControl<string | null>;

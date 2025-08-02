@@ -85,7 +85,7 @@ export class App implements OnInit {
         description: 'Itinera bibliography',
         label: 'ID',
         service: workService,
-        itemIdGetter: (item: any) => item?.id,
+        itemIdGetter: (item: any) => item?.key || item?.id,
         itemLabelGetter: (item: any) => item?.key || item?.title,
       },
       {
