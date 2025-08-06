@@ -12,7 +12,7 @@ The codicological parts in this project are imported from an [independent librar
 
 1. `npm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
-3. `docker build . -t vedph2020/cadmus-itinera-app:13.0.1 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+3. `docker build . -t vedph2020/cadmus-itinera-app:13.0.2 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
 ## Setup
 
@@ -59,7 +59,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
-- 2025-08-06: updated packages (including bibliography libraries, untied from ISO639).
+### 13.0.2
+
+- 2025-08-06: updated packages (including bibliography libraries, untied from ISO639, and bricks with scope fix in asserted composite IDs).
 
 ### 13.0.1
 
