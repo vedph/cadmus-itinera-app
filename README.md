@@ -59,6 +59,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-08-06: updated packages (including bibliography libraries, untied from ISO639).
+
 ### 13.0.1
 
 - 2025-08-02:
