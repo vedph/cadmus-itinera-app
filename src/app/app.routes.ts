@@ -106,7 +106,7 @@ export const routes: Routes = [
     path: 'items/:iid/itinera',
     loadChildren: () =>
       import('@myrmidon/cadmus-part-itinera-pg').then(
-        (module) => module.CadmusPartItineraPgModule
+        (module) => module.CADMUS_PART_ITINERA_PG_ROUTES
       ),
     canActivate: [jwtGuard],
   },
@@ -124,7 +124,7 @@ export const routes: Routes = [
     path: 'items/:iid/geography',
     loadChildren: () =>
       import('@myrmidon/cadmus-part-geo-pg').then(
-        (module) => module.CadmusPartGeoPgModule
+        (module) => module.CADMUS_PART_GEO_PG_ROUTES
       ),
     canActivate: [jwtGuard],
   },

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
 import {
@@ -18,11 +19,19 @@ import {
   MatCardActions,
 } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatButton, MatIconButton } from '@angular/material/button';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { NgxToolsValidators, FlatLookupPipe } from '@myrmidon/ngx-tools';
+import {
+  NgxToolsValidators,
+  FlatLookupPipe,
+  deepCopy,
+} from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -60,14 +69,16 @@ import { ReferencedTextComponent } from '../referenced-text/referenced-text.comp
     MatIcon,
     MatCardTitle,
     MatCardContent,
-    MatTabGroup,
-    MatTab,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
     MatButton,
     MatIconButton,
     MatTooltip,
     ReferencedTextComponent,
     MatCardActions,
     CloseSaveButtonsComponent,
+    TitleCasePipe,
     FlatLookupPipe,
   ],
 })
@@ -75,22 +86,32 @@ export class ReferencedTextsPartComponent
   extends ModelEditorComponentBase<ReferencedTextsPart>
   implements OnInit
 {
-  private _editedIndex: number;
-
-  public tabIndex: number;
-  public editedText: ReferencedText | undefined;
+  public readonly editedText = signal<ReferencedText | undefined>(undefined);
+  public readonly editedIndex = signal<number>(-1);
 
   // related-text-types
-  public txtTypeEntries: ThesaurusEntry[] | undefined;
-  public idScopeEntries: ThesaurusEntry[] | undefined;
+  public readonly txtTypeEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
+  public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
   // asserted-id-tags
-  public idTagEntries: ThesaurusEntry[] | undefined;
+  public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
   // assertion-tags
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
   // doc-reference-types
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
   // doc-reference-tags
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
 
   public texts: FormControl<ReferencedText[]>;
 
@@ -100,8 +121,6 @@ export class ReferencedTextsPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this._editedIndex = -1;
-    this.tabIndex = 0;
     // form
     this.texts = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -122,39 +141,39 @@ export class ReferencedTextsPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'related-text-types';
     if (this.hasThesaurus(key)) {
-      this.txtTypeEntries = thesauri[key].entries;
+      this.txtTypeEntries.set(thesauri[key].entries);
     } else {
-      this.txtTypeEntries = undefined;
+      this.txtTypeEntries.set(undefined);
     }
     key = 'asserted-id-scopes';
     if (this.hasThesaurus(key)) {
-      this.idScopeEntries = thesauri[key].entries;
+      this.idScopeEntries.set(thesauri[key].entries);
     } else {
-      this.idScopeEntries = undefined;
+      this.idScopeEntries.set(undefined);
     }
     key = 'asserted-id-tags';
     if (this.hasThesaurus(key)) {
-      this.idTagEntries = thesauri[key].entries;
+      this.idTagEntries.set(thesauri[key].entries);
     } else {
-      this.idTagEntries = undefined;
+      this.idTagEntries.set(undefined);
     }
     key = 'assertion-tags';
     if (this.hasThesaurus(key)) {
-      this.assTagEntries = thesauri[key].entries;
+      this.assTagEntries.set(thesauri[key].entries);
     } else {
-      this.assTagEntries = undefined;
+      this.assTagEntries.set(undefined);
     }
     key = 'doc-reference-types';
     if (this.hasThesaurus(key)) {
-      this.refTypeEntries = thesauri[key].entries;
+      this.refTypeEntries.set(thesauri[key].entries);
     } else {
-      this.refTypeEntries = undefined;
+      this.refTypeEntries.set(undefined);
     }
     key = 'doc-reference-tags';
     if (this.hasThesaurus(key)) {
-      this.refTagEntries = thesauri[key].entries;
+      this.refTagEntries.set(thesauri[key].entries);
     } else {
-      this.refTagEntries = undefined;
+      this.refTagEntries.set(undefined);
     }
   }
 
@@ -186,29 +205,24 @@ export class ReferencedTextsPartComponent
   }
 
   public addText(): void {
-    this.editText(
-      {
-        type: this.txtTypeEntries?.length ? this.txtTypeEntries[0].id : '',
-        targetId: { target: { gid: '', label: '' } },
-      },
-      -1
-    );
+    this.editedIndex.set(-1);
+    this.editedText.set({
+      type: this.txtTypeEntries()?.length ? this.txtTypeEntries()![0].id : '',
+      targetId: { target: { gid: '', label: '' } },
+    });
   }
 
-  public editText(text: ReferencedText, index: number): void {
-    this._editedIndex = index;
-    this.editedText = text;
-    setTimeout(() => {
-      this.tabIndex = 1;
-    }, 0);
+  public editText(index: number): void {
+    this.editedIndex.set(index);
+    this.editedText.set(deepCopy(this.texts.value[index]));
   }
 
   public onTextSave(text: ReferencedText): void {
     const texts = [...this.texts.value];
-    if (this._editedIndex === -1) {
+    if (this.editedIndex() === -1) {
       texts.push(text);
     } else {
-      texts.splice(this._editedIndex, 1, text);
+      texts.splice(this.editedIndex(), 1, text);
     }
     this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
@@ -217,9 +231,8 @@ export class ReferencedTextsPartComponent
   }
 
   public closeText(): void {
-    this._editedIndex = -1;
-    this.editedText = undefined;
-    this.tabIndex = 0;
+    this.editedIndex.set(-1);
+    this.editedText.set(undefined);
   }
 
   public deleteText(index: number): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { UserListComponent } from '@myrmidon/auth-jwt-admin';
 
 @Component({
   selector: 'app-manage-users-page',
+  standalone: true,
   templateUrl: './manage-users-page.component.html',
   styleUrls: ['./manage-users-page.component.css'],
   imports: [
@@ -27,8 +28,4 @@ import { UserListComponent } from '@myrmidon/auth-jwt-admin';
     UserListComponent,
   ],
 })
-export class ManageUsersPageComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class ManageUsersPageComponent {}

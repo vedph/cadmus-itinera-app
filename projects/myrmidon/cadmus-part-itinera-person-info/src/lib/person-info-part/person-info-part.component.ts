@@ -1,4 +1,12 @@
-import { Component, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Optional,
+  signal,
+} from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
 import {
   FormControl,
   FormBuilder,
@@ -69,6 +77,7 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
     MatInput,
     NgeMonacoModule,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
   ],
 })
@@ -84,7 +93,7 @@ export class PersonInfoPartComponent
   public bio: FormControl<string | null>;
 
   // person-sex
-  public sexEntries: ThesaurusEntry[] | undefined;
+  public readonly sexEntries = signal<ThesaurusEntry[] | undefined>(undefined);
 
   constructor(
     authService: AuthJwtService,
@@ -180,9 +189,9 @@ export class PersonInfoPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     const key = 'person-sex';
     if (this.hasThesaurus(key)) {
-      this.sexEntries = thesauri[key].entries;
+      this.sexEntries.set(thesauri[key].entries);
     } else {
-      this.sexEntries = undefined;
+      this.sexEntries.set(undefined);
     }
   }
 

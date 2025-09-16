@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
 import {
@@ -22,7 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -65,6 +66,7 @@ import { PersonWorkComponent } from '../person-work/person-work.component';
     MatTooltip,
     PersonWorkComponent,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
   ],
 })
@@ -72,15 +74,15 @@ export class PersonWorksPartComponent
   extends ModelEditorComponentBase<PersonWorksPart>
   implements OnInit
 {
-  public editedIndex: number;
-  public editedWork: PersonWork | undefined;
+  public readonly editedIndex = signal<number>(-1);
+  public readonly editedWork = signal<PersonWork | undefined>(undefined);
 
   // assertion-tags
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // doc-reference-types
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // doc-reference-tags
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
 
   public works: FormControl<PersonWork[]>;
 
@@ -90,7 +92,6 @@ export class PersonWorksPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this.editedIndex = -1;
     // form
     this.works = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -111,21 +112,21 @@ export class PersonWorksPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'assertion-tags';
     if (this.hasThesaurus(key)) {
-      this.assTagEntries = thesauri[key].entries;
+      this.assTagEntries.set(thesauri[key].entries);
     } else {
-      this.assTagEntries = undefined;
+      this.assTagEntries.set(undefined);
     }
     key = 'doc-reference-types';
     if (this.hasThesaurus(key)) {
-      this.refTypeEntries = thesauri[key].entries;
+      this.refTypeEntries.set(thesauri[key].entries);
     } else {
-      this.refTypeEntries = undefined;
+      this.refTypeEntries.set(undefined);
     }
     key = 'doc-reference-tags';
     if (this.hasThesaurus(key)) {
-      this.refTagEntries = thesauri[key].entries;
+      this.refTagEntries.set(thesauri[key].entries);
     } else {
-      this.refTagEntries = undefined;
+      this.refTagEntries.set(undefined);
     }
   }
 
@@ -166,18 +167,18 @@ export class PersonWorksPartComponent
 
   public editWork(index: number): void {
     if (index < 0) {
-      this.editedIndex = -1;
-      this.editedWork = undefined;
+      this.editedIndex.set(-1);
+      this.editedWork.set(undefined);
     } else {
-      this.editedIndex = index;
-      this.editedWork = this.works.value[index];
+      this.editedIndex.set(index);
+      this.editedWork.set(deepCopy(this.works.value[index]));
     }
   }
 
   public onWorkSave(work: PersonWork): void {
     this.works.setValue(
       this.works.value.map((e: PersonWork, i: number) =>
-        i === this.editedIndex ? work : e
+        i === this.editedIndex() ? work : e
       )
     );
     this.works.updateValueAndValidity();

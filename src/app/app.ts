@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, signal } from '@angular/core';
 import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AppRepository } from '@myrmidon/cadmus-state';
 import { Router, RouterModule } from '@angular/router';
@@ -49,12 +49,13 @@ import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  public user?: User;
-  public logged?: boolean;
-  public itemBrowsers?: ThesaurusEntry[];
-  public version: string;
+  public readonly user = signal<User | undefined>(undefined);
+  public readonly logged = signal<boolean>(false);
+  public readonly itemBrowsers = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly version = signal<string>('');
+  public readonly isHome = signal<boolean>(false);
+
   public snavToggle: FormControl<boolean>;
-  public isHome = false;
 
   constructor(
     @Inject('itemBrowserKeys')
@@ -70,11 +71,11 @@ export class App implements OnInit {
     storage: RamStorageService,
     formBuilder: FormBuilder
   ) {
-    this.version = env.get('version') || '';
+    this.version.set(env.get('version') || '');
     this.snavToggle = formBuilder.control(false, { nonNullable: true });
 
     this._router.events.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.isHome = this._router.url === '/home' || this._router.url === '/';
+      this.isHome.set(this._router.url === '/home' || this._router.url === '/');
     });
 
     // configure external lookup for asserted composite IDs
@@ -101,12 +102,12 @@ export class App implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.user = this._authService.currentUserValue || undefined;
-    this.logged = this.user !== null;
+    this.user.set(this._authService.currentUserValue || undefined);
+    this.logged.set(this.user !== null);
 
     this._authService.currentUser$.subscribe((user: User | null) => {
-      this.logged = this._authService.isAuthenticated(true);
-      this.user = user || undefined;
+      this.logged.set(this._authService.isAuthenticated(true));
+      this.user.set(user || undefined);
       // load the general app state just once
       if (user) {
         this._repository.load();
@@ -115,7 +116,7 @@ export class App implements OnInit {
 
     this._repository.itemBrowserThesaurus$.subscribe(
       (thesaurus: Thesaurus | undefined) => {
-        this.itemBrowsers = thesaurus ? thesaurus.entries : undefined;
+        this.itemBrowsers.set(thesaurus ? thesaurus.entries : undefined);
       }
     );
   }

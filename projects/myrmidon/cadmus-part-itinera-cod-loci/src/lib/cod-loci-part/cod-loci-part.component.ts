@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
 import { MatIcon } from '@angular/material/icon';
@@ -56,13 +57,14 @@ import { CodLocusComponent } from '../cod-locus/cod-locus.component';
     MatIcon,
     MatCardTitle,
     MatCardContent,
+    MatCardActions,
     MatTabGroup,
     MatTab,
     MatButton,
     MatIconButton,
     MatTooltip,
     CodLocusComponent,
-    MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
     CodLocationRangePipe,
   ],

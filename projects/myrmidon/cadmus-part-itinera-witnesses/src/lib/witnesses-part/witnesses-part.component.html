@@ -4,7 +4,9 @@
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
       </div>
-      <mat-card-title>Witnesses Part</mat-card-title>
+      <mat-card-title>{{
+        (modelName() | titlecase) || "Witnesses Part"
+      }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div>
@@ -29,8 +31,8 @@
         <tbody>
           @for ( witness of witnesses.value; track witness; let i = $index; let
           first = $first; let last = $last) {
-          <tr>
-            <td>
+          <tr [class.selected]="i === editedIndex()">
+            <td class="fit-width">
               <button
                 type="button"
                 mat-icon-button
@@ -72,19 +74,19 @@
           }
         </tbody>
       </table>
-      }
-
+      } @if (editedWitness()) {
       <mat-expansion-panel
-        [expanded]="editedWitness"
-        [disabled]="!editedWitness"
+        [expanded]="editedWitness()"
+        [disabled]="!editedWitness()"
       >
         <mat-expansion-panel-header>witness</mat-expansion-panel-header>
         <cadmus-witness
-          [witness]="editedWitness"
+          [witness]="editedWitness()"
           (witnessChange)="onWitnessSave($event!)"
           (editorClose)="onWitnessClose()"
         />
       </mat-expansion-panel>
+      }
     </mat-card-content>
     <mat-card-actions>
       <cadmus-close-save-buttons

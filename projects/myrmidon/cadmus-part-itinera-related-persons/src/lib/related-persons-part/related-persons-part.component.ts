@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
 import {
@@ -22,7 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { NgxToolsValidators, FlatLookupPipe } from '@myrmidon/ngx-tools';
+import { NgxToolsValidators, FlatLookupPipe, deepCopy } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -67,6 +68,7 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
     MatTooltip,
     RelatedPersonComponent,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
     FlatLookupPipe,
   ],
@@ -75,21 +77,21 @@ export class RelatedPersonsPartComponent
   extends ModelEditorComponentBase<RelatedPersonsPart>
   implements OnInit
 {
-  public editedIndex: number;
-  public editedPerson: RelatedPerson | undefined;
+  public readonly editedIndex = signal<number>(-1);
+  public readonly editedPerson = signal<RelatedPerson | undefined>(undefined);
 
   // related-person-types
-  public prsTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly prsTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // asserted-id-tags
-  public idTagEntries: ThesaurusEntry[] | undefined;
+  public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // asserted-id-scopes
-  public idScopeEntries: ThesaurusEntry[] | undefined;
+  public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // assertion-tags
-  public assTagEntries: ThesaurusEntry[] | undefined;
+  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // doc-reference-types
-  public refTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // doc-reference-tags
-  public refTagEntries: ThesaurusEntry[] | undefined;
+  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
 
   public persons: FormControl<RelatedPerson[]>;
 
@@ -99,7 +101,6 @@ export class RelatedPersonsPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this.editedIndex = -1;
     // form
     this.persons = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -120,39 +121,39 @@ export class RelatedPersonsPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'asserted-id-tags';
     if (this.hasThesaurus(key)) {
-      this.idTagEntries = thesauri[key].entries;
+      this.idTagEntries.set(thesauri[key].entries);
     } else {
-      this.idTagEntries = undefined;
+      this.idTagEntries.set(undefined);
     }
     key = 'related-person-types';
     if (this.hasThesaurus(key)) {
-      this.prsTypeEntries = thesauri[key].entries;
+      this.prsTypeEntries.set(thesauri[key].entries);
     } else {
-      this.prsTypeEntries = undefined;
+      this.prsTypeEntries.set(undefined);
     }
     key = 'asserted-id-scopes';
     if (this.hasThesaurus(key)) {
-      this.idScopeEntries = thesauri[key].entries;
+      this.idScopeEntries.set(thesauri[key].entries);
     } else {
-      this.idScopeEntries = undefined;
+      this.idScopeEntries.set(undefined);
     }
     key = 'assertion-tags';
     if (this.hasThesaurus(key)) {
-      this.assTagEntries = thesauri[key].entries;
+      this.assTagEntries.set(thesauri[key].entries);
     } else {
-      this.assTagEntries = undefined;
+      this.assTagEntries.set(undefined);
     }
     key = 'doc-reference-types';
     if (this.hasThesaurus(key)) {
-      this.refTypeEntries = thesauri[key].entries;
+      this.refTypeEntries.set(thesauri[key].entries);
     } else {
-      this.refTypeEntries = undefined;
+      this.refTypeEntries.set(undefined);
     }
     key = 'doc-reference-tags';
     if (this.hasThesaurus(key)) {
-      this.refTagEntries = thesauri[key].entries;
+      this.refTagEntries.set(thesauri[key].entries);
     } else {
-      this.refTagEntries = undefined;
+      this.refTagEntries.set(undefined);
     }
   }
 
@@ -185,7 +186,7 @@ export class RelatedPersonsPartComponent
 
   public addPerson(): void {
     const person: RelatedPerson = {
-      type: this.prsTypeEntries?.length ? this.prsTypeEntries[0].id : '',
+      type: this.prsTypeEntries()?.length ? this.prsTypeEntries()![0].id : '',
       name: '',
     };
     this.persons.setValue([...this.persons.value, person]);
@@ -196,18 +197,18 @@ export class RelatedPersonsPartComponent
 
   public editPerson(index: number): void {
     if (index < 0) {
-      this.editedIndex = -1;
-      this.editedPerson = undefined;
+      this.editedIndex.set(-1);
+      this.editedPerson.set(undefined);
     } else {
-      this.editedIndex = index;
-      this.editedPerson = this.persons.value[index];
+      this.editedIndex.set(index);
+      this.editedPerson.set(deepCopy(this.persons.value[index]));
     }
   }
 
   public onPersonSave(entry: RelatedPerson): void {
     this.persons.setValue(
       this.persons.value.map((e: RelatedPerson, i: number) =>
-        i === this.editedIndex ? entry : e
+        i === this.editedIndex() ? entry : e
       )
     );
     this.persons.updateValueAndValidity();

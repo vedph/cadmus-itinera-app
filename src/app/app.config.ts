@@ -44,7 +44,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
-    provideAnimationsAsync(),
     provideHttpClient(withInterceptors([jwtInterceptor]), withFetch()),
     provideNativeDateAdapter(),
     // vendors

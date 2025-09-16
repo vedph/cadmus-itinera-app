@@ -4,100 +4,99 @@
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
       </div>
-      <mat-card-title>Referenced Texts Part</mat-card-title>
+      <mat-card-title>{{
+        (modelName() | titlecase) || "Referenced Texts Part"
+      }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-tab-group [(selectedIndex)]="tabIndex">
-        <mat-tab label="texts">
-          <div>
-            <button
-              type="button"
-              mat-flat-button
-              class="mat-primary"
-              (click)="addText()"
-            >
-              <mat-icon>add_circle</mat-icon> text
-            </button>
-          </div>
-          @if (texts.value.length) {
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>type</th>
-                <th>target ID</th>
-                <th>target cit.</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for ( text of texts.value; track text; let i = $index; let first
-              = $first; let last = $last) {
-              <tr>
-                <td>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Edit this text"
-                    (click)="editText(text, i)"
-                  >
-                    <mat-icon class="mat-primary">edit</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this text up"
-                    [disabled]="first"
-                    (click)="moveTextUp(i)"
-                  >
-                    <mat-icon>arrow_upward</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this text down"
-                    [disabled]="last"
-                    (click)="moveTextDown(i)"
-                  >
-                    <mat-icon>arrow_downward</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Delete this text"
-                    (click)="deleteText(i)"
-                  >
-                    <mat-icon class="mat-warn">remove_circle</mat-icon>
-                  </button>
-                </td>
-                <td>
-                  {{ text.type | flatLookup : txtTypeEntries : "id" : "value" }}
-                </td>
-                <td>{{ text.targetId }}</td>
-                <td>{{ text.targetCitation }}</td>
-              </tr>
-              }
-            </tbody>
-          </table>
+      <div>
+        <button
+          type="button"
+          mat-flat-button
+          class="mat-primary"
+          (click)="addText()"
+        >
+          <mat-icon>add_circle</mat-icon> text
+        </button>
+      </div>
+      @if (texts.value.length) {
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>type</th>
+            <th>target ID</th>
+            <th>target cit.</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for ( text of texts.value; track text; let i = $index; let first =
+          $first; let last = $last) {
+          <tr [class.selected]="i === editedIndex()">
+            <td class="fit-width">
+              <button
+                type="button"
+                mat-icon-button
+                matTooltip="Edit this text"
+                (click)="editText(i)"
+              >
+                <mat-icon class="mat-primary">edit</mat-icon>
+              </button>
+              <button
+                type="button"
+                mat-icon-button
+                matTooltip="Move this text up"
+                [disabled]="first"
+                (click)="moveTextUp(i)"
+              >
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button
+                type="button"
+                mat-icon-button
+                matTooltip="Move this text down"
+                [disabled]="last"
+                (click)="moveTextDown(i)"
+              >
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button
+                type="button"
+                mat-icon-button
+                matTooltip="Delete this text"
+                (click)="deleteText(i)"
+              >
+                <mat-icon class="mat-warn">remove_circle</mat-icon>
+              </button>
+            </td>
+            <td>
+              {{ text.type | flatLookup : txtTypeEntries() : "id" : "value" }}
+            </td>
+            <td>{{ text.targetId }}</td>
+            <td>{{ text.targetCitation }}</td>
+          </tr>
           }
-        </mat-tab>
-
-        @if (editedText) {
-        <mat-tab label="text">
-          <cadmus-referenced-text
-            [text]="editedText"
-            [assTagEntries]="assTagEntries"
-            [idScopeEntries]="idScopeEntries"
-            [idTagEntries]="idTagEntries"
-            [refTagEntries]="refTagEntries"
-            [refTypeEntries]="refTypeEntries"
-            [txtTypeEntries]="txtTypeEntries"
-            (textChange)="onTextSave($event!)"
-            (editorClose)="closeText()"
-          >
-          </cadmus-referenced-text>
-        </mat-tab>
-        }
-      </mat-tab-group>
+        </tbody>
+      </table>
+      } @if (editedText()) {
+      <mat-expansion-panel [expanded]="editedText()" [disabled]="!editedText()">
+        <mat-expansion-panel-header>
+          <mat-panel-title> text #{{ editedIndex() + 1 }} </mat-panel-title>
+        </mat-expansion-panel-header>
+        <cadmus-referenced-text
+          [text]="editedText()"
+          [assTagEntries]="assTagEntries()"
+          [idScopeEntries]="idScopeEntries()"
+          [idTagEntries]="idTagEntries()"
+          [refTagEntries]="refTagEntries()"
+          [refTypeEntries]="refTypeEntries()"
+          [txtTypeEntries]="txtTypeEntries()"
+          (textChange)="onTextSave($event!)"
+          (editorClose)="closeText()"
+        >
+        </cadmus-referenced-text>
+      </mat-expansion-panel>
+      }
     </mat-card-content>
     <mat-card-actions>
       <cadmus-close-save-buttons

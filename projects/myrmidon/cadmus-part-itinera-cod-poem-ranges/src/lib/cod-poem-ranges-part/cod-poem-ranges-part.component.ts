@@ -14,6 +14,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -87,8 +88,9 @@ import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
     MatInput,
     MatIconButton,
     MatTooltip,
-    CodPoemRangeLayoutsComponent,
     MatCardActions,
+    TitleCasePipe,
+    CodPoemRangeLayoutsComponent,
     CloseSaveButtonsComponent,
     AlnumRangePipe,
   ],

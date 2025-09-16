@@ -1,10 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 // cadmus
-import { PendingChangesGuard } from '@myrmidon/cadmus-core';
+import { pendingChangesGuard } from '@myrmidon/cadmus-core';
 import {
   COD_LOCI_PART_TYPEID,
   CodLociPartFeatureComponent,
@@ -42,72 +39,59 @@ import {
   WITNESSES_PART_TYPEID,
 } from '@myrmidon/cadmus-part-itinera-witnesses';
 
-export const RouterModuleForChild = RouterModule.forChild([
+export const CADMUS_PART_ITINERA_PG_ROUTES: Routes = [
   {
     path: `${COD_LOCI_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: CodLociPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${COD_POEM_RANGES_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: CodPoemRangesPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${PERSON_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: PersonInfoPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${PERSON_WORKS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: PersonWorksPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${LETTER_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: LetterInfoPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${LITERARY_WORK_INFO_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: LiteraryWorkInfoPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${REFERENCED_TEXTS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: ReferencedTextsPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${RELATED_PERSONS_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: RelatedPersonsPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: `${WITNESSES_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: WitnessesPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
-]);
-
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    // Cadmus
-    RouterModuleForChild,
-  ],
-  exports: [],
-})
-export class CadmusPartItineraPgModule {}
+];

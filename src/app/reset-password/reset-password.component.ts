@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -20,6 +20,7 @@ import { AuthJwtAccountService } from '@myrmidon/auth-jwt-admin';
 
 @Component({
   selector: 'cadmus-reset-password',
+  standalone: true,
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css'],
   imports: [
@@ -34,9 +35,10 @@ import { AuthJwtAccountService } from '@myrmidon/auth-jwt-admin';
   ],
 })
 export class ResetPasswordComponent {
-  public busy: boolean | undefined;
-  public form: FormGroup;
+  public readonly busy = signal<boolean>(false);
+
   public email: FormControl<string | null>;
+  public form: FormGroup;
 
   constructor(
     private _snackbar: MatSnackBar,
@@ -53,18 +55,18 @@ export class ResetPasswordComponent {
   }
 
   public reset(): void {
-    if (this.busy || !this.email.value) {
+    if (this.busy() || !this.email.value) {
       return;
     }
 
-    this.busy = true;
+    this.busy.set(true);
     this._accountService.resetPassword(this.email.value).subscribe({
       next: () => {
-        this.busy = false;
+        this.busy.set(false);
         this._snackbar.open(`Message sent to ${this.email.value}`, 'OK');
       },
       error: (error) => {
-        this.busy = false;
+        this.busy.set(false);
         console.error(error);
         this._snackbar.open(
           `Error sending message to ${this.email.value}`,

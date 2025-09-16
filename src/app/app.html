@@ -3,14 +3,14 @@
     <span id="logo"><img src="./img/logo-black-40.png" alt="Fusisoft" /></span>
     <a mat-button routerLink="/home">Cadmus Itinera</a>
 
-    @if (logged && itemBrowsers) {
+    @if (logged() && itemBrowsers()) {
     <button type="button" mat-button [matMenuTriggerFor]="itemMenu">
       Items
     </button>
     }
     <mat-menu #itemMenu>
       <a mat-menu-item routerLink="/items">Items</a>
-      @for (entry of itemBrowsers; track entry) {
+      @for (entry of itemBrowsers(); track entry) {
       <a
         mat-menu-item
         [routerLink]="'item-browser/' + getItemBrowserRoute(entry.id)"
@@ -18,44 +18,49 @@
       >
       }
     </mat-menu>
-    @if (logged && !itemBrowsers) {
-    <a mat-button routerLink="/items">Items</a>
-    }
-
+    <!-- item menu -->
+    @if (logged() && !itemBrowsers()) {
+    <button type="button" mat-button routerLink="/items">Items</button>
+    } @if (logged()) {
     <!-- search menu -->
-    @if (logged) {
     <button type="button" mat-button routerLink="/search">Search</button>
-    }
     <!-- graph menu -->
-    @if (logged) {
     <button type="button" mat-button routerLink="/graph">Graph</button>
-    }
     <!-- stats menu -->
-    @if (logged) {
     <button type="button" mat-button routerLink="/stats">Stats</button>
     }
 
-    <!-- biblio menu -->
-    @if ( user && (user.roles.includes('admin') ||
-    user.roles.includes('editor')) ) {
-    <button type="button" mat-button routerLink="/biblio">Bibliography</button>
-    }
+    <!-- demo menu -->
+    <button type="button" mat-button [matMenuTriggerFor]="demoMenu">
+      Demo
+    </button>
+    <mat-menu #demoMenu>
+      <button type="button" mat-menu-item routerLink="/demo/graph">
+        Graph
+      </button>
+      <button type="button" mat-menu-item routerLink="/demo/layers">
+        Text Layers
+      </button>
+    </mat-menu>
 
     <span class="tb-fill-remaining-space"></span>
 
-    @if (user) {
+    <!-- user -->
+    @if (user()) {
     <div>
-      <!-- sidenav -->
-      <mat-slide-toggle [formControl]="snavToggle" matTooltip="Toggle tools" />
       <!-- indicators -->
-      <img [src]="user.email | gravatar : 32" alt="{{ user.userName }}" />
-      @if (user && user.roles.includes('admin')) {
+      <img
+        alt="avatar"
+        [src]="user()!.email | gravatar : 32"
+        [alt]="user()!.userName"
+      />
+      @if (user() && user()!.roles.includes('admin')) {
       <mat-icon class="small-icon" title="admin">build</mat-icon>
-      } @if (user && !user.emailConfirmed) {
+      } @if (user() && !user()!.emailConfirmed) {
       <mat-icon
         class="small-icon"
         title="You must verify your email address! Please check your mailbox {{
-          user.email
+          user()!.email
         }}"
         >feedback</mat-icon
       >
@@ -68,7 +73,7 @@
         <a mat-menu-item routerLink="/reset-password">Reset password</a>
       </mat-menu>
       <!-- admin menu -->
-      @if (user && user.roles.includes('admin')) {
+      @if (user() && user()!.roles.includes('admin')) {
       <button type="button" mat-button [matMenuTriggerFor]="adminMenu">
         Admin
       </button>
@@ -83,13 +88,18 @@
     }
 
     <!-- login -->
-    @if (!logged) {
-    <button type="button" mat-icon-button routerLink="/login">
+    @if (!logged()) {
+    <button
+      type="button"
+      mat-icon-button
+      [routerLink]="['/login']"
+      [queryParams]="{ returnUrl: 'items' }"
+    >
       <mat-icon>login</mat-icon>
     </button>
     }
     <!-- logout -->
-    @if (logged) {
+    @if (logged()) {
     <button type="button" mat-icon-button (click)="logout()">
       <mat-icon>logout</mat-icon>
     </button>
@@ -134,7 +144,7 @@
 </main>
 
 <footer>
-  @if (!isHome) {
+  @if (!isHome()) {
   <div id="logos">
     <img src="./img/unisi-64.png" alt="Università di Siena" />
     <img src="./img/unina-64.png" alt="Università degli studi di Napoli" />
@@ -155,12 +165,10 @@
       >
     </p>
     <p>
-      Cadmus by
-      <a rel="noopener" href="http://www.fusisoft.it" target="_blank"
-        >Daniele Fusi</a
-      >
+      <a rel="noopener" href="https://vedph.github.io/cadmus-doc/" target="_blank">Cadmus</a>
+      Itinera by Daniele Fusi
       <br />
-      version {{ version }}
+      version {{ version() }}
     </p>
   </div>
 </footer>

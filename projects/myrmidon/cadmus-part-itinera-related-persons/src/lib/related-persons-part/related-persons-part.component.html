@@ -4,7 +4,9 @@
       <div mat-card-avatar>
         <mat-icon>picture_in_picture</mat-icon>
       </div>
-      <mat-card-title>Related Persons Part</mat-card-title>
+      <mat-card-title>{{
+        (modelName() | titlecase) || "Related Persons Part"
+      }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div>
@@ -30,8 +32,8 @@
         <tbody>
           @for ( person of persons.value; track person; let i = $index; let
           first = $first; let last = $last) {
-          <tr [class.selected]="editedIndex === i">
-            <td>
+          <tr [class.selected]="editedIndex() === i">
+            <td class="fit-width">
               <button
                 type="button"
                 mat-icon-button
@@ -68,7 +70,7 @@
               </button>
             </td>
             <td>
-              {{ person.type | flatLookup : prsTypeEntries : "id" : "value" }}
+              {{ person.type | flatLookup : prsTypeEntries() : "id" : "value" }}
             </td>
             <td>{{ person.name }}</td>
             <td>{{ person.ids?.length || 0 }}</td>
@@ -76,19 +78,22 @@
           }
         </tbody>
       </table>
-      } @if (editedPerson) {
-      <mat-expansion-panel [expanded]="editedPerson" [disabled]="!editedPerson">
+      } @if (editedPerson()) {
+      <mat-expansion-panel
+        [expanded]="editedPerson()"
+        [disabled]="!editedPerson()"
+      >
         <mat-expansion-panel-header>
-          <mat-panel-title> #{{ editedIndex + 1 }} </mat-panel-title>
+          <mat-panel-title> #{{ editedIndex() + 1 }} </mat-panel-title>
         </mat-expansion-panel-header>
         <cadmus-related-person
-          [idScopeEntries]="idScopeEntries"
-          [idTagEntries]="idTagEntries"
-          [assTagEntries]="assTagEntries"
-          [refTagEntries]="refTagEntries"
-          [prsTypeEntries]="prsTypeEntries"
-          [refTypeEntries]="refTypeEntries"
-          [person]="editedPerson"
+          [idScopeEntries]="idScopeEntries()"
+          [idTagEntries]="idTagEntries()"
+          [assTagEntries]="assTagEntries()"
+          [refTagEntries]="refTagEntries()"
+          [prsTypeEntries]="prsTypeEntries()"
+          [refTypeEntries]="refTypeEntries()"
+          [person]="editedPerson()"
           (personChange)="onPersonSave($event!)"
           (editorClose)="onPersonClose()"
         />

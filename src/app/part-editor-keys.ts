@@ -25,15 +25,15 @@ import { COD_SHELFMARKS_PART_TYPEID } from '@myrmidon/cadmus-part-codicology-she
 import { COD_WATERMARKS_PART_TYPEID } from '@myrmidon/cadmus-part-codicology-watermarks';
 
 // itinera
-import { COD_LOCI_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-cod-loci/src/public-api';
-import { COD_POEM_RANGES_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/src/public-api';
-import { PERSON_INFO_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-person-info/src/public-api';
-import { PERSON_WORKS_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-person-works/src/public-api';
-import { LETTER_INFO_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-letter-info/src/public-api';
-import { LITERARY_WORK_INFO_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-literary-work-info/src/public-api';
-import { REFERENCED_TEXTS_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-referenced-texts/src/public-api';
-import { RELATED_PERSONS_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-related-persons/src/public-api';
-import { WITNESSES_PART_TYPEID } from '../../projects/myrmidon/cadmus-part-itinera-witnesses/src/public-api';
+import { COD_LOCI_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-cod-loci';
+import { COD_POEM_RANGES_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-cod-poem-ranges';
+import { PERSON_INFO_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-person-info';
+import { PERSON_WORKS_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-person-works';
+import { LETTER_INFO_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-letter-info';
+import { LITERARY_WORK_INFO_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-literary-work-info';
+import { REFERENCED_TEXTS_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-referenced-texts';
+import { RELATED_PERSONS_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-related-persons';
+import { WITNESSES_PART_TYPEID } from '@myrmidon/cadmus-part-itinera-witnesses';
 
 // geography
 import { ASSERTED_LOCATIONS_PART_TYPEID } from '@myrmidon/cadmus-part-geo-asserted-locations';
@@ -149,7 +149,7 @@ export const PART_EDITOR_KEYS: PartEditorKeys = {
   [WITNESSES_PART_TYPEID]: {
     part: ITINERA,
   },
-    // geography
+  // geography
   [ASSERTED_LOCATIONS_PART_TYPEID]: {
     part: GEOGRAPHY,
   },

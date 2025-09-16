@@ -8,6 +8,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs';
 
 import {
@@ -36,7 +37,7 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -107,6 +108,7 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
     ThesaurusTreeComponent,
     MatHint,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
   ],
 })
@@ -146,11 +148,11 @@ export class LiteraryWorkInfoPartComponent
     undefined
   );
 
-  public readonly langFlags = computed<Flag[]>(() =>
-    this.langEntries()?.map(entryToFlag) || []
+  public readonly langFlags = computed<Flag[]>(
+    () => this.langEntries()?.map(entryToFlag) || []
   );
-  public readonly mtrFlags = computed<Flag[]>(() =>
-    this.mtrEntries()?.map(entryToFlag) || []
+  public readonly mtrFlags = computed<Flag[]>(
+    () => this.mtrEntries()?.map(entryToFlag) || []
   );
 
   public languages: FormControl<string[]>;
@@ -265,9 +267,9 @@ export class LiteraryWorkInfoPartComponent
     }
     this.languages.setValue(part.languages || []);
     this.genre.setValue(part.genre);
-    this.pickedGenre .set(this.genreEntries()?.find(
-      (e) => e.id === part.genre
-    )?.value);
+    this.pickedGenre.set(
+      this.genreEntries()?.find((e) => e.id === part.genre)?.value
+    );
     this.metres.setValue(part.metres || []);
     this.strophes.setValue(
       part.strophes?.length ? part.strophes.join('\n') : ''
@@ -371,7 +373,7 @@ export class LiteraryWorkInfoPartComponent
       this.editedTitle.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedTitle.set(this.titles.value[index]);
+      this.editedTitle.set(deepCopy(this.titles.value[index]));
     }
   }
 

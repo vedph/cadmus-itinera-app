@@ -8,6 +8,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 
 import {
   MatCard,
@@ -51,6 +52,7 @@ import { LetterInfoPart, LETTER_INFO_PART_TYPEID } from '../letter-info-part';
     MatInput,
     MatError,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
   ],
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
 import {
@@ -25,7 +26,7 @@ import {
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import { EditedObject } from '@myrmidon/cadmus-core';
@@ -67,6 +68,7 @@ import { WitnessComponent } from '../witness/witness.component';
     MatExpansionPanelHeader,
     WitnessComponent,
     MatCardActions,
+    TitleCasePipe,
     CloseSaveButtonsComponent,
     CodLocationRangePipe,
   ],
@@ -75,9 +77,8 @@ export class WitnessesPartComponent
   extends ModelEditorComponentBase<WitnessesPart>
   implements OnInit
 {
-  private _editedIndex: number;
-
-  public editedWitness: Witness | undefined;
+  public readonly editedWitness = signal<Witness | undefined>(undefined);
+  public readonly editedIndex = signal<number>(-1);
 
   public witnesses: FormControl<Witness[]>;
 
@@ -87,7 +88,6 @@ export class WitnessesPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this._editedIndex = -1;
     // form
     this.witnesses = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -137,18 +137,18 @@ export class WitnessesPartComponent
 
   public editWitness(index: number): void {
     if (index < 0) {
-      this._editedIndex = -1;
-      this.editedWitness = undefined;
+      this.editedIndex.set(-1);
+      this.editedWitness.set(undefined);
     } else {
-      this._editedIndex = index;
-      this.editedWitness = this.witnesses.value[index];
+      this.editedIndex.set(index);
+      this.editedWitness.set(deepCopy(this.witnesses.value[index]));
     }
   }
 
   public onWitnessSave(entry: Witness): void {
     this.witnesses.setValue(
       this.witnesses.value.map((e: Witness, i: number) =>
-        i === this._editedIndex ? entry : e
+        i === this.editedIndex() ? entry : e
       )
     );
     this.witnesses.updateValueAndValidity();
