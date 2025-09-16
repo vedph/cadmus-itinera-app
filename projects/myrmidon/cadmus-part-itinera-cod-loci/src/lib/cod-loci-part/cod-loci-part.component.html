@@ -7,7 +7,10 @@
       <mat-card-title>Loci Part</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-tab-group [(selectedIndex)]="tabIndex">
+      <mat-tab-group
+        [selectedIndex]="tabIndex()"
+        (selectedIndexChange)="tabIndex.set($event)"
+      >
         <mat-tab label="loci">
           <div>
             <button
@@ -29,8 +32,8 @@
               </tr>
             </thead>
             <tbody>
-              @for ( entry of loci.value; track entry; let i = $index; let
-              first = $first; let last = $last) {
+              @for ( entry of loci.value; track entry; let i = $index; let first
+              = $first; let last = $last) {
               <tr>
                 <td>
                   <button
@@ -77,12 +80,12 @@
           }
         </mat-tab>
 
-        @if (editedLocus) {
+        @if (editedLocus()) {
         <mat-tab label="locus">
           <cadmus-cod-locus
-            [locEntries]="locEntries"
-            [imgTypeEntries]="imgTypeEntries"
-            [locus]="editedLocus"
+            [locEntries]="locEntries()"
+            [imgTypeEntries]="imgTypeEntries()"
+            [locus]="editedLocus()"
             (locusChange)="onLocusSave($event!)"
             (editorClose)="onLocusClose()"
           />

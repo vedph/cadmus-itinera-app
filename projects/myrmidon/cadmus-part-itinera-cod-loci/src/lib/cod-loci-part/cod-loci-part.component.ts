@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -14,7 +14,7 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -71,15 +71,16 @@ export class CodLociPartComponent
   extends ModelEditorComponentBase<CodLociPart>
   implements OnInit
 {
-  private _editedIndex: number;
-
-  public tabIndex: number;
-  public editedLocus: CodLocus | undefined;
+  public readonly editedLocus = signal<CodLocus | undefined>(undefined);
+  private readonly editedIndex = signal<number>(-1);
+  public readonly tabIndex = signal<number>(0);
 
   // cod-loci
-  public locEntries: ThesaurusEntry[] | undefined;
+  public readonly locEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // cod-image-types
-  public imgTypeEntries: ThesaurusEntry[] | undefined;
+  public readonly imgTypeEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
 
   public loci: FormControl<CodLocus[]>;
 
@@ -89,8 +90,6 @@ export class CodLociPartComponent
     private _dialogService: DialogService
   ) {
     super(authService, formBuilder);
-    this._editedIndex = -1;
-    this.tabIndex = 0;
     // form
     this.loci = formBuilder.control([], {
       validators: NgxToolsValidators.strictMinLengthValidator(1),
@@ -111,16 +110,16 @@ export class CodLociPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'cod-loci';
     if (this.hasThesaurus(key)) {
-      this.locEntries = thesauri[key].entries;
+      this.locEntries.set(thesauri[key].entries);
     } else {
-      this.locEntries = undefined;
+      this.locEntries.set(undefined);
     }
 
     key = 'cod-image-types';
     if (this.hasThesaurus(key)) {
-      this.imgTypeEntries = thesauri[key].entries;
+      this.imgTypeEntries.set(thesauri[key].entries);
     } else {
-      this.imgTypeEntries = undefined;
+      this.imgTypeEntries.set(undefined);
     }
   }
 
@@ -161,14 +160,14 @@ export class CodLociPartComponent
 
   public editLocus(index: number): void {
     if (index < 0) {
-      this._editedIndex = -1;
-      this.tabIndex = 0;
-      this.editedLocus = undefined;
+      this.editedIndex.set(-1);
+      this.tabIndex.set(0);
+      this.editedLocus.set(undefined);
     } else {
-      this._editedIndex = index;
-      this.editedLocus = this.loci.value[index];
+      this.editedIndex.set(index);
+      this.editedLocus.set(deepCopy(this.loci.value[index]));
       setTimeout(() => {
-        this.tabIndex = 1;
+        this.tabIndex.set(1);
       }, 300);
     }
   }
@@ -176,7 +175,7 @@ export class CodLociPartComponent
   public onLocusSave(entry: CodLocus): void {
     this.loci.setValue(
       this.loci.value.map((e: CodLocus, i: number) =>
-        i === this._editedIndex ? entry : e
+        i === this.editedIndex() ? entry : e
       )
     );
     this.loci.updateValueAndValidity();

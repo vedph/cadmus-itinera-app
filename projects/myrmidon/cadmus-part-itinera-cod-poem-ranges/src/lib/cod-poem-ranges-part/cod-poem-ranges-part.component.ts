@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -91,14 +97,20 @@ export class CodPoemRangesPartComponent
   extends ModelEditorComponentBase<CodPoemRangesPart>
   implements OnInit
 {
+  // cod-poem-range-sort-types
+  public readonly sortEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  // cod-poem-range-layouts
+  public readonly layoutEntries = signal<ThesaurusEntry[] | undefined>(
+    undefined
+  );
+  // cod-poem-range-tags
+  public readonly tagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+
   public sortType: FormControl<string | null>;
   public ranges: FormControl<AlnumRange[]>;
   public layouts: FormControl<CodPoemLayout[]>;
   public tag: FormControl<string | null>;
   public note: FormControl<string | null>;
-
-  public initialRanges: AlnumRange[];
-  public initialLayouts: CodPoemLayout[];
 
   // sub-form
   public addedRanges: FormControl<string | null>;
@@ -106,13 +118,6 @@ export class CodPoemRangesPartComponent
 
   @ViewChild('adder')
   public adderRef?: ElementRef;
-
-  // cod-poem-range-sort-types
-  public sortEntries: ThesaurusEntry[] | undefined;
-  // cod-poem-range-layouts
-  public layoutEntries: ThesaurusEntry[] | undefined;
-  // cod-poem-range-tags
-  public tagEntries: ThesaurusEntry[] | undefined;
 
   constructor(
     authService: AuthJwtService,
@@ -122,8 +127,6 @@ export class CodPoemRangesPartComponent
     private _snackbar: MatSnackBar
   ) {
     super(authService, formBuilder);
-    this.initialRanges = [];
-    this.initialLayouts = [];
     // form
     this.sortType = formBuilder.control(null, [
       Validators.required,
@@ -159,21 +162,21 @@ export class CodPoemRangesPartComponent
   private updateThesauri(thesauri: ThesauriSet): void {
     let key = 'cod-poem-range-sort-types';
     if (this.hasThesaurus(key)) {
-      this.sortEntries = thesauri[key].entries;
+      this.sortEntries.set(thesauri[key].entries);
     } else {
-      this.sortEntries = undefined;
+      this.sortEntries.set(undefined);
     }
     key = 'cod-poem-range-layouts';
     if (this.hasThesaurus(key)) {
-      this.layoutEntries = thesauri[key].entries;
+      this.layoutEntries.set(thesauri[key].entries);
     } else {
-      this.layoutEntries = undefined;
+      this.layoutEntries.set(undefined);
     }
     key = 'cod-poem-range-tags';
     if (this.hasThesaurus(key)) {
-      this.tagEntries = thesauri[key].entries;
+      this.tagEntries.set(thesauri[key].entries);
     } else {
-      this.tagEntries = undefined;
+      this.tagEntries.set(undefined);
     }
   }
 
@@ -185,17 +188,15 @@ export class CodPoemRangesPartComponent
     this.sortType.setValue(
       part.sortType
         ? part.sortType
-        : this.sortEntries?.length
-        ? this.sortEntries[0].id
-        : ''
+        : this.sortEntries()?.length
+        ? this.sortEntries()![0].id
+        : '',
+      { emitEvent: false }
     );
-    this.ranges.setValue(part.ranges || []);
-    this.layouts.setValue(part.layouts || []);
-    this.tag.setValue(part.tag || null);
-    this.note.setValue(part.note || null);
-    // for layouts control
-    this.initialRanges = this.ranges.value;
-    this.initialLayouts = this.layouts.value;
+    this.ranges.setValue(part.ranges || [], { emitEvent: false });
+    this.layouts.setValue(part.layouts || [], { emitEvent: false });
+    this.tag.setValue(part.tag || null, { emitEvent: false });
+    this.note.setValue(part.note || null, { emitEvent: false });
     this.form.markAsPristine();
   }
 
@@ -289,8 +290,8 @@ export class CodPoemRangesPartComponent
   public onTabIndexChange(index: number): void {
     // whenever we move on layouts, update them if ranges changed
     if (index === 1 && this.ranges.dirty) {
-      this.initialRanges = this.ranges.value;
-      this.initialLayouts = this.layouts.value;
+      this.ranges.setValue(this.ranges.value);
+      this.layouts.setValue(this.layouts.value);
     }
   }
 

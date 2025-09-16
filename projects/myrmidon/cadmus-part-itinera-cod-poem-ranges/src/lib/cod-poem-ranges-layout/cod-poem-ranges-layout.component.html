@@ -4,7 +4,7 @@
   class="layout"
 >
   <!-- toolbar -->
-  @if (!editingNote) {
+  @if (!editingNote()) {
   <div class="form-row" style="gap: 0">
     <!-- buttons -->
     <div>
@@ -43,7 +43,7 @@
   </div>
   }
   <!-- note editor -->
-  @if (editingNote) {
+  @else {
   <div>
     <mat-label>note</mat-label>
     <mat-form-field>

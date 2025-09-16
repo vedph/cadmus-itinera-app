@@ -12,11 +12,11 @@
         <mat-tab label="ranges">
           <div>
             <!-- sortType (bound) -->
-            @if (sortEntries?.length) {
+            @if (sortEntries()?.length) {
             <mat-form-field class="form-col">
               <mat-label>type</mat-label>
               <mat-select [formControl]="sortType">
-                @for (e of sortEntries; track e.id) {
+                @for (e of sortEntries(); track e.id) {
                 <mat-option [value]="e.id">{{ e.value }}</mat-option>
                 }
               </mat-select>
@@ -27,7 +27,7 @@
             </mat-form-field>
             }
             <!-- sortType (free) -->
-            @if (!sortEntries?.length) {
+            @if (!sortEntries()?.length) {
             <mat-form-field class="form-col">
               <mat-label>type</mat-label>
               <input matInput [formControl]="sortType" />
@@ -122,9 +122,9 @@
         <!-- LAYOUTS -->
         <mat-tab label="layouts">
           <cadmus-cod-poem-range-layouts
-            [layoutEntries]="layoutEntries"
-            [ranges]="initialRanges"
-            [layouts]="initialLayouts"
+            [layoutEntries]="layoutEntries()"
+            [ranges]="ranges.value"
+            [layouts]="layouts.value"
             (layoutsChange)="onLayoutsChange($event)"
           />
         </mat-tab>
@@ -133,18 +133,18 @@
         <mat-tab label="note">
           <div>
             <!-- tag (bound) -->
-            @if (tagEntries?.length) {
+            @if (tagEntries()?.length) {
             <mat-form-field>
               <mat-label>tag</mat-label>
               <mat-select [formControl]="tag">
-                @for (e of tagEntries; track e.id) {
+                @for (e of tagEntries(); track e.id) {
                 <mat-option [value]="e.id">{{ e.value }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
             }
             <!-- tag (free) -->
-            @if (!tagEntries?.length) {
+            @if (!tagEntries()?.length) {
             <mat-form-field>
               <mat-label>tag</mat-label>
               <input matInput [formControl]="tag" />

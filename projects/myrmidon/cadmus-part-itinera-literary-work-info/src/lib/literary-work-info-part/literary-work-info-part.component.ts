@@ -129,9 +129,6 @@ export class LiteraryWorkInfoPartComponent
   public titles: FormControl<AssertedTitle[]>;
   public note: FormControl<string | null>;
 
-  public langFlags: Flag[] = [];
-  public mtrFlags: Flag[] = [];
-
   public pickedGenre?: string;
 
   // literary-work-genres
@@ -169,6 +166,9 @@ export class LiteraryWorkInfoPartComponent
   public idScopeEntries?: ThesaurusEntry[] | undefined;
   // asserted-id-tags
   public idTagEntries?: ThesaurusEntry[] | undefined;
+
+  public langFlags: Flag[] = [];
+  public mtrFlags: Flag[] = [];
 
   constructor(
     authService: AuthJwtService,

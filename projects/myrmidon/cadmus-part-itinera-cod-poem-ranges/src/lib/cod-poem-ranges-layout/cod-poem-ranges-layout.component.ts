@@ -1,4 +1,4 @@
-import { Component, effect, model, output } from '@angular/core';
+import { Component, effect, model, output, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -58,7 +58,8 @@ export class CodPoemRangesLayoutComponent {
     checked: boolean;
   }>();
 
-  public editingNote?: boolean;
+  public readonly editingNote = signal<boolean>(false);
+
   public note: FormControl<string | null>;
   public form: FormGroup;
 
@@ -74,7 +75,7 @@ export class CodPoemRangesLayoutComponent {
   }
 
   private updateForm(row?: PoemLayoutRow): void {
-    this.editingNote = false;
+    this.editingNote.set(false);
     if (!row) {
       this.form.reset();
       return;
@@ -112,11 +113,11 @@ export class CodPoemRangesLayoutComponent {
   }
 
   public editNote(): void {
-    this.editingNote = true;
+    this.editingNote.set(true);
   }
 
   public cancelNote(): void {
-    this.editingNote = false;
+    this.editingNote.set(false);
   }
 
   public saveNote(): void {
