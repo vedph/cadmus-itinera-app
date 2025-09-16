@@ -59,6 +59,8 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-09-16: updated Angular and packages.
+
 ### 13.0.2
 
 - 2025-08-06: updated packages (including bibliography libraries, untied from ISO639, and bricks with scope fix in asserted composite IDs).
