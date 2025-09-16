@@ -11,14 +11,14 @@
         <!-- GENERAL -->
         <mat-tab label="general">
           <!-- author IDs -->
-          <fieldset style="margin-bottom: 8px">
+          <fieldset>
             <legend>author(s)</legend>
             <cadmus-refs-asserted-composite-ids
-              [idScopeEntries]="idScopeEntries"
-              [idTagEntries]="idTagEntries"
-              [assTagEntries]="assTagEntries"
-              [refTypeEntries]="refTypeEntries"
-              [refTagEntries]="refTagEntries"
+              [idScopeEntries]="idScopeEntries()"
+              [idTagEntries]="idTagEntries()"
+              [assTagEntries]="assTagEntries()"
+              [refTypeEntries]="refTypeEntries()"
+              [refTagEntries]="refTagEntries()"
               [pinByTypeMode]="true"
               [canSwitchMode]="true"
               [canEditTarget]="true"
@@ -52,8 +52,8 @@
               <tbody>
                 @for ( title of titles.value; track title; let i = $index; let
                 first = $first; let last = $last) {
-                <tr>
-                  <td>
+                <tr [class.selected]="i === editedIndex()">
+                  <td class="fit-width">
                     <button
                       type="button"
                       mat-icon-button
@@ -97,18 +97,18 @@
             </table>
             }
             <mat-expansion-panel
-              [disabled]="!editedTitle"
-              [expanded]="editedTitle"
+              [disabled]="!editedTitle()"
+              [expanded]="editedTitle()"
             >
               <mat-expansion-panel-header>
-                {{ editedTitle?.value }}
+                {{ editedTitle()?.value }}
               </mat-expansion-panel-header>
               <cadmus-asserted-title
-                [langEntries]="langEntries"
-                [assTagEntries]="assTagEntries"
-                [refTagEntries]="refTagEntries"
-                [refTypeEntries]="refTypeEntries"
-                [title]="editedTitle"
+                [langEntries]="langEntries()"
+                [assTagEntries]="assTagEntries()"
+                [refTagEntries]="refTagEntries()"
+                [refTypeEntries]="refTypeEntries()"
+                [title]="editedTitle()"
                 (titleChange)="onTitleSave($event!)"
                 (editorClose)="onTitleClose()"
               />
@@ -139,7 +139,7 @@
           <fieldset>
             <legend>language(s)</legend>
             <cadmus-ui-flag-set
-              [flags]="langFlags"
+              [flags]="langFlags()"
               [checkedIds]="languages.value"
               (checkedIdsChange)="onLanguageIdsChange($event)"
             />
@@ -148,7 +148,7 @@
           <!-- genre -->
           <fieldset>
             <legend>genre</legend>
-            @if (!genreEntries?.length) {
+            @if (!genreEntries()?.length) {
             <mat-form-field>
               <mat-label>genre</mat-label>
               <input matInput [formControl]="genre" />
@@ -160,9 +160,9 @@
               <mat-error>genre too long</mat-error>
               }
             </mat-form-field>
-            } @if (genreEntries?.length) {
+            } @if (genreEntries()?.length) {
             <div>
-              genre: <span class="pick">{{ pickedGenre }}</span>
+              genre: <span class="pick">{{ pickedGenre() }}</span>
               @if ( $any(genre).errors?.required && (genre.dirty ||
               genre.touched) ) {
               <mat-error>genre required</mat-error>
@@ -170,7 +170,7 @@
               <cadmus-thesaurus-tree
                 rootLabel="genre"
                 [renderLabel]="renderLabel"
-                [entries]="genreEntries"
+                [entries]="genreEntries()"
                 (entryChange)="onEntryChange($event)"
               />
             </div>
@@ -186,7 +186,7 @@
             <fieldset>
               <legend>metre(s)</legend>
               <cadmus-ui-flag-set
-                [flags]="mtrFlags"
+                [flags]="mtrFlags()"
                 [checkedIds]="metres.value"
                 (checkedIdsChange)="onMetreIdsChange($event)"
               />
