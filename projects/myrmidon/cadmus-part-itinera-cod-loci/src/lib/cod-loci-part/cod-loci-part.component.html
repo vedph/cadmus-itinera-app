@@ -36,7 +36,7 @@
             <tbody>
               @for ( entry of loci.value; track entry; let i = $index; let first
               = $first; let last = $last) {
-              <tr [class.selected]="i === editedLocusIndex()">
+              <tr [class.selected]="i === editedIndex()">
                 <td class="fit-width">
                   <button
                     type="button"

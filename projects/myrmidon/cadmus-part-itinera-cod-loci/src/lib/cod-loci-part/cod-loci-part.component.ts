@@ -74,7 +74,7 @@ export class CodLociPartComponent
   implements OnInit
 {
   public readonly editedLocus = signal<CodLocus | undefined>(undefined);
-  private readonly editedIndex = signal<number>(-1);
+  public readonly editedIndex = signal<number>(-1);
   public readonly tabIndex = signal<number>(0);
 
   // cod-loci

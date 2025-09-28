@@ -5,7 +5,7 @@ import {
   jwtGuard,
   jwtAdminGuard,
 } from '@myrmidon/auth-jwt-login';
-import { editorGuard, EditorGuardService } from '@myrmidon/cadmus-api';
+import { editorGuard } from '@myrmidon/cadmus-api';
 import { PendingChangesGuard } from '@myrmidon/cadmus-core';
 
 import { BiblioPageComponent } from './biblio-page/biblio-page.component';
@@ -97,7 +97,7 @@ export const routes: Routes = [
     path: 'items/:iid/general',
     loadChildren: () =>
       import('@myrmidon/cadmus-part-general-pg').then(
-        (module) => module.CadmusPartGeneralPgModule
+        (module) => module.CADMUS_PART_GENERAL_ROUTES
       ),
     canActivate: [jwtGuard],
   },
@@ -115,7 +115,7 @@ export const routes: Routes = [
     path: 'items/:iid/codicology',
     loadChildren: () =>
       import('@myrmidon/cadmus-part-codicology-pg').then(
-        (module) => module.CadmusPartCodicologyPgModule
+        (module) => module.CADMUS_PART_CODICOLOGY_PG_ROUTES
       ),
     canActivate: [jwtGuard],
   },
@@ -151,7 +151,7 @@ export const routes: Routes = [
     path: 'preview',
     loadChildren: () =>
       import('@myrmidon/cadmus-preview-pg').then(
-        (module) => module.CadmusPreviewPgModule
+        (module) => module.CADMUS_PART_PREVIEW_PG_ROUTES
       ),
     canActivate: [jwtGuard],
   },
@@ -159,7 +159,7 @@ export const routes: Routes = [
   {
     path: 'biblio',
     component: BiblioPageComponent,
-    canActivate: [EditorGuardService],
+    canActivate: [editorGuard],
   },
   // fallback
   { path: '', redirectTo: 'home', pathMatch: 'full' },
