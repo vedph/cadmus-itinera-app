@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-part-itinera-cod-poem-ranges",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "Cadmus Itinera - CodPoemRangesPart.",
   "keywords": [
     "Cadmus"
@@ -14,9 +14,9 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/material": "^20.0.0"
+    "@angular/common": "^20.0.0 || ^21.0.0",
+    "@angular/core": "^20.0.0 || ^21.0.0",
+    "@angular/material": "^20.0.0 || ^21.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -6,7 +6,7 @@ import {
   jwtAdminGuard,
 } from '@myrmidon/auth-jwt-login';
 import { editorGuard } from '@myrmidon/cadmus-api';
-import { PendingChangesGuard } from '@myrmidon/cadmus-core';
+import { pendingChangesGuard } from '@myrmidon/cadmus-core';
 
 import { BiblioPageComponent } from './biblio-page/biblio-page.component';
 import { HomeComponent } from './home/home.component';
@@ -48,7 +48,7 @@ export const routes: Routes = [
         (module) => module.ItemEditorComponent
       ),
     canActivate: [jwtGuard],
-    canDeactivate: [PendingChangesGuard],
+    canDeactivate: [pendingChangesGuard],
   },
   {
     path: 'items',
@@ -97,7 +97,7 @@ export const routes: Routes = [
     path: 'items/:iid/general',
     loadChildren: () =>
       import('@myrmidon/cadmus-part-general-pg').then(
-        (module) => module.CADMUS_PART_GENERAL_ROUTES
+        (module) => module.CADMUS_PART_GENERAL_PG_ROUTES
       ),
     canActivate: [jwtGuard],
   },

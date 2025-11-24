@@ -10,7 +10,7 @@ The codicological parts in this project are imported from an [independent librar
 
 🐋 Quick Docker image build:
 
-1. `npm run build-lib`;
+1. `pnpm run build-lib`;
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
 3. `docker build . -t vedph2020/cadmus-itinera-app:13.0.2 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
 
