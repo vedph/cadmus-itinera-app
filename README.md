@@ -59,6 +59,9 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2025-11-24:
+  - ⚠️ upgraded to Angular 21.
+  - migrated to `pnpm`.
 - 2025-09-28:
   - updated Angular and packages.
   - removed `diff-match-patch`.
