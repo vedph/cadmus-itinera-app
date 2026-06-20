@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { take } from 'rxjs';
 
 import { ThesaurusService } from '@myrmidon/cadmus-api';
@@ -14,6 +14,7 @@ import { WorkListComponent } from '@myrmidon/cadmus-biblio-ui';
     WorkListComponent
   ],
   templateUrl: './biblio-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./biblio-page.component.scss'],
 })
 export class BiblioPageComponent {

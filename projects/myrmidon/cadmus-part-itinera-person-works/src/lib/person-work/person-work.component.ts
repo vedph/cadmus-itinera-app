@@ -1,4 +1,4 @@
-import { Component, effect, input, model, output } from '@angular/core';
+import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -24,6 +24,7 @@ import { PersonWork } from '../person-works-part';
   selector: 'cadmus-person-work',
   templateUrl: './person-work.component.html',
   styleUrls: ['./person-work.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

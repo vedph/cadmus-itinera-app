@@ -12,40 +12,43 @@
       <div>
         <!-- sex (bound) -->
         @if (sexEntries()?.length) {
-        <mat-form-field>
-          <mat-label>sex</mat-label>
-          <mat-select [formControl]="sex">
-            @for (e of sexEntries(); track e.id) {
-            <mat-option [value]="e.id">{{ e.value }}</mat-option>
+          <mat-form-field>
+            <mat-label>sex</mat-label>
+            <mat-select [formControl]="sex">
+              @for (e of sexEntries(); track e.id) {
+                <mat-option [value]="e.id">{{ e.value }}</mat-option>
+              }
+            </mat-select>
+            @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
+              <mat-error>sex required</mat-error>
             }
-          </mat-select>
-          @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
-          <mat-error>sex required</mat-error>
-          }
-        </mat-form-field>
+          </mat-form-field>
         }
         <!-- sex (free) -->
         @if (!sexEntries()?.length) {
-        <mat-form-field>
-          <mat-label>sex</mat-label>
-          <input matInput [formControl]="sex" />
-          @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
-          <mat-error>sex required</mat-error>
-          } @if ($any(sex).errors?.maxLength && (sex.dirty || sex.touched)) {
-          <mat-error>sex too long</mat-error>
-          }
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>sex</mat-label>
+            <input matInput [formControl]="sex" />
+            @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
+              <mat-error>sex required</mat-error>
+            }
+            @if ($any(sex).errors?.maxLength && (sex.dirty || sex.touched)) {
+              <mat-error>sex too long</mat-error>
+            }
+          </mat-form-field>
         }
       </div>
 
       <!-- bio -->
-      <div>
-        <nge-monaco-editor
-          style="--editor-height: 400px"
-          (ready)="onCreateEditor($event)"
+      <div id="editor">
+        <ngx-monaco-editor
+          [formControl]="bio"
+          [language]="'markdown'"
+          [options]="editorOptions"
+          (editorInitialized)="onEditorInit($event)"
         />
         @if ($any(bio).errors?.maxLength && (bio.touched || bio.dirty)) {
-        <mat-error>too long</mat-error>
+          <mat-error>too long</mat-error>
         }
       </div>
     </mat-card-content>

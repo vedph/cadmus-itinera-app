@@ -5,6 +5,7 @@ import {
   OnInit,
   Optional,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import {
@@ -31,7 +32,12 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { MatInput } from '@angular/material/input';
 
-import { NgeMonacoModule } from '@cisstech/nge/monaco';
+import {
+  EditorInitializedEvent,
+  NgxMonacoEditorComponent,
+  StandaloneCodeEditor,
+  StandaloneEditorConstructionOptions,
+} from '@jean-merelis/ngx-monaco-editor';
 
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
@@ -60,6 +66,7 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
   templateUrl: './person-info-part.component.html',
   styleUrls: ['./person-info-part.component.css'],
   providers: [CadmusTextEdService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -75,7 +82,7 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
     MatOption,
     MatError,
     MatInput,
-    NgeMonacoModule,
+    NgxMonacoEditorComponent,
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
@@ -85,9 +92,12 @@ export class PersonInfoPartComponent
   extends ModelEditorComponentBase<PersonInfoPart>
   implements OnInit, OnDestroy
 {
-  private readonly _disposables: monaco.IDisposable[] = [];
-  private _editorModel?: monaco.editor.ITextModel;
-  private _editor?: monaco.editor.IStandaloneCodeEditor;
+  private _editor?: StandaloneCodeEditor;
+  public readonly editorOptions: StandaloneEditorConstructionOptions = {
+    minimap: { side: 'right' },
+    wordWrap: 'on',
+    automaticLayout: true,
+  };
 
   public sex: FormControl<string | null>;
   public bio: FormControl<string | null>;
@@ -101,7 +111,7 @@ export class PersonInfoPartComponent
     private _editService: CadmusTextEdService,
     @Inject(CADMUS_TEXT_ED_BINDINGS_TOKEN)
     @Optional()
-    private _editorBindings?: CadmusTextEdBindings
+    private _editorBindings?: CadmusTextEdBindings,
   ) {
     super(authService, formBuilder);
     // form
@@ -116,10 +126,6 @@ export class PersonInfoPartComponent
     super.ngOnInit();
   }
 
-  public override ngOnDestroy() {
-    this._disposables.forEach((d) => d.dispose());
-  }
-
   private async applyEdit(selector: string) {
     if (!this._editor) {
       return;
@@ -129,10 +135,7 @@ export class PersonInfoPartComponent
       ? this._editor.getModel()!.getValueInRange(selection)
       : '';
 
-    const result = await this._editService.edit({
-      selector,
-      text: text,
-    });
+    const result = await this._editService.edit({ selector, text });
 
     this._editor.executeEdits('my-source', [
       {
@@ -143,42 +146,19 @@ export class PersonInfoPartComponent
     ]);
   }
 
-  public onCreateEditor(editor: monaco.editor.IEditor) {
-    editor.updateOptions({
-      minimap: {
-        side: 'right',
-      },
-      wordWrap: 'on',
-      automaticLayout: true,
-    });
-    this._editorModel =
-      this._editorModel ||
-      monaco.editor.createModel('# Hello world', 'markdown');
-    editor.setModel(this._editorModel);
-    this._editor = editor as monaco.editor.IStandaloneCodeEditor;
-
-    this._disposables.push(
-      this._editorModel.onDidChangeContent((e) => {
-        console.log(this._editorModel!.getValue());
-        this.bio.setValue(this._editorModel!.getValue());
-        this.bio.markAsDirty();
-        this.bio.updateValueAndValidity();
-      })
-    );
+  public onEditorInit(event: EditorInitializedEvent) {
+    this._editor = event.editor;
+    this._editor.focus();
 
     if (this._editorBindings) {
       Object.keys(this._editorBindings).forEach((key) => {
         const n = parseInt(key, 10);
-        console.log(
-          'Binding ' + n + ' to ' + this._editorBindings![key as any]
-        );
         this._editor!.addCommand(n, () => {
           this.applyEdit(this._editorBindings![key as any]);
         });
       });
     }
   }
-
   protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
     return formBuilder.group({
       sex: this.sex,
@@ -202,7 +182,6 @@ export class PersonInfoPartComponent
     }
     this.sex.setValue(part.sex);
     this.bio.setValue(part.bio || null);
-    this._editorModel?.setValue(part.bio || '');
     this.form.markAsPristine();
   }
 

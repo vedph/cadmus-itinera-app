@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -53,6 +53,7 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
   selector: 'cadmus-related-persons-part',
   templateUrl: './related-persons-part.component.html',
   styleUrls: ['./related-persons-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

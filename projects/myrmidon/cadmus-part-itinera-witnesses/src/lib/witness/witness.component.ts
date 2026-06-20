@@ -1,4 +1,4 @@
-import { Component, effect, model, output } from '@angular/core';
+import { Component, effect, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -25,6 +25,7 @@ import { Witness } from '../witnesses-part';
   selector: 'cadmus-witness',
   templateUrl: './witness.component.html',
   styleUrls: ['./witness.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

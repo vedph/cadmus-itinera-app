@@ -1,4 +1,4 @@
-import { Component, effect, input, model, output } from '@angular/core';
+import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -25,6 +25,7 @@ import { AssertedTitle } from '../literary-work-info-part';
   selector: 'cadmus-asserted-title',
   templateUrl: './asserted-title.component.html',
   styleUrls: ['./asserted-title.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

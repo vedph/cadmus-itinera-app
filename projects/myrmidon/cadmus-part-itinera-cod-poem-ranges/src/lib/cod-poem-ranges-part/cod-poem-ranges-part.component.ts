@@ -4,6 +4,7 @@ import {
   OnInit,
   signal,
   ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
@@ -69,6 +70,7 @@ import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
   selector: 'cadmus-cod-poem-ranges-part',
   templateUrl: './cod-poem-ranges-part.component.html',
   styleUrls: ['./cod-poem-ranges-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

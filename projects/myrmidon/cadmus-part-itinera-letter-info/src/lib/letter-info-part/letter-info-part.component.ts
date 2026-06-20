@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -38,6 +38,7 @@ import { LetterInfoPart, LETTER_INFO_PART_TYPEID } from '../letter-info-part';
   selector: 'cadmus-letter-info-part',
   templateUrl: './letter-info-part.component.html',
   styleUrls: ['./letter-info-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

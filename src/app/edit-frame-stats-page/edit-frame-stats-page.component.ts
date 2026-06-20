@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 import { EditFrameStatsComponent } from '@myrmidon/cadmus-statistics';
@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-edit-frame-stats-page',
   imports: [MatCardModule, MatIcon, EditFrameStatsComponent],
   templateUrl: './edit-frame-stats-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './edit-frame-stats-page.component.scss',
 })
 export class EditFrameStatsPageComponent {

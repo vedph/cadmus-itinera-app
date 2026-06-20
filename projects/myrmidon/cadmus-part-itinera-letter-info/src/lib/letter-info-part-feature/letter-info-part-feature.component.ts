@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { LetterInfoPartComponent } from '../letter-info-part/letter-info-part.co
     selector: 'cadmus-letter-info-part-feature',
     templateUrl: './letter-info-part-feature.component.html',
     styleUrls: ['./letter-info-part-feature.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CurrentItemBarComponent, LetterInfoPartComponent],
 })
 export class LetterInfoPartFeatureComponent

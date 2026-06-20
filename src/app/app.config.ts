@@ -2,19 +2,17 @@ import {
   ApplicationConfig,
   importProvidersFrom,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
 } from '@angular/core';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { provideNativeDateAdapter } from '@angular/material/core';
 
-import { NgeMonacoModule } from '@cisstech/nge/monaco';
-import { NgeMarkdownModule } from '@cisstech/nge/markdown';
+import {
+  DefaultMonacoLoader,
+  NGX_MONACO_LOADER_PROVIDER,
+} from '@jean-merelis/ngx-monaco-editor';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -25,6 +23,7 @@ import {
 import {
   CADMUS_TEXT_ED_SERVICE_OPTIONS_TOKEN,
   CADMUS_TEXT_ED_BINDINGS_TOKEN,
+  CadmusTextEdService,
 } from '@myrmidon/cadmus-text-ed';
 import {
   MdBoldCtePlugin,
@@ -42,17 +41,19 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
-    provideHttpClient(withInterceptors([jwtInterceptor]), withFetch()),
+    provideHttpClient(withInterceptors([jwtInterceptor])),
     provideNativeDateAdapter(),
     // vendors
-    importProvidersFrom(NgeMonacoModule.forRoot({})),
-    importProvidersFrom(NgeMarkdownModule),
+    {
+      provide: NGX_MONACO_LOADER_PROVIDER,
+      useFactory: () => new DefaultMonacoLoader({ paths: { vs: '/vs' } }),
+    },
     importProvidersFrom(
       NgxEchartsModule.forRoot({
         echarts: () => import('echarts'),
-      })
+      }),
     ),
     // parts and fragments type IDs to editor group keys mappings
     // https://github.com/nrwl/nx/issues/208#issuecomment-384102058
@@ -79,6 +80,7 @@ export const appConfig: ApplicationConfig = {
     },
     // text editor plugins
     // https://github.com/vedph/cadmus-bricks-shell-v2/blob/master/projects/myrmidon/cadmus-text-ed/README.md
+    CadmusTextEdService,
     MdBoldCtePlugin,
     MdItalicCtePlugin,
     TxtEmojiCtePlugin,
@@ -89,7 +91,7 @@ export const appConfig: ApplicationConfig = {
         mdBoldCtePlugin: MdBoldCtePlugin,
         mdItalicCtePlugin: MdItalicCtePlugin,
         txtEmojiCtePlugin: TxtEmojiCtePlugin,
-        mdLinkCtePlugin: MdLinkCtePlugin
+        mdLinkCtePlugin: MdLinkCtePlugin,
       ) => {
         return {
           plugins: [

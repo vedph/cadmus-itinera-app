@@ -18,20 +18,25 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "polyfills": ["zone.js", "@angular/localize/init"],
+            "polyfills": ["@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min/vs",
+                "output": "vs"
               }
             ],
             "styles": ["src/styles.scss"],
             "allowedCommonJsDependencies": [
-              "leaflet",
               "ngraph.graph",
-              "ngraph.forcelayout"
+              "ngraph.forcelayout",
+              "maplibre-gl"
             ]
           },
           "configurations": {
@@ -39,8 +44,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4MB",
-                  "maximumError": "5MB"
+                  "maximumWarning": "5MB",
+                  "maximumError": "6MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -54,6 +59,12 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "polyfills": ["@angular/localize/init"]
             }
           },
           "defaultConfiguration": "production"
@@ -74,22 +85,11 @@
           "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing",
-              "@angular/localize/init"
-            ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": ["src/styles.scss"]
+            "buildTarget": ":build:testing",
+            "runner": "vitest"
           }
         }
       }
@@ -116,10 +116,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -146,10 +143,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -176,10 +170,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -206,10 +197,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -236,10 +224,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -266,10 +251,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -296,10 +278,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -326,10 +305,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -356,10 +332,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }
@@ -386,10 +359,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": []
           }
         }
       }

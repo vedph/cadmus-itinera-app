@@ -1,4 +1,10 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -42,8 +48,6 @@ import { DialogService } from '@myrmidon/ngx-mat-tools';
 import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
-  renderLabelFromLastColon,
-  ThesaurusTreeComponent,
   CloseSaveButtonsComponent,
 } from '@myrmidon/cadmus-ui';
 import {
@@ -56,6 +60,10 @@ import {
   AssertedCompositeIdsComponent,
 } from '@myrmidon/cadmus-refs-asserted-ids';
 import { Flag, FlagSetComponent } from '@myrmidon/cadmus-ui-flag-set';
+import {
+  renderLabelFromLastColon,
+  ThesaurusTreeComponent,
+} from '@myrmidon/cadmus-thesaurus-store';
 
 import {
   AssertedTitle,
@@ -81,6 +89,7 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
   selector: 'cadmus-literary-work-info-part',
   templateUrl: './literary-work-info-part.component.html',
   styleUrls: ['./literary-work-info-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -122,37 +131,37 @@ export class LiteraryWorkInfoPartComponent
 
   // literary-work-genres
   public readonly genreEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
   public readonly langEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // literary-work-metres
   public readonly mtrEntries = signal<ThesaurusEntry[] | undefined>(undefined);
   // assertion-tags
   public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
   // doc-reference-types
   public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
   // doc-reference-tags
   public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
   // asserted-id-scopes
   public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
   // asserted-id-tags
   public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+    undefined,
   );
 
   public readonly langFlags = computed<Flag[]>(
-    () => this.langEntries()?.map(entryToFlag) || []
+    () => this.langEntries()?.map(entryToFlag) || [],
   );
   public readonly mtrFlags = computed<Flag[]>(
-    () => this.mtrEntries()?.map(entryToFlag) || []
+    () => this.mtrEntries()?.map(entryToFlag) || [],
   );
 
   public languages: FormControl<string[]>;
@@ -168,7 +177,7 @@ export class LiteraryWorkInfoPartComponent
   constructor(
     authService: AuthJwtService,
     formBuilder: FormBuilder,
-    private _dialogService: DialogService
+    private _dialogService: DialogService,
   ) {
     super(authService, formBuilder);
     // form
@@ -268,11 +277,11 @@ export class LiteraryWorkInfoPartComponent
     this.languages.setValue(part.languages || []);
     this.genre.setValue(part.genre);
     this.pickedGenre.set(
-      this.genreEntries()?.find((e) => e.id === part.genre)?.value
+      this.genreEntries()?.find((e) => e.id === part.genre)?.value,
     );
     this.metres.setValue(part.metres || []);
     this.strophes.setValue(
-      part.strophes?.length ? part.strophes.join('\n') : ''
+      part.strophes?.length ? part.strophes.join('\n') : '',
     );
     this.isLost.setValue(part.isLost ? true : false);
     this.authorIds.setValue(part.authorIds || []);
@@ -282,7 +291,7 @@ export class LiteraryWorkInfoPartComponent
   }
 
   protected override onDataSet(
-    data?: EditedObject<LiteraryWorkInfoPart>
+    data?: EditedObject<LiteraryWorkInfoPart>,
   ): void {
     // thesauri
     if (data?.thesauri) {
@@ -302,7 +311,7 @@ export class LiteraryWorkInfoPartComponent
         text
           .split('\n')
           .map((s) => s.trim())
-          .filter((s) => s)
+          .filter((s) => s),
       ),
     ];
     return strophes.length ? strophes : undefined;
@@ -310,7 +319,7 @@ export class LiteraryWorkInfoPartComponent
 
   protected getValue(): LiteraryWorkInfoPart {
     let part = this.getEditedPart(
-      LITERARY_WORK_INFO_PART_TYPEID
+      LITERARY_WORK_INFO_PART_TYPEID,
     ) as LiteraryWorkInfoPart;
     part.languages = this.languages.value || [];
     part.genre = this.genre.value?.trim() || '';
@@ -380,8 +389,8 @@ export class LiteraryWorkInfoPartComponent
   public onTitleSave(item: AssertedTitle): void {
     this.titles.setValue(
       this.titles.value.map((x: AssertedTitle, i: number) =>
-        i === this.editedIndex() ? item : x
-      )
+        i === this.editedIndex() ? item : x,
+      ),
     );
     this.titles.updateValueAndValidity();
     this.titles.markAsDirty();

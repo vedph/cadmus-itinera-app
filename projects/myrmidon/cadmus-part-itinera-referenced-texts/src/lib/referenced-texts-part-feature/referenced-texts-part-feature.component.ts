@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { ReferencedTextsPartComponent } from '../referenced-texts-part/reference
   selector: 'cadmus-referenced-texts-part-feature',
   templateUrl: './referenced-texts-part-feature.component.html',
   styleUrls: ['./referenced-texts-part-feature.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CurrentItemBarComponent, ReferencedTextsPartComponent],
 })
 export class ReferencedTextsPartFeatureComponent

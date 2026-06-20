@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { PersonInfoPartComponent } from '../person-info-part/person-info-part.co
     selector: 'cadmus-person-info-part-feature',
     templateUrl: './person-info-part-feature.component.html',
     styleUrls: ['./person-info-part-feature.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CurrentItemBarComponent, PersonInfoPartComponent],
 })
 export class PersonInfoPartFeatureComponent

@@ -1,4 +1,4 @@
-import { Component, effect, input, model } from '@angular/core';
+import { Component, effect, input, model, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -52,6 +52,7 @@ const PRESETS = [
   selector: 'cadmus-cod-poem-range-layouts',
   templateUrl: './cod-poem-range-layouts.component.html',
   styleUrls: ['./cod-poem-range-layouts.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     MatFormField,

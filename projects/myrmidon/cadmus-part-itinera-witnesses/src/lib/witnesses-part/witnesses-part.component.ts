@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -52,6 +52,7 @@ import { WitnessComponent } from '../witness/witness.component';
   selector: 'cadmus-witnesses-part',
   templateUrl: './witnesses-part.component.html',
   styleUrls: ['./witnesses-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

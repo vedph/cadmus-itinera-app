@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { CodLociPartComponent } from '../cod-loci-part/cod-loci-part.component';
   selector: 'cadmus-cod-loci-part-feature',
   templateUrl: './cod-loci-part-feature.component.html',
   styleUrls: ['./cod-loci-part-feature.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CurrentItemBarComponent, CodLociPartComponent],
 })
 export class CodLociPartFeatureComponent

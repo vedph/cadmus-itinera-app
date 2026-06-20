@@ -1,4 +1,4 @@
-import { Component, effect, model, output, signal } from '@angular/core';
+import { Component, effect, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -32,6 +32,7 @@ import { Alnum } from '../services/alnum';
   selector: 'cadmus-cod-poem-ranges-layout',
   templateUrl: './cod-poem-ranges-layout.component.html',
   styleUrls: ['./cod-poem-ranges-layout.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatIconButton,
     MatTooltip,

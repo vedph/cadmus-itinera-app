@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -48,6 +48,7 @@ import { CodLocusComponent } from '../cod-locus/cod-locus.component';
   selector: 'cadmus-cod-loci-part',
   templateUrl: './cod-loci-part.component.html',
   styleUrls: ['./cod-loci-part.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

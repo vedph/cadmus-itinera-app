@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, signal } from '@angular/core';
+import { Component, OnInit, Inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AppRepository } from '@myrmidon/cadmus-state';
 import { Router, RouterModule } from '@angular/router';
@@ -8,6 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -34,6 +35,7 @@ import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-
     ReactiveFormsModule,
     RouterModule,
     MatButtonModule,
+    MatDivider,
     MatIconModule,
     MatMenuModule,
     MatSidenavModule,
@@ -46,6 +48,7 @@ import { CodLocationConverterComponent } from '@myrmidon/cadmus-part-codicology-
     GravatarPipe,
   ],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss',
 })
 export class App implements OnInit {

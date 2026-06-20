@@ -59,6 +59,12 @@ window.__env.mapbox_token = "the token for this project";
 
 ## History
 
+- 2026-06-20:
+  - ⚠️ migrated to zoneless.
+  - ⚠️ upgraded to Angular 22.
+  - ⚠️ migrated to new [Monaco wrapper](https://vedph.github.io/cadmus-doc/history/20260613-monaco.html).
+  - ⚠️ replaced styles with new Angular Material M3 styles.
+  - 🆕 added new admin pages.
 - 2025-11-24:
   - ⚠️ upgraded to Angular 21.
   - migrated to `pnpm`.

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { WitnessesPartComponent } from '../witnesses-part/witnesses-part.compone
     selector: 'cadmus-witnesses-part-feature',
     templateUrl: './witnesses-part-feature.component.html',
     styleUrls: ['./witnesses-part-feature.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CurrentItemBarComponent, WitnessesPartComponent],
 })
 export class WitnessesPartFeatureComponent

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { LiteraryWorkInfoPartComponent } from '../literary-work-info-part/litera
   selector: 'cadmus-literary-work-info-part-feature',
   templateUrl: './literary-work-info-part-feature.component.html',
   styleUrls: ['./literary-work-info-part-feature.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CurrentItemBarComponent, LiteraryWorkInfoPartComponent],
 })
 export class LiteraryWorkInfoPartFeatureComponent

@@ -1,4 +1,4 @@
-import { Component, effect, input, model, output } from '@angular/core';
+import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -33,6 +33,7 @@ import { ReferencedText } from '../referenced-texts-part';
   selector: 'cadmus-referenced-text',
   templateUrl: './referenced-text.component.html',
   styleUrls: ['./referenced-text.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

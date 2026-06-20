@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { CodPoemRangesPartComponent } from '../cod-poem-ranges-part/cod-poem-ran
     selector: 'cadmus-cod-poem-ranges-part-feature',
     templateUrl: './cod-poem-ranges-part-feature.component.html',
     styleUrls: ['./cod-poem-ranges-part-feature.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CurrentItemBarComponent, CodPoemRangesPartComponent],
 })
 export class CodPoemRangesPartFeatureComponent
