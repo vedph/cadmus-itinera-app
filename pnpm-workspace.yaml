@@ -3,3 +3,9 @@ allowBuilds:
   esbuild: true
   lmdb: true
   msgpackr-extract: true
+minimumReleaseAgeExclude:
+  - '@myrmidon/cadmus-biblio-api@11.0.0'
+  - '@myrmidon/cadmus-biblio-core@11.0.0'
+  - '@myrmidon/cadmus-biblio-ui@13.0.0'
+  - '@myrmidon/cadmus-part-biblio-pg@13.0.0'
+  - '@myrmidon/cadmus-part-biblio-ui@13.0.0'

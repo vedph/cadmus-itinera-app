@@ -32,7 +32,10 @@
                 "output": "vs"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss",
+              "node_modules/maplibre-gl/dist/maplibre-gl.css"
+            ],
             "allowedCommonJsDependencies": [
               "ngraph.graph",
               "ngraph.forcelayout",
