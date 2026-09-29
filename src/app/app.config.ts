@@ -15,7 +15,6 @@ import {
 } from '@jean-merelis/ngx-monaco-editor';
 import { NgxEchartsModule } from 'ngx-echarts';
 
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   AUTH_JWT_EXCLUDED_URLS,
   jwtInterceptor,
