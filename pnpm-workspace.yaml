@@ -10,3 +10,4 @@ minimumReleaseAgeExclude:
   - '@myrmidon/cadmus-part-biblio-pg@13.0.0'
   - '@myrmidon/cadmus-part-biblio-ui@13.0.0'
   - '@types/jasmine@7.0.0'
+  - marked@18.1.0

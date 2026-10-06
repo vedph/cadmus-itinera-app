@@ -1,5 +1,8 @@
 # History
 
+- 2026-10-06:
+  - updated Angular and packages (still for Reactive forms).
+  - updated and fixed Maplibre.
 - 2026-09-29: updated Angular and packages.
 
 ## 14.0.0
