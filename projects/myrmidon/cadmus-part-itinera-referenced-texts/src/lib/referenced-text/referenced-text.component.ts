@@ -1,8 +1,10 @@
 import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
   Validators,
   FormsModule,
   ReactiveFormsModule,
@@ -28,6 +30,17 @@ import {
 } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { ReferencedText } from '../referenced-texts-part';
+
+/**
+ * Validate that the ID in the control has a target. A new text comes with
+ * a placeholder ID having an empty target, which is not null and thus
+ * would satisfy the required validator.
+ */
+function targetRequiredValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  return control.value?.target?.gid ? null : { required: true };
+}
 
 @Component({
   selector: 'cadmus-referenced-text',
@@ -79,10 +92,7 @@ export class ReferencedTextComponent {
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.targetId = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(100),
-    ]);
+    this.targetId = formBuilder.control(null, targetRequiredValidator);
     this.targetCitation = formBuilder.control(null, Validators.maxLength(50));
     this.sourceCitations = formBuilder.control(
       null,

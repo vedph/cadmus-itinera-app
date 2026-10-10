@@ -10,6 +10,13 @@
       - 🐛 while a locus was being edited, deleting or moving a locus in the list made the editor update the wrong locus (or none) on accept: the edited locus is now tracked across these changes, and its editor is closed when that locus is deleted.
       - 🐛 a new locus could be accepted without a location, because its placeholder range (sheet 0) satisfied the required validation; such a range is now treated as no location.
       - 🐛 the "too long" error messages of citation, text and note were never displayed (wrong `maxLength` error key instead of `maxlength`).
+    - `@myrmidon/cadmus-part-itinera-referenced-texts`:
+      - 🐛 the part editor never received the loaded part nor its thesauri (feature component bound its `data` signal rather than its value).
+      - 🐛 accepting a text in the text editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
+      - 🐛 the target ID column of the texts list displayed `[object Object]`: it now displays the label of the target, or its GID when there is no label.
+      - 🐛 a new text could be accepted without a target, because its placeholder ID (with an empty target) satisfied the required validation.
+      - 🐛 while a text was being edited, deleting or moving a text in the list made the editor update the wrong text on accept: the edited text is now tracked across these changes, and its editor is closed when that text is deleted.
+      - 🐛 the "too long" error messages of type, target citation and sources were never displayed (wrong `maxLength` error key).
     - `@myrmidon/cadmus-part-itinera-person-works`:
       - 🐛 the part editor never received the loaded part nor its thesauri (feature component bound its `data` signal rather than its value).
       - 🐛 accepting a work in the work editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.

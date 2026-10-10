@@ -129,6 +129,25 @@ export function createPartEditorMocks(
 }
 
 /**
+ * Create the providers required by the asserted composite ID brick, which
+ * looks up its targets among items and their pins, and loads the model
+ * types thesaurus.
+ */
+export function createAssertedIdMocks(): Provider[] {
+  return [
+    { provide: ItemService, useValue: {} },
+    {
+      provide: ThesaurusService,
+      useValue: {
+        getThesaurus: (id: string) => of({ id, language: 'en', entries: [] }),
+        getThesauriSet: () => of({}),
+      },
+    },
+    { provide: 'indexLookupDefinitions', useValue: {} },
+  ];
+}
+
+/**
  * Build a thesauri set from a map of thesaurus IDs to their entries.
  */
 export function createThesauri(

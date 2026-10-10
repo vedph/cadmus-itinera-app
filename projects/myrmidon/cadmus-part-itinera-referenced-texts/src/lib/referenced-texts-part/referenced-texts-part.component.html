@@ -72,7 +72,9 @@
             <td>
               {{ text.type | flatLookup : txtTypeEntries() : "id" : "value" }}
             </td>
-            <td>{{ text.targetId }}</td>
+            <td>
+              {{ text.targetId?.target?.label || text.targetId?.target?.gid }}
+            </td>
             <td>{{ text.targetCitation }}</td>
           </tr>
           }

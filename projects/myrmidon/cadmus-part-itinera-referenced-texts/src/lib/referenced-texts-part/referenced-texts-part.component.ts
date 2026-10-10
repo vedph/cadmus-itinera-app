@@ -247,8 +247,26 @@ export class ReferencedTextsPartComponent
           this.texts.setValue(texts);
           this.texts.updateValueAndValidity();
           this.texts.markAsDirty();
+          // keep the edited text in sync with the changed list
+          if (index === this.editedIndex()) {
+            this.closeText();
+          } else if (index < this.editedIndex()) {
+            this.editedIndex.set(this.editedIndex() - 1);
+          }
         }
       });
+  }
+
+  /**
+   * Keep the index of the edited text in sync after the texts at the
+   * specified indexes were swapped.
+   */
+  private onTextsSwapped(a: number, b: number): void {
+    if (this.editedIndex() === a) {
+      this.editedIndex.set(b);
+    } else if (this.editedIndex() === b) {
+      this.editedIndex.set(a);
+    }
   }
 
   public moveTextUp(index: number): void {
@@ -262,6 +280,7 @@ export class ReferencedTextsPartComponent
     this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
     this.texts.markAsDirty();
+    this.onTextsSwapped(index, index - 1);
   }
 
   public moveTextDown(index: number): void {
@@ -275,5 +294,6 @@ export class ReferencedTextsPartComponent
     this.texts.setValue(texts);
     this.texts.updateValueAndValidity();
     this.texts.markAsDirty();
+    this.onTextsSwapped(index, index + 1);
   }
 }
