@@ -9,6 +9,15 @@
       - 🐛 accepting a locus in the locus editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
       - 🐛 a new locus could be accepted without a location, because its placeholder range (sheet 0) satisfied the required validation; such a range is now treated as no location.
       - 🐛 the "too long" error messages of citation, text and note were never displayed (wrong `maxLength` error key instead of `maxlength`).
+    - `@myrmidon/cadmus-part-itinera-cod-poem-ranges`:
+      - 🐛 the part editor never received the loaded part nor its thesauri (feature component bound its `data` signal rather than its value).
+      - 🐛 adding ranges, or applying a layout to the selected poems, also saved the whole part, as the `submit` event of the nested forms bubbled up to the part's form.
+      - 🐛 after adding some ranges, the add button could stay disabled for the next valid ranges typed, because the ranges validator used a stateful (global) regular expression.
+      - 🐛 poems at the boundaries of a range with an alphabetic suffix (e.g. `3a-5`) were lost in the layouts table, because `AlnumRangeService.expandRanges` rendered them as `[object Object]`.
+      - 🐛 `PoemLayoutTable.getLayouts` never collapsed more than two consecutive poems with the same layout into a single range (e.g. 1-6 was saved as 1-2, 3-4, 5-6).
+      - 🐛 the "too long" error messages of type, tag, note and layout were never displayed (wrong `maxLength` error key).
+      - the apply layout button no longer applies the layout twice per click.
+      - added tooltips to the icon buttons which had no accessible description (add ranges, save/discard poem note).
 - 2026-10-10: updated packages and Maplibre configuration.
 - 2026-10-06:
   - updated Angular and packages (still for Reactive forms).

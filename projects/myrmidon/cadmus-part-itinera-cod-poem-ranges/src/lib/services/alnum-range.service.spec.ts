@@ -3,7 +3,7 @@ import { Alnum } from './alnum';
 
 import { AlnumRangeService } from './alnum-range.service';
 
-fdescribe('AlnumRangeService', () => {
+describe('AlnumRangeService', () => {
   let service: AlnumRangeService;
 
   beforeEach(() => {
@@ -144,5 +144,128 @@ fdescribe('AlnumRangeService', () => {
     const b = service.parseRanges('3 4b 5-8');
     const i = service.intersectRanges(a, b);
     expect(service.rangesToString(i)).toBe('3 4b 5-6');
+  });
+
+  it('parseRange picks the first range only', () => {
+    expect(service.parseRange('1-3 5')).toEqual({ a: '1', b: '3' });
+  });
+
+  it('parseRange is repeatable', () => {
+    // a stateful (global) regular expression would alternate results
+    expect(service.parseRange('1-3')).toEqual({ a: '1', b: '3' });
+    expect(service.parseRange('1-3')).toEqual({ a: '1', b: '3' });
+  });
+
+  it('parseRanges(null) and parseRanges("") ret empty', () => {
+    expect(service.parseRanges(null)).toEqual([]);
+    expect(service.parseRanges(undefined)).toEqual([]);
+    expect(service.parseRanges('')).toEqual([]);
+  });
+
+  it('parseRanges accepts commas as separators', () => {
+    expect(service.parseRanges('1, 2-5,7')).toEqual([
+      { a: '1', b: '1' },
+      { a: '2', b: '5' },
+      { a: '7', b: '7' },
+    ]);
+  });
+
+  it('parseRanges is repeatable', () => {
+    expect(service.parseRanges('1 2-5')).toHaveLength(2);
+    expect(service.parseRanges('1 2-5')).toHaveLength(2);
+  });
+
+  it('rangeToString of nothing is empty', () => {
+    expect(service.rangeToString(null)).toBe('');
+    expect(service.rangeToString(undefined)).toBe('');
+    expect(service.rangeToString({ a: '' })).toBe('');
+  });
+
+  it('rangeToString of a single value is the value', () => {
+    expect(service.rangeToString({ a: '3' })).toBe('3');
+    expect(service.rangeToString({ a: '3', b: '3' })).toBe('3');
+  });
+
+  it('rangeToString of a range is a-b', () => {
+    expect(service.rangeToString({ a: '3', b: '7' })).toBe('3-7');
+  });
+
+  it('rangesToString of nothing is empty', () => {
+    expect(service.rangesToString(null)).toBe('');
+    expect(service.rangesToString(undefined)).toBe('');
+    expect(service.rangesToString([])).toBe('');
+  });
+
+  it('rangesToString round-trips with parseRanges', () => {
+    const text = '1 2-5 7-8 9a';
+    expect(service.rangesToString(service.parseRanges(text))).toBe(text);
+  });
+
+  it('expandRanges of nothing is empty', () => {
+    expect(service.expandRanges([])).toEqual([]);
+  });
+
+  it('expandRanges of a range without b is its a', () => {
+    expect(service.expandRanges([{ a: '4' }])).toEqual(['4']);
+  });
+
+  it('expandRanges of a range with suffixes is its boundaries', () => {
+    // a range cannot be enumerated when its boundaries have a suffix
+    expect(service.expandRanges([{ a: '1a', b: '3' }])).toEqual(['1a', '3']);
+    expect(service.expandRanges([{ a: '1', b: '3b' }])).toEqual(['1', '3b']);
+  });
+
+  it('expandRanges skips a range with unparsable boundaries', () => {
+    expect(
+      service.expandRanges([
+        { a: 'alpha', b: 'beta' },
+        { a: '1', b: '2' },
+      ]),
+    ).toEqual(['1', '2']);
+  });
+
+  it('expandRanges of a descending range is empty', () => {
+    expect(service.expandRanges([{ a: '5', b: '3' }])).toEqual([]);
+  });
+
+  it('alnumToRanges of nothing is empty', () => {
+    expect(service.alnumToRanges([])).toEqual([]);
+  });
+
+  it('alnumToRanges of a single number is that number', () => {
+    expect(service.alnumToRanges([new Alnum(3)])).toEqual([{ a: '3' }]);
+  });
+
+  it('alnumToRanges does not join non consecutive numbers', () => {
+    expect(
+      service.alnumToRanges([new Alnum(1), new Alnum(3), new Alnum(5)]),
+    ).toEqual([{ a: '1' }, { a: '3' }, { a: '5' }]);
+  });
+
+  it('alnumToRanges ends a range at the last number', () => {
+    expect(
+      service.alnumToRanges([new Alnum(1), new Alnum(2), new Alnum(3)]),
+    ).toEqual([{ a: '1', b: '3' }]);
+  });
+
+  it('alnumToRanges keeps a trailing suffixed number apart', () => {
+    expect(
+      service.alnumToRanges([new Alnum(1), new Alnum(2), new Alnum(3, 'a')]),
+    ).toEqual([{ a: '1', b: '2' }, { a: '3a' }]);
+  });
+
+  it('intersectRanges of disjoint ranges is empty', () => {
+    expect(
+      service.intersectRanges(
+        service.parseRanges('1-3'),
+        service.parseRanges('4-6'),
+      ),
+    ).toEqual([]);
+  });
+
+  it('intersectRanges with nothing is empty', () => {
+    expect(service.intersectRanges(service.parseRanges('1-3'), [])).toEqual(
+      [],
+    );
   });
 });

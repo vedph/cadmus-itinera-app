@@ -1,5 +1,5 @@
 <div>
-  <form class="form-row" (submit)="applyLayout()">
+  <form class="form-row" (submit)="applyLayout(); $event.stopPropagation()">
     <!-- layout (bound) -->
     @if (layoutEntries()?.length) {
     <mat-form-field class="form-col">
@@ -17,7 +17,7 @@
     <mat-form-field class="form-col">
       <mat-label>layout</mat-label>
       <input matInput [formControl]="layout" />
-      @if ( $any(layout).errors?.maxLength && (layout.dirty || layout.touched) )
+      @if ( $any(layout).errors?.maxlength && (layout.dirty || layout.touched) )
       {
       <mat-error>layout too long</mat-error>
       }
@@ -28,7 +28,6 @@
       mat-icon-button
       type="submit"
       matTooltip="Apply layout to selected rows"
-      (click)="applyLayout()"
     >
       <mat-icon class="mat-primary">check_circle</mat-icon>
     </button>

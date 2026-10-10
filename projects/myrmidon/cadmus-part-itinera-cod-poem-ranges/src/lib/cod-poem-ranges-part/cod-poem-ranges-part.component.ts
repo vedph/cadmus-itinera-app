@@ -142,7 +142,7 @@ export class CodPoemRangesPartComponent
     this.note = formBuilder.control(null, Validators.maxLength(1000));
     this.addedRanges = formBuilder.control(null, [
       Validators.required,
-      Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN, 'g')),
+      Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN)),
     ]);
     this.addForm = formBuilder.group({
       addedRanges: this.addedRanges,

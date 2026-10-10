@@ -117,8 +117,8 @@ export class AlnumRangeService {
         // a range cannot include an A part;
         // in this case, expand as two different single ranges
         if (first.a || last.a) {
-          expanded.push(first.toString());
-          expanded.push(last.toString());
+          expanded.push(Alnum.toString(first));
+          expanded.push(Alnum.toString(last));
         } else {
           for (let n = first.n; n <= last.n; n++) {
             expanded.push(n.toString());

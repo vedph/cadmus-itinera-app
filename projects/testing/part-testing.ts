@@ -48,6 +48,7 @@ export interface PartEditorMocksOptions {
 export interface PartEditorMocks {
   providers: (Provider | EnvironmentProviders)[];
   dialogService: { confirm: ReturnType<typeof vi.fn> };
+  snackbar: { open: ReturnType<typeof vi.fn> };
   user$: BehaviorSubject<User | null>;
 }
 
@@ -66,7 +67,7 @@ function createUser(roles: string[]): User {
 /**
  * Create the mock services required by any part editor component derived
  * from ModelEditorComponentBase: authentication, app repository, editor
- * help, and confirmation dialog. Material animations are disabled.
+ * help, confirmation dialog, and snackbar. Material animations are disabled.
  */
 export function createPartEditorMocks(
   options: PartEditorMocksOptions = {},
@@ -79,8 +80,11 @@ export function createPartEditorMocks(
     confirm: vi.fn(() => of(options.confirm ?? true)),
   };
 
+  const snackbar = { open: vi.fn() };
+
   return {
     dialogService,
+    snackbar,
     user$,
     providers: [
       { provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } },
@@ -105,6 +109,7 @@ export function createPartEditorMocks(
         useValue: { resolveUrl: () => Promise.resolve(undefined) },
       },
       { provide: DialogService, useValue: dialogService },
+      { provide: MatSnackBar, useValue: snackbar },
     ],
   };
 }

@@ -264,7 +264,7 @@ export class PoemLayoutTable {
         // the consecutive rows with the same layout and note
         // and without any alpha (which breaks sequences)
         // belong to the same range, except when a is not before b
-        while (i < rows.length && this.canCollapseRow(rows[start], rows[i])) {
+        while (i < rows.length && this.canCollapseRow(rows[i - 1], rows[i])) {
           i++;
         }
         layouts.push({
