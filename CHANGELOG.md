@@ -1,5 +1,6 @@
 # History
 
+- 2026-10-10: updated packages and Maplibre configuration.
 - 2026-10-06:
   - updated Angular and packages (still for Reactive forms).
   - updated and fixed Maplibre.

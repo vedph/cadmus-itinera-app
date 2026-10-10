@@ -4,6 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
+import { provideMaplibreWorker } from '@maplibre/ngx-maplibre-gl/config';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
@@ -54,6 +55,7 @@ export const appConfig: ApplicationConfig = {
         echarts: () => import('echarts'),
       }),
     ),
+    provideMaplibreWorker('assets/maplibre-gl/maplibre-gl-worker.mjs'),
     // parts and fragments type IDs to editor group keys mappings
     // https://github.com/nrwl/nx/issues/208#issuecomment-384102058
     // inject like: @Inject('partEditorKeys') partEditorKeys: PartEditorKeys

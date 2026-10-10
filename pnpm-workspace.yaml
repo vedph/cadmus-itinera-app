@@ -11,3 +11,5 @@ minimumReleaseAgeExclude:
   - '@myrmidon/cadmus-part-biblio-ui@13.0.0'
   - '@types/jasmine@7.0.0'
   - marked@18.1.0
+  - '@myrmidon/cadmus-refs-historical-date@10.0.4'
+  - '@rollup/rollup-win32-arm64-msvc@4.64.4'
