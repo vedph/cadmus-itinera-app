@@ -127,7 +127,7 @@
             <mat-form-field class="long-text">
               <mat-label>note</mat-label>
               <input matInput [formControl]="note" />
-              @if ( $any(note).errors?.maxLength && (note.dirty || note.touched)
+              @if ( $any(note).errors?.maxlength && (note.dirty || note.touched)
               ) {
               <mat-error>note too long</mat-error>
               }
@@ -157,7 +157,7 @@
               @if ( $any(genre).errors?.required && (genre.dirty ||
               genre.touched) ) {
               <mat-error>genre required</mat-error>
-              } @if ( $any(genre).errors?.maxLength && (genre.dirty ||
+              } @if ( $any(genre).errors?.maxlength && (genre.dirty ||
               genre.touched) ) {
               <mat-error>genre too long</mat-error>
               }
@@ -202,7 +202,7 @@
               <mat-label>strophes</mat-label>
               <textarea rows="3" matInput [formControl]="strophes"></textarea>
               <mat-hint>1 per line</mat-hint>
-              @if ( $any(strophes).errors?.maxLength && (strophes.dirty ||
+              @if ( $any(strophes).errors?.maxlength && (strophes.dirty ||
               strophes.touched) ) {
               <mat-error>strophes too long</mat-error>
               }

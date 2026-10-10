@@ -93,7 +93,7 @@ export class AssertedTitleComponent {
 
     this.language.setValue(model.language);
     this.value.setValue(model.value);
-    this.hasAssertion.setValue(model.value ? true : false);
+    this.hasAssertion.setValue(model.assertion ? true : false);
     this.assertion.setValue(model.assertion || null);
     this.form.markAsPristine();
   }

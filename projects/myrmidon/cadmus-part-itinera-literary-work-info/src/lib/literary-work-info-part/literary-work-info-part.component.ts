@@ -412,8 +412,26 @@ export class LiteraryWorkInfoPartComponent
           this.titles.setValue(titles);
           this.titles.updateValueAndValidity();
           this.titles.markAsDirty();
+          // keep the edited title in sync with the changed list
+          if (index === this.editedIndex()) {
+            this.editTitle(-1);
+          } else if (index < this.editedIndex()) {
+            this.editedIndex.set(this.editedIndex() - 1);
+          }
         }
       });
+  }
+
+  /**
+   * Keep the index of the edited title in sync after the titles at the
+   * specified indexes were swapped.
+   */
+  private onTitlesSwapped(a: number, b: number): void {
+    if (this.editedIndex() === a) {
+      this.editedIndex.set(b);
+    } else if (this.editedIndex() === b) {
+      this.editedIndex.set(a);
+    }
   }
 
   public moveTitleUp(index: number): void {
@@ -427,6 +445,7 @@ export class LiteraryWorkInfoPartComponent
     this.titles.setValue(titles);
     this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
+    this.onTitlesSwapped(index, index - 1);
   }
 
   public moveTitleDown(index: number): void {
@@ -440,6 +459,7 @@ export class LiteraryWorkInfoPartComponent
     this.titles.setValue(titles);
     this.titles.updateValueAndValidity();
     this.titles.markAsDirty();
+    this.onTitlesSwapped(index, index + 1);
   }
   //#endregion
 }

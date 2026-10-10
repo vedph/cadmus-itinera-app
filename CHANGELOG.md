@@ -9,6 +9,12 @@
       - 🐛 accepting a locus in the locus editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
       - 🐛 a new locus could be accepted without a location, because its placeholder range (sheet 0) satisfied the required validation; such a range is now treated as no location.
       - 🐛 the "too long" error messages of citation, text and note were never displayed (wrong `maxLength` error key instead of `maxlength`).
+    - `@myrmidon/cadmus-part-itinera-literary-work-info`:
+      - 🐛 the part editor never received the loaded part nor its thesauri (feature component bound its `data` signal rather than its value).
+      - 🐛 accepting a title in the title editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
+      - 🐛 while a title was being edited, deleting or moving a title in the list made the editor update the wrong title (or none) on accept: the edited title is now tracked across these changes, and its editor is closed when that title is deleted.
+      - 🐛 the assertion checkbox of the title editor was checked for any title having a value, rather than for titles having an assertion.
+      - 🐛 the "too long" error messages of title language and value, genre and note were never displayed (wrong `maxLength` error key).
     - `@myrmidon/cadmus-part-itinera-letter-info`:
       - 🐛 the part editor never received the loaded part (feature component bound its `data` signal rather than its value).
       - 🐛 the "too long" error messages of subject, header and text date were never displayed (wrong `maxLength` error key).

@@ -8,6 +8,7 @@ import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
+import { MockInstance, onTestFinished } from 'vitest';
 
 import { AuthJwtService, User } from '@myrmidon/auth-jwt-login';
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
@@ -23,6 +24,20 @@ import { DialogService } from '@myrmidon/ngx-mat-tools';
 
 export const TEST_ITEM_ID = '11111111-1111-1111-1111-111111111111';
 export const TEST_PART_ID = '22222222-2222-2222-2222-222222222222';
+
+/**
+ * Replace the open method of any snackbar with a spy for the running test.
+ * The snackbar is not mocked with a provider, because a component importing
+ * any module with providers gets its own injector, where the real snackbar
+ * would take precedence over a mock provided to the test bed.
+ */
+function spyOnSnackbar(): { open: MockInstance } {
+  const open = vi
+    .spyOn(MatSnackBar.prototype, 'open')
+    .mockImplementation(() => undefined as never);
+  onTestFinished(() => open.mockRestore());
+  return { open };
+}
 
 /**
  * Options for the mock services used by part editors.
@@ -48,7 +63,7 @@ export interface PartEditorMocksOptions {
 export interface PartEditorMocks {
   providers: (Provider | EnvironmentProviders)[];
   dialogService: { confirm: ReturnType<typeof vi.fn> };
-  snackbar: { open: ReturnType<typeof vi.fn> };
+  snackbar: { open: MockInstance };
   user$: BehaviorSubject<User | null>;
 }
 
@@ -80,7 +95,7 @@ export function createPartEditorMocks(
     confirm: vi.fn(() => of(options.confirm ?? true)),
   };
 
-  const snackbar = { open: vi.fn() };
+  const snackbar = spyOnSnackbar();
 
   return {
     dialogService,
@@ -109,7 +124,6 @@ export function createPartEditorMocks(
         useValue: { resolveUrl: () => Promise.resolve(undefined) },
       },
       { provide: DialogService, useValue: dialogService },
-      { provide: MatSnackBar, useValue: snackbar },
     ],
   };
 }
@@ -210,7 +224,7 @@ export interface PartFeatureMocks {
     save: ReturnType<typeof vi.fn>;
   };
   router: { navigate: ReturnType<typeof vi.fn> };
-  snackbar: { open: ReturnType<typeof vi.fn> };
+  snackbar: { open: MockInstance };
 }
 
 /**
@@ -240,7 +254,7 @@ export function createPartFeatureMocks(
     ),
   };
   const router = { navigate: vi.fn(() => Promise.resolve(true)) };
-  const snackbar = { open: vi.fn() };
+  const snackbar = spyOnSnackbar();
 
   return {
     editorService,
@@ -258,7 +272,6 @@ export function createPartFeatureMocks(
           },
         },
       },
-      { provide: MatSnackBar, useValue: snackbar },
       { provide: ItemService, useValue: {} },
       { provide: ThesaurusService, useValue: {} },
       { provide: PartEditorService, useValue: editorService },
