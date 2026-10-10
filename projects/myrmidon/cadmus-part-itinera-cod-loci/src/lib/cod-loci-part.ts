@@ -114,7 +114,7 @@ export const COD_LOCI_PART_SCHEMA = {
                         type: 'boolean',
                       },
                       c: {
-                        type: 'integer',
+                        type: 'string',
                       },
                       l: {
                         type: 'integer',
@@ -147,7 +147,7 @@ export const COD_LOCI_PART_SCHEMA = {
                         type: 'boolean',
                       },
                       c: {
-                        type: 'integer',
+                        type: 'string',
                       },
                       l: {
                         type: 'integer',

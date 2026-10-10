@@ -296,6 +296,16 @@ describe('CodLociPartComponent', () => {
     );
   });
 
+  it('should become dirty as soon as a locus is added', async () => {
+    const { user, dirtyChange } = await setup({ data: createData() });
+
+    await user.click(screen.getByRole('button', { name: /locus/ }));
+
+    // the new locus is in the list even if its editor gets discarded
+    expect(citations()).toHaveLength(LOCI.length + 1);
+    expect(dirtyChange).toHaveBeenLastCalledWith(true);
+  });
+
   it('should add a new locus and open it in the editor', async () => {
     const { user } = await setup({ data: createData([LOCI[0]]) });
 

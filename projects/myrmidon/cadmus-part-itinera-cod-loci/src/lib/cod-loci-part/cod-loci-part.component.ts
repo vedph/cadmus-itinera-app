@@ -158,6 +158,8 @@ export class CodLociPartComponent
       text: '',
     };
     this.loci.setValue([...this.loci.value, entry]);
+    this.loci.updateValueAndValidity();
+    this.loci.markAsDirty();
     this.editLocus(this.loci.value.length - 1);
   }
 
