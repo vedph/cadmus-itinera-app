@@ -1,4 +1,4 @@
-<form [formGroup]="form" (submit)="save()">
+<form [formGroup]="form" (submit)="save(); $event.stopPropagation()">
   <!-- id -->
   <div>
     <mat-form-field>
@@ -6,7 +6,7 @@
       <input matInput [formControl]="id" />
       @if ($any(id).errors?.required && (id.dirty || id.touched)) {
       <mat-error>ID required</mat-error>
-      } @if ($any(id).errors?.maxLength && (id.dirty || id.touched)) {
+      } @if ($any(id).errors?.maxlength && (id.dirty || id.touched)) {
       <mat-error>ID too long</mat-error>
       }
     </mat-form-field>

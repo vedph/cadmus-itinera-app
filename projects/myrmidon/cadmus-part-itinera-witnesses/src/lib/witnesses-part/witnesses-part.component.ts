@@ -172,8 +172,26 @@ export class WitnessesPartComponent
           this.witnesses.setValue(witnesses);
           this.witnesses.updateValueAndValidity();
           this.witnesses.markAsDirty();
+          // keep the edited witness in sync with the changed list
+          if (index === this.editedIndex()) {
+            this.editWitness(-1);
+          } else if (index < this.editedIndex()) {
+            this.editedIndex.set(this.editedIndex() - 1);
+          }
         }
       });
+  }
+
+  /**
+   * Keep the index of the edited witness in sync after the witnesses at
+   * the specified indexes were swapped.
+   */
+  private onWitnessesSwapped(a: number, b: number): void {
+    if (this.editedIndex() === a) {
+      this.editedIndex.set(b);
+    } else if (this.editedIndex() === b) {
+      this.editedIndex.set(a);
+    }
   }
 
   public moveWitnessUp(index: number): void {
@@ -187,6 +205,7 @@ export class WitnessesPartComponent
     this.witnesses.setValue(witnesses);
     this.witnesses.updateValueAndValidity();
     this.witnesses.markAsDirty();
+    this.onWitnessesSwapped(index, index - 1);
   }
 
   public moveWitnessDown(index: number): void {
@@ -200,5 +219,6 @@ export class WitnessesPartComponent
     this.witnesses.setValue(witnesses);
     this.witnesses.updateValueAndValidity();
     this.witnesses.markAsDirty();
+    this.onWitnessesSwapped(index, index + 1);
   }
 }
