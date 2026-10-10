@@ -32,7 +32,7 @@
             @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
               <mat-error>sex required</mat-error>
             }
-            @if ($any(sex).errors?.maxLength && (sex.dirty || sex.touched)) {
+            @if ($any(sex).errors?.maxlength && (sex.dirty || sex.touched)) {
               <mat-error>sex too long</mat-error>
             }
           </mat-form-field>
@@ -47,7 +47,7 @@
           [options]="editorOptions"
           (editorInitialized)="onEditorInit($event)"
         />
-        @if ($any(bio).errors?.maxLength && (bio.touched || bio.dirty)) {
+        @if ($any(bio).errors?.maxlength && (bio.touched || bio.dirty)) {
           <mat-error>too long</mat-error>
         }
       </div>
