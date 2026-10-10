@@ -118,10 +118,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-loci/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -145,10 +146,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-cod-poem-ranges/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -172,10 +174,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-letter-info/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -199,10 +202,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-literary-work-info/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -226,10 +230,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-info/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -253,10 +258,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-person-works/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -280,10 +286,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-referenced-texts/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -307,10 +314,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-related-persons/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -334,10 +342,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-witnesses/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }
@@ -361,10 +370,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/myrmidon/cadmus-part-itinera-pg/tsconfig.spec.json",
-            "polyfills": []
+            "runner": "vitest",
+            "setupFiles": ["projects/test-setup.ts"]
           }
         }
       }

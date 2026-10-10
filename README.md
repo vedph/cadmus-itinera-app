@@ -10,9 +10,18 @@ The codicological parts in this project are imported from an [independent librar
 
 🐋 Quick Docker image build:
 
-1. `pnpm run build-lib`;
+1. `pnpm run build:libs` (builds all the libraries in dependency order; pass one or more library names to build only those and their dependents);
 2. update version in `env.js` (and in Docker compose files), then `ng build --configuration production`;
 3. `docker build . -t vedph2020/cadmus-itinera-app:14.0.0 -t vedph2020/cadmus-itinera-app:latest` (replace with the current version).
+
+## Testing
+
+Libraries are tested with Vitest (via the Angular `unit-test` builder, in jsdom) and the Angular Testing Library:
+
+- `pnpm run test:libs`: test all the libraries (add `--coverage` for a coverage report, or library names to test only those).
+- `ng test @myrmidon/cadmus-part-itinera-cod-loci --watch=false`: test a single library.
+
+The `@myrmidon/cadmus-part-itinera-pg` library consumes the other libraries from `dist`, so run `pnpm run build:libs` before testing it.
 
 ## Setup
 

@@ -1,5 +1,8 @@
 # History
 
+- 2026-10-10:
+  - replaced the libraries build script with `scripts/build-libs.mjs` (`pnpm run build:libs`), which builds libraries in dependency order and stops at the first failure.
+  - ⚠️ migrated libraries tests from Karma/Jasmine to Vitest + Angular Testing Library (`pnpm run test:libs`), removing Karma, Jasmine and other stale packages (`istanbul-lib-instrument`, `@types/diff-match-patch`).
 - 2026-10-10: updated packages and Maplibre configuration.
 - 2026-10-06:
   - updated Angular and packages (still for Reactive forms).
