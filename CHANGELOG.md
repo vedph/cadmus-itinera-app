@@ -3,6 +3,12 @@
 - 2026-10-10:
   - replaced the libraries build script with `scripts/build-libs.mjs` (`pnpm run build:libs`), which builds libraries in dependency order and stops at the first failure.
   - ⚠️ migrated libraries tests from Karma/Jasmine to Vitest + Angular Testing Library (`pnpm run test:libs`), removing Karma, Jasmine and other stale packages (`istanbul-lib-instrument`, `@types/diff-match-patch`).
+  - added tests to libraries, fixing the bugs they revealed:
+    - `@myrmidon/cadmus-part-itinera-cod-loci`:
+      - 🐛 the part editor never received the loaded part nor its thesauri, because the feature component bound its `data` signal rather than its value (`$any(data)` instead of `$any(data())`): the editor was always empty, and saving created a new part.
+      - 🐛 accepting a locus in the locus editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
+      - 🐛 a new locus could be accepted without a location, because its placeholder range (sheet 0) satisfied the required validation; such a range is now treated as no location.
+      - 🐛 the "too long" error messages of citation, text and note were never displayed (wrong `maxLength` error key instead of `maxlength`).
 - 2026-10-10: updated packages and Maplibre configuration.
 - 2026-10-06:
   - updated Angular and packages (still for Reactive forms).

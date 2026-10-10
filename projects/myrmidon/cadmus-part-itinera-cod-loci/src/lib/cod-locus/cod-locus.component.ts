@@ -19,6 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 import {
   CodLocationRange,
   CodLocationComponent,
+  CodLocationParser,
 } from '@myrmidon/cadmus-cod-location';
 import { CodImage, CodImagesComponent } from '@myrmidon/cadmus-codicology-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
@@ -97,7 +98,13 @@ export class CodLocusComponent {
     }
 
     this.citation.setValue(model.citation);
-    this.ranges.setValue([model.range]);
+    // the range of a new locus is a placeholder rendered as an empty
+    // location: it is not a location, so it must not satisfy validation
+    this.ranges.setValue(
+      model.range && CodLocationParser.rangesToString([model.range])
+        ? [model.range]
+        : []
+    );
     this.text.setValue(model.text);
     this.note.setValue(model.note || null);
     this.images.setValue(model.images || []);
