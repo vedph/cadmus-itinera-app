@@ -9,6 +9,9 @@
       - 🐛 accepting a locus in the locus editor also saved the whole part, as the `submit` event of the nested form bubbled up to the part's form.
       - 🐛 a new locus could be accepted without a location, because its placeholder range (sheet 0) satisfied the required validation; such a range is now treated as no location.
       - 🐛 the "too long" error messages of citation, text and note were never displayed (wrong `maxLength` error key instead of `maxlength`).
+    - `@myrmidon/cadmus-part-itinera-letter-info`:
+      - 🐛 the part editor never received the loaded part (feature component bound its `data` signal rather than its value).
+      - 🐛 the "too long" error messages of subject, header and text date were never displayed (wrong `maxLength` error key).
     - `@myrmidon/cadmus-part-itinera-cod-poem-ranges`:
       - 🐛 the part editor never received the loaded part nor its thesauri (feature component bound its `data` signal rather than its value).
       - 🐛 adding ranges, or applying a layout to the selected poems, also saved the whole part, as the `submit` event of the nested forms bubbled up to the part's form.
