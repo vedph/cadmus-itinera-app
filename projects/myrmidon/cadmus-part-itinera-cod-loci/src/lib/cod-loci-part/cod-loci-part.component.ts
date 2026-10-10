@@ -201,8 +201,26 @@ export class CodLociPartComponent
           this.loci.setValue(entries);
           this.loci.updateValueAndValidity();
           this.loci.markAsDirty();
+          // keep the edited locus in sync with the changed list
+          if (index === this.editedIndex()) {
+            this.editLocus(-1);
+          } else if (index < this.editedIndex()) {
+            this.editedIndex.set(this.editedIndex() - 1);
+          }
         }
       });
+  }
+
+  /**
+   * Keep the index of the edited locus in sync after the loci at the
+   * specified indexes were swapped.
+   */
+  private onLociSwapped(a: number, b: number): void {
+    if (this.editedIndex() === a) {
+      this.editedIndex.set(b);
+    } else if (this.editedIndex() === b) {
+      this.editedIndex.set(a);
+    }
   }
 
   public moveLocusUp(index: number): void {
@@ -216,6 +234,7 @@ export class CodLociPartComponent
     this.loci.setValue(entries);
     this.loci.updateValueAndValidity();
     this.loci.markAsDirty();
+    this.onLociSwapped(index, index - 1);
   }
 
   public moveLocusDown(index: number): void {
@@ -229,5 +248,6 @@ export class CodLociPartComponent
     this.loci.setValue(entries);
     this.loci.updateValueAndValidity();
     this.loci.markAsDirty();
+    this.onLociSwapped(index, index + 1);
   }
 }

@@ -5,7 +5,7 @@ import {
   waitFor,
   within,
 } from '@testing-library/angular/zoneless';
-import userEvent from '@testing-library/user-event';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { EditedObject, PartIdentity } from '@myrmidon/cadmus-core';
 
@@ -229,6 +229,71 @@ describe('CodLociPartComponent', () => {
     );
     expect(screen.queryByRole('tab', { name: 'locus' })).not.toBeInTheDocument();
     expect(dirtyChange).not.toHaveBeenCalledWith(true);
+  });
+
+  /** Open the editor of a locus, then go back to the list of loci. */
+  async function editAndGoBackToList(user: UserEvent, row: number) {
+    await user.click(rowButton(row, 'Edit this locus'));
+    await screen.findByLabelText('citation');
+    await user.click(screen.getByRole('tab', { name: 'loci' }));
+    await waitFor(() => expect(lociRows()).toHaveLength(LOCI.length));
+  }
+
+  /** Go back to the locus editor, change its citation and accept. */
+  async function acceptCitation(user: UserEvent, citation: string) {
+    await user.click(screen.getByRole('tab', { name: 'locus' }));
+    const input = await screen.findByLabelText('citation');
+    await user.clear(input);
+    await user.type(input, citation);
+    await user.click(acceptButton());
+  }
+
+  it('should update the edited locus after a locus before it is deleted', async () => {
+    const { user } = await setup({ data: createData() });
+
+    await editAndGoBackToList(user, 2);
+    await user.click(rowButton(0, 'Delete this locus'));
+    await acceptCitation(user, 'Pd. 2,2');
+
+    await waitFor(() => expect(citations()).toEqual(['Pg. 1,1', 'Pd. 2,2']));
+  });
+
+  it('should update the edited locus after it is moved', async () => {
+    const { user } = await setup({ data: createData() });
+
+    await editAndGoBackToList(user, 1);
+    await user.click(rowButton(1, 'Move this locus up'));
+    await acceptCitation(user, 'Pg. 2,2');
+
+    await waitFor(() =>
+      expect(citations()).toEqual(['Pg. 2,2', 'If. 1,1', 'Pd. 1,1']),
+    );
+  });
+
+  it('should update the edited locus after another locus takes its place', async () => {
+    const { user } = await setup({ data: createData() });
+
+    await editAndGoBackToList(user, 1);
+    await user.click(rowButton(2, 'Move this locus up'));
+    await acceptCitation(user, 'Pg. 2,2');
+
+    await waitFor(() =>
+      expect(citations()).toEqual(['If. 1,1', 'Pd. 1,1', 'Pg. 2,2']),
+    );
+  });
+
+  it('should close the locus editor when its locus is deleted', async () => {
+    const { user } = await setup({ data: createData() });
+
+    await editAndGoBackToList(user, 1);
+    await user.click(rowButton(1, 'Delete this locus'));
+
+    expect(citations()).toEqual(['If. 1,1', 'Pd. 1,1']);
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('tab', { name: 'locus' }),
+      ).not.toBeInTheDocument(),
+    );
   });
 
   it('should add a new locus and open it in the editor', async () => {
