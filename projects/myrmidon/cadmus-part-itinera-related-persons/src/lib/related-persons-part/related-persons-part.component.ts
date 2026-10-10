@@ -232,8 +232,26 @@ export class RelatedPersonsPartComponent
           this.persons.setValue(entries);
           this.persons.updateValueAndValidity();
           this.persons.markAsDirty();
+          // keep the edited person in sync with the changed list
+          if (index === this.editedIndex()) {
+            this.editPerson(-1);
+          } else if (index < this.editedIndex()) {
+            this.editedIndex.set(this.editedIndex() - 1);
+          }
         }
       });
+  }
+
+  /**
+   * Keep the index of the edited person in sync after the persons at the
+   * specified indexes were swapped.
+   */
+  private onPersonsSwapped(a: number, b: number): void {
+    if (this.editedIndex() === a) {
+      this.editedIndex.set(b);
+    } else if (this.editedIndex() === b) {
+      this.editedIndex.set(a);
+    }
   }
 
   public movePersonUp(index: number): void {
@@ -247,6 +265,7 @@ export class RelatedPersonsPartComponent
     this.persons.setValue(entries);
     this.persons.updateValueAndValidity();
     this.persons.markAsDirty();
+    this.onPersonsSwapped(index, index - 1);
   }
 
   public movePersonDown(index: number): void {
@@ -260,5 +279,6 @@ export class RelatedPersonsPartComponent
     this.persons.setValue(entries);
     this.persons.updateValueAndValidity();
     this.persons.markAsDirty();
+    this.onPersonsSwapped(index, index + 1);
   }
 }
