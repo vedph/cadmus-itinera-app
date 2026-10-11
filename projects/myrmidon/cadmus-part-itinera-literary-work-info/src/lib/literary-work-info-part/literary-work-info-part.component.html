@@ -1,222 +1,218 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Literary Work Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-tab-group>
-        <!-- GENERAL -->
-        <mat-tab label="general">
-          <!-- author IDs -->
-          <fieldset>
-            <legend>author(s)</legend>
-            <cadmus-refs-asserted-composite-ids
-              [idScopeEntries]="idScopeEntries()"
-              [idTagEntries]="idTagEntries()"
-              [assTagEntries]="assTagEntries()"
-              [refTypeEntries]="refTypeEntries()"
-              [refTagEntries]="refTagEntries()"
-              [pinByTypeMode]="true"
-              [canSwitchMode]="true"
-              [canEditTarget]="true"
-              [ids]="authorIds.value"
-              (idsChange)="onAuthorIdsChange($event)"
-            />
-          </fieldset>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Literary Work Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <!-- GENERAL -->
+      <mat-tab label="general">
+        <!-- author IDs -->
+        <fieldset>
+          <legend>author(s)</legend>
+          <cadmus-refs-asserted-composite-ids
+            [idScopeEntries]="idScopeEntries()"
+            [idTagEntries]="idTagEntries()"
+            [assTagEntries]="assTagEntries()"
+            [refTypeEntries]="refTypeEntries()"
+            [refTagEntries]="refTagEntries()"
+            [pinByTypeMode]="true"
+            [canSwitchMode]="true"
+            [canEditTarget]="true"
+            [ids]="form.authorIds().value()"
+            (idsChange)="onAuthorIdsChange($event)"
+          />
+        </fieldset>
 
-          <!-- titles -->
-          <fieldset>
-            <legend>titles</legend>
-            <div>
-              <button
-                type="button"
-                mat-flat-button
-                class="mat-primary"
-                (click)="addTitle()"
-              >
-                <mat-icon>add_circle</mat-icon> title
-              </button>
-            </div>
-            @if (titles.value.length) {
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>language</th>
-                  <th>title</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for ( title of titles.value; track title; let i = $index; let
-                first = $first; let last = $last) {
-                <tr [class.selected]="i === editedIndex()">
-                  <td class="fit-width">
-                    <button
-                      type="button"
-                      mat-icon-button
-                      matTooltip="Edit this title"
-                      (click)="editTitle(i)"
-                    >
-                      <mat-icon class="mat-primary">edit</mat-icon>
-                    </button>
-                    <button
-                      type="button"
-                      mat-icon-button
-                      matTooltip="Move this title up"
-                      [disabled]="first"
-                      (click)="moveTitleUp(i)"
-                    >
-                      <mat-icon>arrow_upward</mat-icon>
-                    </button>
-                    <button
-                      type="button"
-                      mat-icon-button
-                      matTooltip="Move this title down"
-                      [disabled]="last"
-                      (click)="moveTitleDown(i)"
-                    >
-                      <mat-icon>arrow_downward</mat-icon>
-                    </button>
-                    <button
-                      type="button"
-                      mat-icon-button
-                      matTooltip="Delete this title"
-                      (click)="deleteTitle(i)"
-                    >
-                      <mat-icon class="mat-warn">remove_circle</mat-icon>
-                    </button>
-                  </td>
-                  <td>{{ title.language }}</td>
-                  <td>{{ title.value }}</td>
-                </tr>
-                }
-              </tbody>
-            </table>
-            }
-            <mat-expansion-panel
-              [disabled]="!editedTitle()"
-              [expanded]="editedTitle()"
+        <!-- titles -->
+        <fieldset>
+          <legend>titles</legend>
+          <div>
+            <button
+              type="button"
+              mat-flat-button
+              class="mat-primary"
+              (click)="addTitle()"
             >
-              <mat-expansion-panel-header>
-                {{ editedTitle()?.value }}
-              </mat-expansion-panel-header>
-              <cadmus-asserted-title
-                [langEntries]="langEntries()"
-                [assTagEntries]="assTagEntries()"
-                [refTagEntries]="refTagEntries()"
-                [refTypeEntries]="refTypeEntries()"
-                [title]="editedTitle()"
-                (titleChange)="onTitleSave($event!)"
-                (editorClose)="onTitleClose()"
-              />
-            </mat-expansion-panel>
-          </fieldset>
-
-          <!-- lost -->
-          <div>
-            <mat-checkbox [formControl]="isLost">lost</mat-checkbox>
+              <mat-icon>add_circle</mat-icon> title
+            </button>
           </div>
-
-          <!-- note -->
-          <div>
-            <mat-form-field class="long-text">
-              <mat-label>note</mat-label>
-              <input matInput [formControl]="note" />
-              @if ( $any(note).errors?.maxlength && (note.dirty || note.touched)
-              ) {
-              <mat-error>note too long</mat-error>
+          @if (form.titles().value().length) {
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>language</th>
+                <th>title</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for ( title of form.titles().value(); track title; let i = $index; let
+              first = $first; let last = $last) {
+              <tr [class.selected]="i === editedIndex()">
+                <td class="fit-width">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Edit this title"
+                    (click)="editTitle(i)"
+                  >
+                    <mat-icon class="mat-primary">edit</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this title up"
+                    [disabled]="first"
+                    (click)="moveTitleUp(i)"
+                  >
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Move this title down"
+                    [disabled]="last"
+                    (click)="moveTitleDown(i)"
+                  >
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matTooltip="Delete this title"
+                    (click)="deleteTitle(i)"
+                  >
+                    <mat-icon class="mat-warn">remove_circle</mat-icon>
+                  </button>
+                </td>
+                <td>{{ title.language }}</td>
+                <td>{{ title.value }}</td>
+              </tr>
               }
-            </mat-form-field>
-          </div>
-        </mat-tab>
+            </tbody>
+          </table>
+          }
+          <mat-expansion-panel
+            [disabled]="!editedTitle()"
+            [expanded]="editedTitle()"
+          >
+            <mat-expansion-panel-header>
+              {{ editedTitle()?.value }}
+            </mat-expansion-panel-header>
+            <cadmus-asserted-title
+              [langEntries]="langEntries()"
+              [assTagEntries]="assTagEntries()"
+              [refTagEntries]="refTagEntries()"
+              [refTypeEntries]="refTypeEntries()"
+              [title]="editedTitle()"
+              (titleChange)="onTitleSave($event!)"
+              (editorClose)="onTitleClose()"
+            />
+          </mat-expansion-panel>
+        </fieldset>
+
+        <!-- lost -->
+        <div>
+          <mat-checkbox [formField]="form.isLost">lost</mat-checkbox>
+        </div>
 
         <!-- note -->
-        <mat-tab label="lang./note">
-          <!-- languages -->
-          <fieldset>
-            <legend>language(s)</legend>
-            <cadmus-ui-flag-set
-              [flags]="langFlags()"
-              [checkedIds]="languages.value"
-              (checkedIdsChange)="onLanguageIdsChange($event)"
-            />
-          </fieldset>
-
-          <!-- genre -->
-          <fieldset>
-            <legend>genre</legend>
-            @if (!genreEntries()?.length) {
-            <mat-form-field>
-              <mat-label>genre</mat-label>
-              <input matInput [formControl]="genre" />
-              @if ( $any(genre).errors?.required && (genre.dirty ||
-              genre.touched) ) {
-              <mat-error>genre required</mat-error>
-              } @if ( $any(genre).errors?.maxlength && (genre.dirty ||
-              genre.touched) ) {
-              <mat-error>genre too long</mat-error>
-              }
-            </mat-form-field>
-            } @if (genreEntries()?.length) {
-            <div>
-              genre: <span class="pick">{{ pickedGenre() }}</span>
-              @if ( $any(genre).errors?.required && (genre.dirty ||
-              genre.touched) ) {
-              <mat-error>genre required</mat-error>
-              }
-              <cadmus-thesaurus-tree
-                rootLabel="genre"
-                [renderLabel]="renderLabel"
-                [entries]="genreEntries()"
-                (entryChange)="onEntryChange($event)"
-              />
-            </div>
+        <div>
+          <mat-form-field class="long-text">
+            <mat-label>note</mat-label>
+            <input matInput [formField]="form.note" />
+            @if ( form.note().getError("maxLength") && (form.note().dirty() || form.note().touched())
+            ) {
+            <mat-error>note too long</mat-error>
             }
-          </fieldset>
-        </mat-tab>
+          </mat-form-field>
+        </div>
+      </mat-tab>
 
-        <!-- POETRY -->
-        <mat-tab label="poetry">
-          <!-- metres -->
-          @if (mtrFlags().length) {
+      <!-- note -->
+      <mat-tab label="lang./note">
+        <!-- languages -->
+        <fieldset>
+          <legend>language(s)</legend>
+          <cadmus-ui-flag-set
+            [flags]="langFlags()"
+            [checkedIds]="form.languages().value()"
+            (checkedIdsChange)="onLanguageIdsChange($event)"
+          />
+        </fieldset>
+
+        <!-- genre -->
+        <fieldset>
+          <legend>genre</legend>
+          @if (!genreEntries()?.length) {
+          <mat-form-field>
+            <mat-label>genre</mat-label>
+            <input matInput [formField]="form.genre" />
+            @if ( form.genre().getError("required") && (form.genre().dirty() ||
+            form.genre().touched()) ) {
+            <mat-error>genre required</mat-error>
+            } @if ( form.genre().getError("maxLength") && (form.genre().dirty() ||
+            form.genre().touched()) ) {
+            <mat-error>genre too long</mat-error>
+            }
+          </mat-form-field>
+          } @if (genreEntries()?.length) {
           <div>
-            <fieldset>
-              <legend>metre(s)</legend>
-              <cadmus-ui-flag-set
-                [flags]="mtrFlags()"
-                [checkedIds]="metres.value"
-                (checkedIdsChange)="onMetreIdsChange($event)"
-              />
-            </fieldset>
+            genre: <span class="pick">{{ pickedGenre() }}</span>
+            @if ( form.genre().getError("required") && (form.genre().dirty() ||
+            form.genre().touched()) ) {
+            <mat-error>genre required</mat-error>
+            }
+            <cadmus-thesaurus-tree
+              rootLabel="genre"
+              [renderLabel]="renderLabel"
+              [entries]="genreEntries()"
+              (entryChange)="onEntryChange($event)"
+            />
           </div>
           }
+        </fieldset>
+      </mat-tab>
 
-          <!-- strophes -->
-          <div style="margin-top: 8px">
-            <mat-form-field class="long-text">
-              <mat-label>strophes</mat-label>
-              <textarea rows="3" matInput [formControl]="strophes"></textarea>
-              <mat-hint>1 per line</mat-hint>
-              @if ( $any(strophes).errors?.maxlength && (strophes.dirty ||
-              strophes.touched) ) {
-              <mat-error>strophes too long</mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
-      />
-    </mat-card-actions>
-  </mat-card>
-</form>
+      <!-- POETRY -->
+      <mat-tab label="poetry">
+        <!-- metres -->
+        @if (mtrFlags().length) {
+        <div>
+          <fieldset>
+            <legend>metre(s)</legend>
+            <cadmus-ui-flag-set
+              [flags]="mtrFlags()"
+              [checkedIds]="form.metres().value()"
+              (checkedIdsChange)="onMetreIdsChange($event)"
+            />
+          </fieldset>
+        </div>
+        }
+
+        <!-- strophes -->
+        <div style="margin-top: 8px">
+          <mat-form-field class="long-text">
+            <mat-label>strophes</mat-label>
+            <textarea rows="3" matInput [formField]="form.strophes"></textarea>
+            <mat-hint>1 per line</mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

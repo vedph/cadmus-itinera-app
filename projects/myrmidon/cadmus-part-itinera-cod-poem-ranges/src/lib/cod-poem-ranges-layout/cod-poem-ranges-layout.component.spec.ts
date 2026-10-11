@@ -193,14 +193,25 @@ describe('CodPoemRangesLayoutComponent', () => {
   });
 
   it('should report a note longer than 500 characters', async () => {
-    const { user } = await setup(ROW);
+    // the input does not accept more than 500 characters, so such a note
+    // can only come from the bound row
+    const { user } = await setup({ ...ROW, note: 'x'.repeat(501) });
+
+    await user.click(editNoteButton());
+    await user.click(screen.getByRole('textbox'));
+    await user.tab();
+
+    expect(screen.getByText('note too long')).toBeInTheDocument();
+  });
+
+  it('should not let the user type a note longer than 500 characters', async () => {
+    const { user } = await setup({ nr: new Alnum(3) });
 
     await user.click(editNoteButton());
     await user.click(screen.getByRole('textbox'));
     await user.paste('x'.repeat(501));
-    await user.tab();
 
-    expect(screen.getByText('note too long')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveValue('x'.repeat(500));
   });
 
   it('should close the note editor when another row is bound', async () => {

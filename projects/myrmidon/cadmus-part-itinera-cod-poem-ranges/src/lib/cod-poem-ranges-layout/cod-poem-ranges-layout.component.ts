@@ -1,12 +1,13 @@
-import { Component, effect, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import { FormField, form, maxLength } from '@angular/forms/signals';
 
 import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -32,6 +33,8 @@ import { Alnum } from '../services/alnum';
   selector: 'cadmus-cod-poem-ranges-layout',
   templateUrl: './cod-poem-ranges-layout.component.html',
   styleUrls: ['./cod-poem-ranges-layout.component.css'],
+  // not OnPush: PoemLayoutTable changes its rows in place, so the bound row
+  // is the same object with other content, and no signal notifies it
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatIconButton,
@@ -40,8 +43,7 @@ import { Alnum } from '../services/alnum';
     MatLabel,
     MatFormField,
     MatInput,
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatSuffix,
     MatError,
   ],
@@ -59,30 +61,26 @@ export class CodPoemRangesLayoutComponent {
     checked: boolean;
   }>();
 
-  public readonly editingNote = signal<boolean>(false);
+  // the note editor is closed whenever a row is bound
+  public readonly editingNote = linkedSignal({
+    source: () => this.row(),
+    computation: () => false,
+  });
 
-  public note: FormControl<string | null>;
-  public form: FormGroup;
+  private readonly _draft = linkedSignal(() => ({
+    note: this.row()?.note || '',
+  }));
+  public readonly form = form(this._draft, (p) => {
+    maxLength(p.note, 500);
+  });
 
-  constructor(formBuilder: FormBuilder) {
-    this.note = formBuilder.control(null, Validators.maxLength(500));
-    this.form = formBuilder.group({
-      note: this.note,
-    });
-
+  constructor() {
+    // a new row was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.row());
+      this.row();
+      untracked(() => this.form().reset());
     });
-  }
-
-  private updateForm(row?: PoemLayoutRow): void {
-    this.editingNote.set(false);
-    if (!row) {
-      this.form.reset();
-      return;
-    }
-    this.note.setValue(row.note || null);
-    this.form.markAsPristine();
   }
 
   public setCheck(event: MouseEvent): void {
@@ -123,7 +121,7 @@ export class CodPoemRangesLayoutComponent {
 
   public saveNote(): void {
     this.cancelNote();
-    const note = this.note.value?.trim();
+    const note = this._draft().note.trim();
 
     const nr: Alnum | undefined = this.row()?.nr;
     const row: PoemLayoutRow = {

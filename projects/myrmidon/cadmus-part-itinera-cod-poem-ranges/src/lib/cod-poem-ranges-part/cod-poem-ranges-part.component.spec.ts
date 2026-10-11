@@ -172,16 +172,54 @@ describe('CodPoemRangesPartComponent', () => {
     expect(saveButton()).toBeDisabled();
   });
 
-  it('should reject a type longer than 50 characters', async () => {
+  // the length limits are also set on the inputs, so that a longer value
+  // can only come from the bound data
+  it('should not let the user type a type longer than 50 characters', async () => {
     const { user } = await setup({ data: createData() });
 
     const type = screen.getByRole('textbox', { name: 'type' });
     await user.clear(type);
     await user.type(type, 'x'.repeat(51));
+
+    expect(type).toHaveValue('x'.repeat(50));
+  });
+
+  it('should reject a type longer than 50 characters', async () => {
+    const { user } = await setup({
+      data: createData({ ...PROPS, sortType: 'x'.repeat(51) }),
+    });
+
+    await user.click(screen.getByRole('textbox', { name: 'type' }));
     await user.tab();
 
     expect(screen.getByText('type too long')).toBeInTheDocument();
     expect(saveButton()).toBeDisabled();
+  });
+
+  it('should be pristine once data is bound', async () => {
+    const { dirtyChange, fixture } = await setup({ data: createData() });
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.isDirty()).toBe(false);
+    expect(dirtyChange).not.toHaveBeenCalledWith(true);
+  });
+
+  it('should render no form element', async () => {
+    const { container } = await setup({ data: createData() });
+
+    expect(container.querySelector('form')).toBeNull();
+  });
+
+  it('should emit ranges and layouts without any form tag on save', async () => {
+    const { user, dataChange } = await setup({ data: createData() });
+
+    await user.click(rowButton(0, 'Move this range down'));
+    await user.click(saveButton());
+
+    const part: CodPoemRangesPart = dataChange.mock.calls[0][0].value;
+    for (const o of [...part.ranges!, ...part.layouts!]) {
+      expect(Object.getOwnPropertySymbols(o)).toEqual([]);
+    }
   });
 
   it('should pick type and tag from their thesauri when available', async () => {
@@ -401,14 +439,17 @@ describe('CodPoemRangesPartComponent', () => {
   });
 
   it('should reject too long tag and note', async () => {
-    const { user } = await setup({ data: createData() });
+    const { user } = await setup({
+      data: createData({
+        ...PROPS,
+        tag: 'x'.repeat(51),
+        note: 'x'.repeat(1001),
+      }),
+    });
 
     await openTab(user, 'note');
-    const tag = await screen.findByLabelText('tag');
-    await user.clear(tag);
-    await user.type(tag, 'x'.repeat(51));
+    await user.click(await screen.findByLabelText('tag'));
     await user.click(screen.getByRole('textbox', { name: 'note' }));
-    await user.paste('x'.repeat(1001));
     await user.tab();
 
     expect(screen.getByText('tag too long')).toBeInTheDocument();

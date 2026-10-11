@@ -2,7 +2,10 @@ import { inputBinding, outputBinding, signal } from '@angular/core';
 import { render, screen, waitFor } from '@testing-library/angular/zoneless';
 import userEvent from '@testing-library/user-event';
 
-import { createPartEditorMocks } from '../../../../../testing/part-testing';
+import {
+  createPartEditorMocks,
+  setInputValue,
+} from '../../../../../testing/part-testing';
 import { Witness } from '../witnesses-part';
 import { WitnessComponent } from './witness.component';
 
@@ -141,7 +144,7 @@ describe('WitnessComponent', () => {
 
     await user.clear(id());
     await user.click(id());
-    await user.paste('x'.repeat(501));
+    setInputValue(id(), 'x'.repeat(501));
     await user.tab();
 
     expect(screen.getByText('ID too long')).toBeInTheDocument();
@@ -158,5 +161,23 @@ describe('WitnessComponent', () => {
 
     expect(editorClose).toHaveBeenCalledTimes(1);
     expect(witnessChange).not.toHaveBeenCalled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, witnessChange } = await setup(WITNESS);
+
+    // pristine: nothing to save
+    await user.type(screen.getByLabelText('ID'), '{Enter}');
+    expect(witnessChange).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText('ID'), ' changed{Enter}');
+
+    expect(witnessChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render no form element of its own', async () => {
+    await setup(WITNESS);
+
+    expect(acceptButton().closest('form')).toBeNull();
   });
 });

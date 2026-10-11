@@ -1,12 +1,11 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
@@ -23,18 +22,18 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { NgxToolsValidators, FlatLookupPipe, deepCopy } from '@myrmidon/ngx-tools';
+import {
+  NgxToolsSignalValidators,
+  FlatLookupPipe,
+} from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   RelatedPerson,
@@ -42,6 +41,16 @@ import {
   RELATED_PERSONS_PART_TYPEID,
 } from '../related-persons-part';
 import { RelatedPersonComponent } from '../related-person/related-person.component';
+
+interface RelatedPersonsPartControls {
+  persons: RelatedPerson[];
+}
+
+function toDraft(
+  part?: RelatedPersonsPart | null,
+): RelatedPersonsPartControls {
+  return { persons: copyFormValue(part?.persons || []) };
+}
 
 /**
  * RelatedPersonsPart editor component.
@@ -53,10 +62,8 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
   selector: 'cadmus-related-persons-part',
   templateUrl: './related-persons-part.component.html',
   styleUrls: ['./related-persons-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -71,117 +78,51 @@ import { RelatedPersonComponent } from '../related-person/related-person.compone
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
     FlatLookupPipe,
   ],
 })
-export class RelatedPersonsPartComponent
-  extends ModelEditorComponentBase<RelatedPersonsPart>
-  implements OnInit
-{
+export class RelatedPersonsPartComponent extends ModelEditorComponentBase<RelatedPersonsPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedIndex = signal<number>(-1);
   public readonly editedPerson = signal<RelatedPerson | undefined>(undefined);
 
   // related-person-types
-  public readonly prsTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly prsTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['related-person-types']?.entries,
+  );
   // asserted-id-tags
-  public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly idTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-tags']?.entries,
+  );
   // asserted-id-scopes
-  public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly idScopeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-scopes']?.entries,
+  );
   // assertion-tags
-  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly assTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['assertion-tags']?.entries,
+  );
   // doc-reference-types
-  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly refTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-types']?.entries,
+  );
   // doc-reference-tags
-  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly refTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-tags']?.entries,
+  );
 
-  public persons: FormControl<RelatedPerson[]>;
-
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.persons = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      entries: this.persons,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'asserted-id-tags';
-    if (this.hasThesaurus(key)) {
-      this.idTagEntries.set(thesauri[key].entries);
-    } else {
-      this.idTagEntries.set(undefined);
-    }
-    key = 'related-person-types';
-    if (this.hasThesaurus(key)) {
-      this.prsTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.prsTypeEntries.set(undefined);
-    }
-    key = 'asserted-id-scopes';
-    if (this.hasThesaurus(key)) {
-      this.idScopeEntries.set(thesauri[key].entries);
-    } else {
-      this.idScopeEntries.set(undefined);
-    }
-    key = 'assertion-tags';
-    if (this.hasThesaurus(key)) {
-      this.assTagEntries.set(thesauri[key].entries);
-    } else {
-      this.assTagEntries.set(undefined);
-    }
-    key = 'doc-reference-types';
-    if (this.hasThesaurus(key)) {
-      this.refTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.refTypeEntries.set(undefined);
-    }
-    key = 'doc-reference-tags';
-    if (this.hasThesaurus(key)) {
-      this.refTagEntries.set(thesauri[key].entries);
-    } else {
-      this.refTagEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: RelatedPersonsPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.persons.setValue(part.persons || []);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<RelatedPersonsPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.persons, 1);
+  });
 
   protected getValue(): RelatedPersonsPart {
     let part = this.getEditedPart(
       RELATED_PERSONS_PART_TYPEID
     ) as RelatedPersonsPart;
-    part.persons = this.persons.value || [];
+    part.persons = copyFormValue(this._draft().persons);
     return part;
   }
 
@@ -190,10 +131,9 @@ export class RelatedPersonsPartComponent
       type: this.prsTypeEntries()?.length ? this.prsTypeEntries()![0].id : '',
       name: '',
     };
-    this.persons.setValue([...this.persons.value, person]);
-    this.persons.updateValueAndValidity();
-    this.persons.markAsDirty();
-    this.editPerson(this.persons.value.length - 1);
+    this.form.persons().value.set([...this.form.persons().value(), person]);
+    this.form.persons().markAsDirty();
+    this.editPerson(this.form.persons().value().length - 1);
   }
 
   public editPerson(index: number): void {
@@ -202,18 +142,17 @@ export class RelatedPersonsPartComponent
       this.editedPerson.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedPerson.set(deepCopy(this.persons.value[index]));
+      this.editedPerson.set(copyFormValue(this.form.persons().value()[index]));
     }
   }
 
   public onPersonSave(entry: RelatedPerson): void {
-    this.persons.setValue(
-      this.persons.value.map((e: RelatedPerson, i: number) =>
+    this.form.persons().value.set(
+      this.form.persons().value().map((e: RelatedPerson, i: number) =>
         i === this.editedIndex() ? entry : e
       )
     );
-    this.persons.updateValueAndValidity();
-    this.persons.markAsDirty();
+    this.form.persons().markAsDirty();
     this.editPerson(-1);
   }
 
@@ -227,11 +166,10 @@ export class RelatedPersonsPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const entries = [...this.persons.value];
+          const entries = [...this.form.persons().value()];
           entries.splice(index, 1);
-          this.persons.setValue(entries);
-          this.persons.updateValueAndValidity();
-          this.persons.markAsDirty();
+          this.form.persons().value.set(entries);
+          this.form.persons().markAsDirty();
           // keep the edited person in sync with the changed list
           if (index === this.editedIndex()) {
             this.editPerson(-1);
@@ -258,27 +196,25 @@ export class RelatedPersonsPartComponent
     if (index < 1) {
       return;
     }
-    const entry = this.persons.value[index];
-    const entries = [...this.persons.value];
+    const entry = this.form.persons().value()[index];
+    const entries = [...this.form.persons().value()];
     entries.splice(index, 1);
     entries.splice(index - 1, 0, entry);
-    this.persons.setValue(entries);
-    this.persons.updateValueAndValidity();
-    this.persons.markAsDirty();
+    this.form.persons().value.set(entries);
+    this.form.persons().markAsDirty();
     this.onPersonsSwapped(index, index - 1);
   }
 
   public movePersonDown(index: number): void {
-    if (index + 1 >= this.persons.value.length) {
+    if (index + 1 >= this.form.persons().value().length) {
       return;
     }
-    const entry = this.persons.value[index];
-    const entries = [...this.persons.value];
+    const entry = this.form.persons().value()[index];
+    const entries = [...this.form.persons().value()];
     entries.splice(index, 1);
     entries.splice(index + 1, 0, entry);
-    this.persons.setValue(entries);
-    this.persons.updateValueAndValidity();
-    this.persons.markAsDirty();
+    this.form.persons().value.set(entries);
+    this.form.persons().markAsDirty();
     this.onPersonsSwapped(index, index + 1);
   }
 }

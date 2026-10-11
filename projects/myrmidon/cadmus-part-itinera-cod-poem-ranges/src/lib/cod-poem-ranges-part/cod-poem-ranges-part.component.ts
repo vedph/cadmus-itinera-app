@@ -1,20 +1,20 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
-  OnInit,
+  inject,
+  linkedSignal,
   signal,
   ViewChild,
-  ChangeDetectionStrategy
 } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  FormField,
+  form,
+  maxLength,
+  pattern,
+  required,
+} from '@angular/forms/signals';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs';
 
@@ -37,16 +37,13 @@ import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   CodPoemLayout,
@@ -61,6 +58,30 @@ import {
 import { CodPoemRangeLayoutsComponent } from '../cod-poem-range-layouts/cod-poem-range-layouts.component';
 import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
 
+interface CodPoemRangesPartControls {
+  sortType: string;
+  ranges: AlnumRange[];
+  layouts: CodPoemLayout[];
+  tag: string;
+  note: string;
+}
+
+function toDraft(
+  part: CodPoemRangesPart | null | undefined,
+  sortEntries: ThesaurusEntry[] | undefined,
+): CodPoemRangesPartControls {
+  return {
+    // a part without type gets the first type available, if any
+    sortType: part
+      ? part.sortType || (sortEntries?.length ? sortEntries[0].id : '')
+      : '',
+    ranges: copyFormValue(part?.ranges || []),
+    layouts: copyFormValue(part?.layouts || []),
+    tag: part?.tag || '',
+    note: part?.note || '',
+  };
+}
+
 /**
  * CodPoemRanges part editor component.
  * Thesauri: cod-poem-range-sort-types, cod-poem-range-layouts, cod-poem-range-tags
@@ -70,10 +91,9 @@ import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
   selector: 'cadmus-cod-poem-ranges-part',
   templateUrl: './cod-poem-ranges-part.component.html',
   styleUrls: ['./cod-poem-ranges-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -94,163 +114,89 @@ import { AlnumRangePipe } from '../pipes/alnum-range.pipe';
     TitleCasePipe,
     CodPoemRangeLayoutsComponent,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
     AlnumRangePipe,
   ],
 })
-export class CodPoemRangesPartComponent
-  extends ModelEditorComponentBase<CodPoemRangesPart>
-  implements OnInit
-{
+export class CodPoemRangesPartComponent extends ModelEditorComponentBase<CodPoemRangesPart> {
+  private readonly _alnumService = inject(AlnumRangeService);
+  private readonly _dialogService = inject(DialogService);
+  private readonly _snackbar = inject(MatSnackBar);
+
   // cod-poem-range-sort-types
-  public readonly sortEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly sortEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['cod-poem-range-sort-types']?.entries,
+  );
   // cod-poem-range-layouts
-  public readonly layoutEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly layoutEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['cod-poem-range-layouts']?.entries,
   );
   // cod-poem-range-tags
-  public readonly tagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly tagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['cod-poem-range-tags']?.entries,
+  );
 
-  public sortType: FormControl<string | null>;
-  public ranges: FormControl<AlnumRange[]>;
-  public layouts: FormControl<CodPoemLayout[]>;
-  public tag: FormControl<string | null>;
-  public note: FormControl<string | null>;
+  private readonly _draft = linkedSignal(() =>
+    toDraft(this.data()?.value, this.sortEntries()),
+  );
+  public readonly form = this.createForm(this._draft, (p) => {
+    required(p.sortType);
+    maxLength(p.sortType, 50);
+    maxLength(p.tag, 50);
+    maxLength(p.note, 1000);
+  });
 
-  // sub-form
-  public addedRanges: FormControl<string | null>;
-  public addForm: FormGroup;
+  // sub-form: the ranges to add, not part of the model
+  public readonly addForm = form(signal({ addedRanges: '' }), (p) => {
+    required(p.addedRanges);
+    pattern(p.addedRanges, new RegExp(ALNUM_RANGE_PATTERN));
+  });
 
   @ViewChild('adder')
   public adderRef?: ElementRef;
 
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _alnumService: AlnumRangeService,
-    private _dialogService: DialogService,
-    private _snackbar: MatSnackBar
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.sortType = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.ranges = formBuilder.control([], { nonNullable: true });
-    this.layouts = formBuilder.control([], { nonNullable: true });
-    this.tag = formBuilder.control(null, Validators.maxLength(50));
-    this.note = formBuilder.control(null, Validators.maxLength(1000));
-    this.addedRanges = formBuilder.control(null, [
-      Validators.required,
-      Validators.pattern(new RegExp(ALNUM_RANGE_PATTERN)),
-    ]);
-    this.addForm = formBuilder.group({
-      addedRanges: this.addedRanges,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      sortType: this.sortType,
-      ranges: this.ranges,
-      layouts: this.layouts,
-      tag: this.tag,
-      note: this.note,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'cod-poem-range-sort-types';
-    if (this.hasThesaurus(key)) {
-      this.sortEntries.set(thesauri[key].entries);
-    } else {
-      this.sortEntries.set(undefined);
-    }
-    key = 'cod-poem-range-layouts';
-    if (this.hasThesaurus(key)) {
-      this.layoutEntries.set(thesauri[key].entries);
-    } else {
-      this.layoutEntries.set(undefined);
-    }
-    key = 'cod-poem-range-tags';
-    if (this.hasThesaurus(key)) {
-      this.tagEntries.set(thesauri[key].entries);
-    } else {
-      this.tagEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: CodPoemRangesPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.sortType.setValue(
-      part.sortType
-        ? part.sortType
-        : this.sortEntries()?.length
-        ? this.sortEntries()![0].id
-        : '',
-      { emitEvent: false }
-    );
-    this.ranges.setValue(part.ranges || [], { emitEvent: false });
-    this.layouts.setValue(part.layouts || [], { emitEvent: false });
-    this.tag.setValue(part.tag || null, { emitEvent: false });
-    this.note.setValue(part.note || null, { emitEvent: false });
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<CodPoemRangesPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
-
   protected getValue(): CodPoemRangesPart {
     let part = this.getEditedPart(
-      COD_POEM_RANGES_PART_TYPEID
+      COD_POEM_RANGES_PART_TYPEID,
     ) as CodPoemRangesPart;
-    part.sortType = this.sortType.value || '';
-    part.ranges = this.ranges.value?.length ? this.ranges.value : undefined;
-    part.layouts = this.layouts.value?.length ? this.layouts.value : undefined;
-    part.tag = this.tag.value?.trim();
-    part.note = this.note.value?.trim();
+    const draft = this._draft();
+    part.sortType = draft.sortType.trim();
+    part.ranges = draft.ranges.length ? copyFormValue(draft.ranges) : undefined;
+    part.layouts = draft.layouts.length
+      ? copyFormValue(draft.layouts)
+      : undefined;
+    part.tag = draft.tag.trim() || undefined;
+    part.note = draft.note.trim() || undefined;
     return part;
   }
 
+  private setRanges(ranges: AlnumRange[]): void {
+    this.form.ranges().value.set(ranges);
+    this.form.ranges().markAsDirty();
+  }
+
   public addRanges(): void {
-    if (this.addForm.invalid) {
+    if (this.addForm().invalid()) {
       return;
     }
-    const newRanges = this._alnumService.parseRanges(this.addedRanges.value);
+    const newRanges = this._alnumService.parseRanges(
+      this.addForm.addedRanges().value(),
+    );
     if (newRanges.length) {
-      const ranges: AlnumRange[] = [...this.ranges.value, ...newRanges];
-
-      this.ranges.setValue(ranges);
-      this.ranges.updateValueAndValidity();
-      this.ranges.markAsDirty();
-      this.addedRanges.reset();
+      this.setRanges([...this.form.ranges().value(), ...newRanges]);
+      this.addForm.addedRanges().value.set('');
+      this.addForm().reset();
     }
   }
 
   public deleteRange(index: number): void {
-    const newRanges = [...this.ranges.value];
+    const newRanges = [...this.form.ranges().value()];
     newRanges.splice(index, 1);
-    this.ranges.setValue(newRanges);
-    this.ranges.updateValueAndValidity();
-    this.ranges.markAsDirty();
+    this.setRanges(newRanges);
   }
 
   public deleteAllRanges(): void {
-    if (!this.ranges.value.length) {
+    if (!this.form.ranges().value().length) {
       return;
     }
     this._dialogService
@@ -258,9 +204,7 @@ export class CodPoemRangesPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          this.ranges.setValue([]);
-          this.ranges.updateValueAndValidity();
-          this.ranges.markAsDirty();
+          this.setRanges([]);
         }
       });
   }
@@ -269,40 +213,27 @@ export class CodPoemRangesPartComponent
     if (index < 1) {
       return;
     }
-    const item = this.ranges.value[index];
-    const items = [...this.ranges.value];
+    const item = this.form.ranges().value()[index];
+    const items = [...this.form.ranges().value()];
     items.splice(index, 1);
     items.splice(index - 1, 0, item);
-    this.ranges.setValue(items);
-    this.ranges.updateValueAndValidity();
-    this.ranges.markAsDirty();
+    this.setRanges(items);
   }
 
   public moveRangeDown(index: number): void {
-    if (index + 1 >= this.ranges.value.length) {
+    if (index + 1 >= this.form.ranges().value().length) {
       return;
     }
-    const item = this.ranges.value[index];
-    const items = [...this.ranges.value];
+    const item = this.form.ranges().value()[index];
+    const items = [...this.form.ranges().value()];
     items.splice(index, 1);
     items.splice(index + 1, 0, item);
-    this.ranges.setValue(items);
-    this.ranges.updateValueAndValidity();
-    this.ranges.markAsDirty();
-  }
-
-  public onTabIndexChange(index: number): void {
-    // whenever we move on layouts, update them if ranges changed
-    if (index === 1 && this.ranges.dirty) {
-      this.ranges.setValue(this.ranges.value);
-      this.layouts.setValue(this.layouts.value);
-    }
+    this.setRanges(items);
   }
 
   public onLayoutsChange(layouts: CodPoemLayout[]): void {
-    this.layouts.setValue(layouts);
-    this.layouts.updateValueAndValidity();
-    this.layouts.markAsDirty();
+    this.form.layouts().value.set(copyFormValue(layouts));
+    this.form.layouts().markAsDirty();
     this._snackbar.open('Layout applied', 'OK', {
       duration: 1500,
     });

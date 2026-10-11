@@ -1,19 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
-  OnInit,
+  inject,
+  linkedSignal,
   signal,
-  ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormField, maxLength, required } from '@angular/forms/signals';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs';
 
@@ -43,18 +36,16 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
-import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
+  setFieldFromChild,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   AssertedCompositeId,
   AssertedCompositeIdsComponent,
@@ -78,6 +69,32 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
   };
 }
 
+interface LiteraryWorkInfoPartControls {
+  languages: string[];
+  genre: string;
+  metres: string[];
+  strophes: string;
+  isLost: boolean;
+  authorIds: AssertedCompositeId[];
+  titles: AssertedTitle[];
+  note: string;
+}
+
+function toDraft(
+  part?: LiteraryWorkInfoPart | null,
+): LiteraryWorkInfoPartControls {
+  return {
+    languages: [...(part?.languages || [])],
+    genre: part?.genre || '',
+    metres: [...(part?.metres || [])],
+    strophes: part?.strophes?.length ? part.strophes.join('\n') : '',
+    isLost: !!part?.isLost,
+    authorIds: copyFormValue(part?.authorIds || []),
+    titles: copyFormValue(part?.titles || []),
+    note: part?.note || '',
+  };
+}
+
 /**
  * LiteraryWorkInfo part editor component.
  * Thesauri: literary-work-languages, literary-work-genres,
@@ -89,10 +106,9 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
   selector: 'cadmus-literary-work-info-part',
   templateUrl: './literary-work-info-part.component.html',
   styleUrls: ['./literary-work-info-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -119,42 +135,46 @@ function entryToFlag(entry: ThesaurusEntry): Flag {
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
   ],
 })
-export class LiteraryWorkInfoPartComponent
-  extends ModelEditorComponentBase<LiteraryWorkInfoPart>
-  implements OnInit
-{
+export class LiteraryWorkInfoPartComponent extends ModelEditorComponentBase<LiteraryWorkInfoPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedIndex = signal<number>(-1);
   public readonly editedTitle = signal<AssertedTitle | undefined>(undefined);
-  public readonly pickedGenre = signal<string | undefined>(undefined);
 
   // literary-work-genres
-  public readonly genreEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly genreEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['literary-work-genres']?.entries,
   );
-  public readonly langEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  // literary-work-languages
+  public readonly langEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['literary-work-languages']?.entries,
+  );
   // literary-work-metres
-  public readonly mtrEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly mtrEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['literary-work-metres']?.entries,
+  );
   // assertion-tags
-  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly assTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['assertion-tags']?.entries,
   );
   // doc-reference-types
-  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly refTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-types']?.entries,
   );
   // doc-reference-tags
-  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly refTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-tags']?.entries,
   );
   // asserted-id-scopes
-  public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly idScopeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-scopes']?.entries,
   );
   // asserted-id-tags
-  public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined,
+  public readonly idTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-tags']?.entries,
   );
 
   public readonly langFlags = computed<Flag[]>(
@@ -164,145 +184,22 @@ export class LiteraryWorkInfoPartComponent
     () => this.mtrEntries()?.map(entryToFlag) || [],
   );
 
-  public languages: FormControl<string[]>;
-  public genre: FormControl<string | null>;
-  public metres: FormControl<string[]>;
-  public strophes: FormControl<string | null>;
-  public isLost: FormControl<boolean>;
-  public authorIds: FormControl<AssertedCompositeId[]>;
-  public titles: FormControl<AssertedTitle[]>;
-  public note: FormControl<string | null>;
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.languages, 1);
+    required(p.genre);
+    maxLength(p.genre, 100);
+    NgxToolsSignalValidators.strictMinLength(p.titles, 1);
+    maxLength(p.note, 1000);
+  });
 
-  // literary-work-languages
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService,
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.languages = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-    this.genre = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(100),
-    ]);
-    this.metres = formBuilder.control([], { nonNullable: true });
-    this.strophes = formBuilder.control(null);
-    this.isLost = formBuilder.control(false, { nonNullable: true });
-    this.authorIds = formBuilder.control([], { nonNullable: true });
-    this.titles = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-    this.note = formBuilder.control(null, Validators.maxLength(1000));
-  }
+  // the label of the genre, when it is picked from its thesaurus
+  public readonly pickedGenre = computed<string | undefined>(() => {
+    const genre = this.form.genre().value();
+    return this.genreEntries()?.find((e) => e.id === genre)?.value;
+  });
 
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      languages: this.languages,
-      genre: this.genre,
-      metres: this.metres,
-      strophes: this.strophes,
-      isLost: this.isLost,
-      author: this.authorIds,
-      titles: this.titles,
-      note: this.note,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'literary-work-languages';
-    if (this.hasThesaurus(key)) {
-      this.langEntries.set(thesauri[key].entries);
-    } else {
-      this.langEntries.set(undefined);
-    }
-    key = 'literary-work-genres';
-    if (this.hasThesaurus(key)) {
-      this.genreEntries.set(thesauri[key].entries);
-    } else {
-      this.genreEntries.set(undefined);
-    }
-    key = 'literary-work-metres';
-    if (this.hasThesaurus(key)) {
-      this.mtrEntries.set(thesauri[key].entries);
-    } else {
-      this.mtrEntries.set(undefined);
-    }
-    key = 'assertion-tags';
-    if (this.hasThesaurus(key)) {
-      this.assTagEntries.set(thesauri[key].entries);
-    } else {
-      this.assTagEntries.set(undefined);
-    }
-    key = 'doc-reference-types';
-    if (this.hasThesaurus(key)) {
-      this.refTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.refTypeEntries.set(undefined);
-    }
-    key = 'doc-reference-tags';
-    if (this.hasThesaurus(key)) {
-      this.refTagEntries.set(thesauri[key].entries);
-    } else {
-      this.refTagEntries.set(undefined);
-    }
-    key = 'asserted-id-scopes';
-    if (this.hasThesaurus(key)) {
-      this.idScopeEntries.set(thesauri[key].entries);
-    } else {
-      this.idScopeEntries.set(undefined);
-    }
-    key = 'asserted-id-tags';
-    if (this.hasThesaurus(key)) {
-      this.idTagEntries.set(thesauri[key].entries);
-    } else {
-      this.idTagEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: LiteraryWorkInfoPart | null): void {
-    if (!part) {
-      this.form.reset();
-      this.pickedGenre.set(undefined);
-      return;
-    }
-    this.languages.setValue(part.languages || []);
-    this.genre.setValue(part.genre);
-    this.pickedGenre.set(
-      this.genreEntries()?.find((e) => e.id === part.genre)?.value,
-    );
-    this.metres.setValue(part.metres || []);
-    this.strophes.setValue(
-      part.strophes?.length ? part.strophes.join('\n') : '',
-    );
-    this.isLost.setValue(part.isLost ? true : false);
-    this.authorIds.setValue(part.authorIds || []);
-    this.titles.setValue(part.titles || []);
-    this.note.setValue(part.note || null);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(
-    data?: EditedObject<LiteraryWorkInfoPart>,
-  ): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
-
-  private parseStrophes(text: string | null): string[] | undefined {
+  private parseStrophes(text: string): string[] | undefined {
     if (!text) {
       return undefined;
     }
@@ -321,37 +218,32 @@ export class LiteraryWorkInfoPartComponent
     let part = this.getEditedPart(
       LITERARY_WORK_INFO_PART_TYPEID,
     ) as LiteraryWorkInfoPart;
-    part.languages = this.languages.value || [];
-    part.genre = this.genre.value?.trim() || '';
-    part.metres = this.metres.value?.length ? this.metres.value : undefined;
-    part.strophes = this.parseStrophes(this.strophes.value);
-    part.isLost = this.isLost.value ? true : undefined;
-    part.authorIds = this.authorIds.value.length
-      ? this.authorIds.value
+    const draft = this._draft();
+    part.languages = [...draft.languages];
+    part.genre = draft.genre.trim();
+    part.metres = draft.metres.length ? [...draft.metres] : undefined;
+    part.strophes = this.parseStrophes(draft.strophes);
+    part.isLost = draft.isLost ? true : undefined;
+    part.authorIds = draft.authorIds.length
+      ? copyFormValue(draft.authorIds)
       : undefined;
-    part.titles = this.titles.value || [];
-    part.note = this.note.value?.trim();
+    part.titles = copyFormValue(draft.titles);
+    part.note = draft.note.trim() || undefined;
 
     return part;
   }
 
   public onLanguageIdsChange(ids: string[]): void {
-    this.languages.setValue(ids);
-    this.languages.updateValueAndValidity();
-    this.languages.markAsDirty();
+    setFieldFromChild(this.form.languages, [...(ids || [])]);
   }
 
   public onMetreIdsChange(ids: string[]): void {
-    this.metres.setValue(ids);
-    this.metres.updateValueAndValidity();
-    this.metres.markAsDirty();
+    setFieldFromChild(this.form.metres, [...(ids || [])]);
   }
 
   public onEntryChange(entry: ThesaurusEntry): void {
-    this.genre.setValue(entry.id);
-    this.genre.updateValueAndValidity();
-    this.genre.markAsDirty();
-    this.pickedGenre.set(entry.value);
+    this.form.genre().value.set(entry.id);
+    this.form.genre().markAsDirty();
   }
 
   public renderLabel(label: string): string {
@@ -359,9 +251,12 @@ export class LiteraryWorkInfoPartComponent
   }
 
   public onAuthorIdsChange(ids: AssertedCompositeId[]): void {
-    this.authorIds.setValue(ids);
-    this.authorIds.updateValueAndValidity();
-    this.authorIds.markAsDirty();
+    setFieldFromChild(this.form.authorIds, copyFormValue(ids || []));
+  }
+
+  private setTitles(titles: AssertedTitle[]): void {
+    this.form.titles().value.set(titles);
+    this.form.titles().markAsDirty();
   }
 
   //#region Titles
@@ -370,10 +265,8 @@ export class LiteraryWorkInfoPartComponent
       language: this.langEntries()?.length ? this.langEntries()![0].id : '',
       value: '',
     };
-    this.titles.setValue([...this.titles.value, title]);
-    this.titles.updateValueAndValidity();
-    this.titles.markAsDirty();
-    this.editTitle(this.titles.value.length - 1);
+    this.setTitles([...this.form.titles().value(), title]);
+    this.editTitle(this.form.titles().value().length - 1);
   }
 
   public editTitle(index: number): void {
@@ -382,18 +275,19 @@ export class LiteraryWorkInfoPartComponent
       this.editedTitle.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedTitle.set(deepCopy(this.titles.value[index]));
+      this.editedTitle.set(copyFormValue(this.form.titles().value()[index]));
     }
   }
 
   public onTitleSave(item: AssertedTitle): void {
-    this.titles.setValue(
-      this.titles.value.map((x: AssertedTitle, i: number) =>
-        i === this.editedIndex() ? item : x,
-      ),
+    this.setTitles(
+      this.form
+        .titles()
+        .value()
+        .map((x: AssertedTitle, i: number) =>
+          i === this.editedIndex() ? item : x,
+        ),
     );
-    this.titles.updateValueAndValidity();
-    this.titles.markAsDirty();
     this.editTitle(-1);
   }
 
@@ -407,11 +301,9 @@ export class LiteraryWorkInfoPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const titles = [...this.titles.value];
+          const titles = [...this.form.titles().value()];
           titles.splice(index, 1);
-          this.titles.setValue(titles);
-          this.titles.updateValueAndValidity();
-          this.titles.markAsDirty();
+          this.setTitles(titles);
           // keep the edited title in sync with the changed list
           if (index === this.editedIndex()) {
             this.editTitle(-1);
@@ -438,27 +330,23 @@ export class LiteraryWorkInfoPartComponent
     if (index < 1) {
       return;
     }
-    const title = this.titles.value[index];
-    const titles = [...this.titles.value];
+    const title = this.form.titles().value()[index];
+    const titles = [...this.form.titles().value()];
     titles.splice(index, 1);
     titles.splice(index - 1, 0, title);
-    this.titles.setValue(titles);
-    this.titles.updateValueAndValidity();
-    this.titles.markAsDirty();
+    this.setTitles(titles);
     this.onTitlesSwapped(index, index - 1);
   }
 
   public moveTitleDown(index: number): void {
-    if (index + 1 >= this.titles.value.length) {
+    if (index + 1 >= this.form.titles().value().length) {
       return;
     }
-    const title = this.titles.value[index];
-    const titles = [...this.titles.value];
+    const title = this.form.titles().value()[index];
+    const titles = [...this.form.titles().value()];
     titles.splice(index, 1);
     titles.splice(index + 1, 0, title);
-    this.titles.setValue(titles);
-    this.titles.updateValueAndValidity();
-    this.titles.markAsDirty();
+    this.setTitles(titles);
     this.onTitlesSwapped(index, index + 1);
   }
   //#endregion

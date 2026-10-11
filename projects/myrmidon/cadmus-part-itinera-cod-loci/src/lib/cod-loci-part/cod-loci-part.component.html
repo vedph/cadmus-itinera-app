@@ -1,106 +1,106 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Loci Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-tab-group
-        [selectedIndex]="tabIndex()"
-        (selectedIndexChange)="tabIndex.set($event)"
-      >
-        <mat-tab label="loci">
-          <div>
-            <button
-              type="button"
-              mat-flat-button
-              class="mat-primary"
-              (click)="addLocus()"
-            >
-              <mat-icon>add_circle</mat-icon> locus
-            </button>
-          </div>
-          @if (loci.value.length) {
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>citation</th>
-                <th>span</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for ( entry of loci.value; track entry; let i = $index; let first
-              = $first; let last = $last) {
-              <tr [class.selected]="i === editedIndex()">
-                <td class="fit-width">
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Edit this locus"
-                    (click)="editLocus(i)"
-                  >
-                    <mat-icon class="mat-primary">edit</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this locus up"
-                    [disabled]="first"
-                    (click)="moveLocusUp(i)"
-                  >
-                    <mat-icon>arrow_upward</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this locus down"
-                    [disabled]="last"
-                    (click)="moveLocusDown(i)"
-                  >
-                    <mat-icon>arrow_downward</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Delete this locus"
-                    (click)="deleteLocus(i)"
-                  >
-                    <mat-icon class="mat-warn">remove_circle</mat-icon>
-                  </button>
-                </td>
-                <td>{{ entry.citation }}</td>
-                <td>{{ entry.range | codLocationRange }}</td>
-              </tr>
-              }
-            </tbody>
-          </table>
-          }
-        </mat-tab>
-
-        @if (editedLocus()) {
-        <mat-tab label="locus">
-          <cadmus-cod-locus
-            [locEntries]="locEntries()"
-            [imgTypeEntries]="imgTypeEntries()"
-            [locus]="editedLocus()"
-            (locusChange)="onLocusSave($event!)"
-            (editorClose)="onLocusClose()"
-          />
-        </mat-tab>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Loci Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group
+      [selectedIndex]="tabIndex()"
+      (selectedIndexChange)="tabIndex.set($event)"
+    >
+      <mat-tab label="loci">
+        <div>
+          <button
+            type="button"
+            mat-flat-button
+            class="mat-primary"
+            (click)="addLocus()"
+          >
+            <mat-icon>add_circle</mat-icon> locus
+          </button>
+        </div>
+        @if (form.loci().value().length) {
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>citation</th>
+              <th>span</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for ( entry of form.loci().value(); track entry; let i = $index; let first
+            = $first; let last = $last) {
+            <tr [class.selected]="i === editedIndex()">
+              <td class="fit-width">
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Edit this locus"
+                  (click)="editLocus(i)"
+                >
+                  <mat-icon class="mat-primary">edit</mat-icon>
+                </button>
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Move this locus up"
+                  [disabled]="first"
+                  (click)="moveLocusUp(i)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Move this locus down"
+                  [disabled]="last"
+                  (click)="moveLocusDown(i)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Delete this locus"
+                  (click)="deleteLocus(i)"
+                >
+                  <mat-icon class="mat-warn">remove_circle</mat-icon>
+                </button>
+              </td>
+              <td>{{ entry.citation }}</td>
+              <td>{{ entry.range | codLocationRange }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
         }
-      </mat-tab-group>
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
-      />
-    </mat-card-actions>
-  </mat-card>
-</form>
+      </mat-tab>
+
+      @if (editedLocus()) {
+      <mat-tab label="locus">
+        <cadmus-cod-locus
+          [locEntries]="locEntries()"
+          [imgTypeEntries]="imgTypeEntries()"
+          [locus]="editedLocus()"
+          (locusChange)="onLocusSave($event!)"
+          (editorClose)="onLocusClose()"
+        />
+      </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

@@ -21,6 +21,7 @@ import {
   createThesauri,
   PartEditorMocksOptions,
   TEST_ITEM_ID,
+  setInputValue,
 } from '../../../../../testing/part-testing';
 import {
   LITERARY_WORK_INFO_PART_TYPEID,
@@ -398,7 +399,7 @@ describe('LiteraryWorkInfoPartComponent', () => {
     const genre = await screen.findByRole('textbox', { name: 'genre' });
     await user.clear(genre);
     await user.click(genre);
-    await user.paste('x'.repeat(101));
+    setInputValue(genre, 'x'.repeat(101));
     await user.tab();
 
     expect(screen.getByText('genre too long')).toBeInTheDocument();
@@ -521,7 +522,7 @@ describe('LiteraryWorkInfoPartComponent', () => {
 
     const note = screen.getByLabelText('note');
     await user.click(note);
-    await user.paste('x'.repeat(1001));
+    setInputValue(note, 'x'.repeat(1001));
     await user.tab();
 
     expect(screen.getByText('note too long')).toBeInTheDocument();
@@ -605,6 +606,48 @@ describe('LiteraryWorkInfoPartComponent', () => {
     expect(part.isLost).toBeUndefined();
     expect(part.authorIds).toBeUndefined();
     expect(part.note).toBeFalsy();
+  });
+
+  it('should stay pristine after its child editors echo the bound data', async () => {
+    // nulls as in real data: the child editors emit a normalized copy
+    const { dirtyChange, fixture } = await setup({
+      data: createData({
+        ...PROPS,
+        authorIds: [
+          {
+            target: { gid: 'http://viaf.org/viaf/1', label: 'Vergilius' },
+            scope: null,
+            tag: null,
+            assertion: null,
+          } as any,
+        ],
+      }),
+    });
+
+    // past the autosave debounce of the child editors
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.isDirty()).toBe(false);
+    expect(dirtyChange).not.toHaveBeenCalledWith(true);
+  });
+
+  it('should emit titles and authors without any form tag on save', async () => {
+    const { user, dataChange } = await setup({ data: createData() });
+
+    await user.click(titleButton(0, 'Move this title down'));
+    await user.click(saveButton());
+
+    const part = savedPart(dataChange);
+    for (const o of [...part.titles, ...part.authorIds!]) {
+      expect(Object.getOwnPropertySymbols(o)).toEqual([]);
+    }
+  });
+
+  it('should render no form element around its buttons', async () => {
+    await setup({ data: createData() });
+
+    expect(saveButton().closest('form')).toBeNull();
   });
 
   it('should request to close', async () => {

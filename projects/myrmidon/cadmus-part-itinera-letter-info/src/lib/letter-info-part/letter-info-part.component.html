@@ -1,56 +1,56 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Letter Info Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <!-- subject -->
-      <div>
-        <mat-form-field class="long-text">
-          <mat-label>subject</mat-label>
-          <textarea matInput [formControl]="subject"></textarea>
-          @if ( $any(subject).errors?.maxlength && (subject.dirty ||
-          subject.touched) ) {
-          <mat-error>subject too long</mat-error>
-          }
-        </mat-form-field>
-      </div>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Letter Info Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <!-- subject -->
+    <div>
+      <mat-form-field class="long-text">
+        <mat-label>subject</mat-label>
+        <textarea matInput [formField]="form.subject"></textarea>
+        @if ( form.subject().getError("maxLength") && (form.subject().dirty() ||
+        form.subject().touched()) ) {
+        <mat-error>subject too long</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-      <!-- header -->
-      <div>
-        <mat-form-field class="long-text">
-          <mat-label>header</mat-label>
-          <input matInput [formControl]="header" />
-          @if ( $any(header).errors?.maxlength && (header.dirty ||
-          header.touched) ) {
-          <mat-error>header too long</mat-error>
-          }
-        </mat-form-field>
-      </div>
+    <!-- header -->
+    <div>
+      <mat-form-field class="long-text">
+        <mat-label>header</mat-label>
+        <input matInput [formField]="form.header" />
+        @if ( form.header().getError("maxLength") && (form.header().dirty() ||
+        form.header().touched()) ) {
+        <mat-error>header too long</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-      <!-- textDate -->
-      <div>
-        <mat-form-field class="long-text">
-          <mat-label>text date</mat-label>
-          <input matInput [formControl]="textDate" />
-          @if ( $any(textDate).errors?.maxlength && (textDate.dirty ||
-          textDate.touched) ) {
-          <mat-error>date too long</mat-error>
-          }
-        </mat-form-field>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
-      />
-    </mat-card-actions>
-  </mat-card>
-</form>
+    <!-- textDate -->
+    <div>
+      <mat-form-field class="long-text">
+        <mat-label>text date</mat-label>
+        <input matInput [formField]="form.textDate" />
+        @if ( form.textDate().getError("maxLength") && (form.textDate().dirty() ||
+        form.textDate().touched()) ) {
+        <mat-error>date too long</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

@@ -1,12 +1,12 @@
-<form [formGroup]="form" (submit)="save(); $event.stopPropagation()">
+<div (keydown.enter)="onEnterKey($event)">
   <!-- title -->
   <div>
     <mat-form-field class="long-text">
       <mat-label>title</mat-label>
-      <input matInput [formControl]="title" />
-      @if ($any(title).errors?.required && (title.dirty || title.touched)) {
+      <input matInput [formField]="form.title" />
+      @if (form.title().getError("required") && (form.title().dirty() || form.title().touched())) {
       <mat-error>title required</mat-error>
-      } @if ($any(title).errors?.maxlength && (title.dirty || title.touched)) {
+      } @if (form.title().getError("maxLength") && (form.title().dirty() || form.title().touched())) {
       <mat-error>title too long</mat-error>
       }
     </mat-form-field>
@@ -16,8 +16,8 @@
   <div>
     <mat-form-field class="long-text">
       <mat-label>EID</mat-label>
-      <input matInput [formControl]="eid" />
-      @if ($any(eid).errors?.maxlength && (eid.dirty || eid.touched)) {
+      <input matInput [formField]="form.eid" />
+      @if (form.eid().getError("maxLength") && (form.eid().dirty() || form.eid().touched())) {
       <mat-error>EID too long</mat-error>
       }
     </mat-form-field>
@@ -25,13 +25,13 @@
 
   <!-- assertion -->
   <div>
-    <mat-checkbox [formControl]="hasAssertion">assertion</mat-checkbox>
-    @if (hasAssertion.value) {
+    <mat-checkbox [formField]="form.hasAssertion">assertion</mat-checkbox>
+    @if (form.hasAssertion().value()) {
     <cadmus-refs-assertion
       [assTagEntries]="assTagEntries()"
       [refTagEntries]="refTagEntries()"
       [refTypeEntries]="refTypeEntries()"
-      [assertion]="assertion.value || undefined"
+      [assertion]="form.assertion().value() || undefined"
       (assertionChange)="onAssertionChange($event)"
     />
     }
@@ -48,12 +48,13 @@
       <mat-icon class="mat-warn">clear</mat-icon>
     </button>
     <button
-      type="submit"
+      type="button"
       mat-icon-button
       matTooltip="Accept changes"
-      [disabled]="form.invalid || form.pristine"
+      [disabled]="form().invalid() || !form().dirty()"
+      (click)="save()"
     >
       <mat-icon class="mat-primary">check_circle</mat-icon>
     </button>
   </div>
-</form>
+</div>

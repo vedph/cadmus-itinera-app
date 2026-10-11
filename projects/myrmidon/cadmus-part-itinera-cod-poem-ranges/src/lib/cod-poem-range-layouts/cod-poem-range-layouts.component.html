@@ -1,11 +1,11 @@
 <div>
-  <form class="form-row" (submit)="applyLayout(); $event.stopPropagation()">
+  <div class="form-row">
     <!-- layout (bound) -->
     @if (layoutEntries()?.length) {
     <mat-form-field class="form-col">
       <mat-label>layout</mat-label>
-      <mat-select [formControl]="layout">
-        <mat-option [value]="null">---</mat-option>
+      <mat-select [formField]="form.layout">
+        <mat-option [value]="''">---</mat-option>
         @for (e of layoutEntries(); track e.id) {
         <mat-option [value]="e.id">{{ e.value }}</mat-option>
         }
@@ -16,9 +16,13 @@
     @else {
     <mat-form-field class="form-col">
       <mat-label>layout</mat-label>
-      <input matInput [formControl]="layout" />
-      @if ( $any(layout).errors?.maxlength && (layout.dirty || layout.touched) )
-      {
+      <input
+        matInput
+        [formField]="form.layout"
+        (keydown.enter)="applyLayout()"
+      />
+      @if ( form.layout().getError("maxLength") && (form.layout().dirty() ||
+      form.layout().touched()) ) {
       <mat-error>layout too long</mat-error>
       }
     </mat-form-field>
@@ -26,8 +30,9 @@
 
     <button
       mat-icon-button
-      type="submit"
+      type="button"
       matTooltip="Apply layout to selected rows"
+      (click)="applyLayout()"
     >
       <mat-icon class="mat-primary">check_circle</mat-icon>
     </button>
@@ -51,7 +56,7 @@
     <!-- presets -->
     <mat-form-field>
       <mat-label>presets</mat-label>
-      <mat-select [formControl]="presets">
+      <mat-select [formField]="form.presets">
         <mat-option [value]="1">sonetto</mat-option>
         <mat-option [value]="2">canzone</mat-option>
         <mat-option [value]="3">ballata</mat-option>
@@ -60,7 +65,7 @@
       </mat-select>
     </mat-form-field>
     <button
-      [disabled]="!presets.value"
+      [disabled]="!form.presets().value()"
       mat-icon-button
       type="button"
       matTooltip="Select preset"
@@ -70,14 +75,14 @@
     </button>
     <button
       mat-icon-button
-      [disabled]="!presets.value"
+      [disabled]="!form.presets().value()"
       type="button"
       matTooltip="Deselect preset"
       (click)="checkPreset(false)"
     >
       <mat-icon>highlight_off</mat-icon>
     </button>
-  </form>
+  </div>
   <div class="layouts">
     @for (row of rows$ | async; track row) {
     <cadmus-cod-poem-ranges-layout

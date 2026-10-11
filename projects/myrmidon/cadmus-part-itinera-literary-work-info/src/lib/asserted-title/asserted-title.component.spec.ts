@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
-import { createPartEditorMocks } from '../../../../../testing/part-testing';
+import {
+  createPartEditorMocks,
+  setInputValue,
+} from '../../../../../testing/part-testing';
 import { AssertedTitle } from '../literary-work-info-part';
 import { AssertedTitleComponent } from './asserted-title.component';
 
@@ -192,7 +195,8 @@ describe('AssertedTitleComponent', () => {
     const { user } = await setup({ title: TITLE });
 
     await user.clear(language());
-    await user.type(language(), 'x'.repeat(51));
+    await user.click(language());
+    setInputValue(language(), 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('language too long')).toBeInTheDocument();
@@ -204,11 +208,31 @@ describe('AssertedTitleComponent', () => {
 
     await user.clear(value());
     await user.click(value());
-    await user.paste('x'.repeat(101));
+    setInputValue(value(), 'x'.repeat(101));
     await user.tab();
 
     expect(screen.getByText('title too long')).toBeInTheDocument();
     expect(acceptButton()).toBeDisabled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, titleChange } = await setup({ title: TITLE });
+
+    // pristine: nothing to save
+    await user.type(value(), '{Enter}');
+    expect(titleChange).not.toHaveBeenCalled();
+
+    await user.type(value(), ' changed{Enter}');
+
+    expect(titleChange).toHaveBeenCalledTimes(1);
+    expect(titleChange.mock.calls[0][0].value).toBe(`${TITLE.value} changed`);
+  });
+
+  it('should render no form element of its own', async () => {
+    const { container } = await setup({ title: TITLE });
+
+    expect(acceptButton().closest('form')).toBeNull();
+    expect(container.firstElementChild?.tagName).not.toBe('FORM');
   });
 
   it('should request to close without saving on discard', async () => {

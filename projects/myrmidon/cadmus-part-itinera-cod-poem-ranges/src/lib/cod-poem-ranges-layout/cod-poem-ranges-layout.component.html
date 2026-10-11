@@ -49,7 +49,7 @@
     <mat-form-field>
       <input
         matInput
-        [formControl]="note"
+        [formField]="form.note"
         (keydown.esc)="cancelNote()"
         (keydown.enter)="saveNote()"
       />
@@ -71,7 +71,8 @@
       >
         <mat-icon class="mat-primary">check_circle</mat-icon>
       </button>
-      @if ($any(note).errors?.maxlength && (note.dirty || note.touched)) {
+      @if ( form.note().getError("maxLength") && (form.note().dirty() ||
+      form.note().touched()) ) {
       <mat-error>note too long</mat-error>
       }
     </mat-form-field>

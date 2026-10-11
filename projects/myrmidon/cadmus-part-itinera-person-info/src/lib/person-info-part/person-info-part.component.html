@@ -1,63 +1,65 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Person Info Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div>
-        <!-- sex (bound) -->
-        @if (sexEntries()?.length) {
-          <mat-form-field>
-            <mat-label>sex</mat-label>
-            <mat-select [formControl]="sex">
-              @for (e of sexEntries(); track e.id) {
-                <mat-option [value]="e.id">{{ e.value }}</mat-option>
-              }
-            </mat-select>
-            @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
-              <mat-error>sex required</mat-error>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Person Info Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <!-- sex (bound) -->
+      @if (sexEntries()?.length) {
+        <mat-form-field>
+          <mat-label>sex</mat-label>
+          <mat-select [formField]="form.sex">
+            @for (e of sexEntries(); track e.id) {
+              <mat-option [value]="e.id">{{ e.value }}</mat-option>
             }
-          </mat-form-field>
-        }
-        <!-- sex (free) -->
-        @if (!sexEntries()?.length) {
-          <mat-form-field>
-            <mat-label>sex</mat-label>
-            <input matInput [formControl]="sex" />
-            @if ($any(sex).errors?.required && (sex.dirty || sex.touched)) {
-              <mat-error>sex required</mat-error>
-            }
-            @if ($any(sex).errors?.maxlength && (sex.dirty || sex.touched)) {
-              <mat-error>sex too long</mat-error>
-            }
-          </mat-form-field>
-        }
-      </div>
+          </mat-select>
+          @if (form.sex().getError("required") && (form.sex().dirty() || form.sex().touched())) {
+            <mat-error>sex required</mat-error>
+          }
+        </mat-form-field>
+      }
+      <!-- sex (free) -->
+      @if (!sexEntries()?.length) {
+        <mat-form-field>
+          <mat-label>sex</mat-label>
+          <input matInput [formField]="form.sex" />
+          @if (form.sex().getError("required") && (form.sex().dirty() || form.sex().touched())) {
+            <mat-error>sex required</mat-error>
+          }
+          @if (form.sex().getError("maxLength") && (form.sex().dirty() || form.sex().touched())) {
+            <mat-error>sex too long</mat-error>
+          }
+        </mat-form-field>
+      }
+    </div>
 
-      <!-- bio -->
-      <div id="editor">
-        <ngx-monaco-editor
-          [formControl]="bio"
-          [language]="'markdown'"
-          [options]="editorOptions"
-          (editorInitialized)="onEditorInit($event)"
-        />
-        @if ($any(bio).errors?.maxlength && (bio.touched || bio.dirty)) {
-          <mat-error>too long</mat-error>
-        }
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
+    <!-- bio -->
+    <div id="editor">
+      <ngx-monaco-editor
+        [value]="form.bio().value()"
+        (valueChange)="setFieldFromEditor(form.bio, $event)"
+        (blur)="form.bio().markAsTouched()"
+        [language]="'markdown'"
+        [options]="editorOptions"
+        (editorInitialized)="onEditorInit($event)"
       />
-    </mat-card-actions>
-  </mat-card>
-</form>
+      @if (form.bio().getError("maxLength") && (form.bio().touched() || form.bio().dirty())) {
+        <mat-error>too long</mat-error>
+      }
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

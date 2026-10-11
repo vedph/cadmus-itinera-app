@@ -1,12 +1,10 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
@@ -26,13 +24,13 @@ import {
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 
-import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
-import { EditedObject } from '@myrmidon/cadmus-core';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
 
 import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
@@ -44,6 +42,14 @@ import {
 } from '../witnesses-part';
 import { WitnessComponent } from '../witness/witness.component';
 
+interface WitnessesPartControls {
+  witnesses: Witness[];
+}
+
+function toDraft(part?: WitnessesPart | null): WitnessesPartControls {
+  return { witnesses: copyFormValue(part?.witnesses || []) };
+}
+
 /**
  * WitnessesPart editor component.
  * Thesauri: none.
@@ -52,10 +58,8 @@ import { WitnessComponent } from '../witness/witness.component';
   selector: 'cadmus-witnesses-part',
   templateUrl: './witnesses-part.component.html',
   styleUrls: ['./witnesses-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -71,57 +75,24 @@ import { WitnessComponent } from '../witness/witness.component';
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
     CodLocationRangePipe,
   ],
 })
-export class WitnessesPartComponent
-  extends ModelEditorComponentBase<WitnessesPart>
-  implements OnInit
-{
+export class WitnessesPartComponent extends ModelEditorComponentBase<WitnessesPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedWitness = signal<Witness | undefined>(undefined);
   public readonly editedIndex = signal<number>(-1);
 
-  public witnesses: FormControl<Witness[]>;
-
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.witnesses = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      witnesses: this.witnesses,
-    });
-  }
-
-  private updateForm(part?: WitnessesPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.witnesses.setValue(part.witnesses || []);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<WitnessesPart>): void {
-    this.updateForm(data?.value);
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.witnesses, 1);
+  });
 
   protected getValue(): WitnessesPart {
     let part = this.getEditedPart(WITNESSES_PART_TYPEID) as WitnessesPart;
-    part.witnesses = this.witnesses.value || [];
+    part.witnesses = copyFormValue(this._draft().witnesses);
     return part;
   }
 
@@ -130,10 +101,9 @@ export class WitnessesPartComponent
       id: '',
       ranges: [],
     };
-    this.witnesses.setValue([...this.witnesses.value, witness]);
-    this.witnesses.updateValueAndValidity();
-    this.witnesses.markAsDirty();
-    this.editWitness(this.witnesses.value.length - 1);
+    this.form.witnesses().value.set([...this.form.witnesses().value(), witness]);
+    this.form.witnesses().markAsDirty();
+    this.editWitness(this.form.witnesses().value().length - 1);
   }
 
   public editWitness(index: number): void {
@@ -142,18 +112,17 @@ export class WitnessesPartComponent
       this.editedWitness.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedWitness.set(deepCopy(this.witnesses.value[index]));
+      this.editedWitness.set(copyFormValue(this.form.witnesses().value()[index]));
     }
   }
 
   public onWitnessSave(entry: Witness): void {
-    this.witnesses.setValue(
-      this.witnesses.value.map((e: Witness, i: number) =>
+    this.form.witnesses().value.set(
+      this.form.witnesses().value().map((e: Witness, i: number) =>
         i === this.editedIndex() ? entry : e
       )
     );
-    this.witnesses.updateValueAndValidity();
-    this.witnesses.markAsDirty();
+    this.form.witnesses().markAsDirty();
     this.editWitness(-1);
   }
 
@@ -167,11 +136,10 @@ export class WitnessesPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const witnesses = [...this.witnesses.value];
+          const witnesses = [...this.form.witnesses().value()];
           witnesses.splice(index, 1);
-          this.witnesses.setValue(witnesses);
-          this.witnesses.updateValueAndValidity();
-          this.witnesses.markAsDirty();
+          this.form.witnesses().value.set(witnesses);
+          this.form.witnesses().markAsDirty();
           // keep the edited witness in sync with the changed list
           if (index === this.editedIndex()) {
             this.editWitness(-1);
@@ -198,27 +166,25 @@ export class WitnessesPartComponent
     if (index < 1) {
       return;
     }
-    const witness = this.witnesses.value[index];
-    const witnesses = [...this.witnesses.value];
+    const witness = this.form.witnesses().value()[index];
+    const witnesses = [...this.form.witnesses().value()];
     witnesses.splice(index, 1);
     witnesses.splice(index - 1, 0, witness);
-    this.witnesses.setValue(witnesses);
-    this.witnesses.updateValueAndValidity();
-    this.witnesses.markAsDirty();
+    this.form.witnesses().value.set(witnesses);
+    this.form.witnesses().markAsDirty();
     this.onWitnessesSwapped(index, index - 1);
   }
 
   public moveWitnessDown(index: number): void {
-    if (index + 1 >= this.witnesses.value.length) {
+    if (index + 1 >= this.form.witnesses().value().length) {
       return;
     }
-    const witness = this.witnesses.value[index];
-    const witnesses = [...this.witnesses.value];
+    const witness = this.form.witnesses().value()[index];
+    const witnesses = [...this.form.witnesses().value()];
     witnesses.splice(index, 1);
     witnesses.splice(index + 1, 0, witness);
-    this.witnesses.setValue(witnesses);
-    this.witnesses.updateValueAndValidity();
-    this.witnesses.markAsDirty();
+    this.form.witnesses().value.set(witnesses);
+    this.form.witnesses().markAsDirty();
     this.onWitnessesSwapped(index, index + 1);
   }
 }

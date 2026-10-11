@@ -187,11 +187,29 @@ describe('LetterInfoPartComponent', () => {
     expect(part.textDate).toBeFalsy();
   });
 
-  it('should reject a subject longer than 3000 characters', async () => {
-    const { user, dataChange } = await setup({ data: createData() });
+  // the length limits are also set on the inputs, so that a longer value
+  // can only come from the bound data
+  it('should not let the user type values longer than their limits', async () => {
+    const { user } = await setup();
 
     await user.click(subject());
     await user.paste('x'.repeat(3001));
+    await user.click(header());
+    await user.paste('x'.repeat(501));
+    await user.click(textDate());
+    await user.paste('x'.repeat(101));
+
+    expect(subject()).toHaveValue('x'.repeat(3000));
+    expect(header()).toHaveValue('x'.repeat(500));
+    expect(textDate()).toHaveValue('x'.repeat(100));
+  });
+
+  it('should reject a subject longer than 3000 characters', async () => {
+    const { user, dataChange } = await setup({
+      data: createData({ subject: 'x'.repeat(3001) }),
+    });
+
+    await user.click(subject());
     await user.tab();
 
     expect(screen.getByText('subject too long')).toBeInTheDocument();
@@ -201,10 +219,11 @@ describe('LetterInfoPartComponent', () => {
   });
 
   it('should reject a header longer than 500 characters', async () => {
-    const { user } = await setup({ data: createData() });
+    const { user } = await setup({
+      data: createData({ header: 'x'.repeat(501) }),
+    });
 
     await user.click(header());
-    await user.paste('x'.repeat(501));
     await user.tab();
 
     expect(screen.getByText('header too long')).toBeInTheDocument();
@@ -212,14 +231,29 @@ describe('LetterInfoPartComponent', () => {
   });
 
   it('should reject a text date longer than 100 characters', async () => {
-    const { user } = await setup({ data: createData() });
+    const { user } = await setup({
+      data: createData({ textDate: 'x'.repeat(101) }),
+    });
 
     await user.click(textDate());
-    await user.paste('x'.repeat(101));
     await user.tab();
 
     expect(screen.getByText('date too long')).toBeInTheDocument();
     await waitFor(() => expect(saveButton()).toBeDisabled());
+  });
+
+  it('should render no form element', async () => {
+    const { container } = await setup({ data: createData() });
+
+    expect(container.querySelector('form')).toBeNull();
+  });
+
+  it('should not save on Enter in a text input', async () => {
+    const { user, dataChange } = await setup({ data: createData() });
+
+    await user.type(header(), '!{Enter}');
+
+    expect(dataChange).not.toHaveBeenCalled();
   });
 
   it('should request to close', async () => {

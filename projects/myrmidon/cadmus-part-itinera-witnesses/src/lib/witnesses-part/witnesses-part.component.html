@@ -1,99 +1,99 @@
-<form [formGroup]="form!" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Witnesses Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div>
-        <button
-          type="button"
-          mat-flat-button
-          class="mat-primary"
-          (click)="addWitness()"
-        >
-          <mat-icon>add_circle</mat-icon> witness
-        </button>
-      </div>
-      @if (witnesses.value.length) {
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>ID</th>
-            <th>range</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for ( witness of witnesses.value; track witness; let i = $index; let
-          first = $first; let last = $last) {
-          <tr [class.selected]="i === editedIndex()">
-            <td class="fit-width">
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Edit this witness"
-                (click)="editWitness(i)"
-              >
-                <mat-icon class="mat-primary">edit</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Move this witness up"
-                [disabled]="first"
-                (click)="moveWitnessUp(i)"
-              >
-                <mat-icon>arrow_upward</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Move this witness down"
-                [disabled]="last"
-                (click)="moveWitnessDown(i)"
-              >
-                <mat-icon>arrow_downward</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Delete this witness"
-                (click)="deleteWitness(i)"
-              >
-                <mat-icon class="mat-warn">remove_circle</mat-icon>
-              </button>
-            </td>
-            <td>{{ witness.id }}</td>
-            <td>{{ witness.ranges | codLocationRange }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-      } @if (editedWitness()) {
-      <mat-expansion-panel
-        [expanded]="editedWitness()"
-        [disabled]="!editedWitness()"
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Witnesses Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <button
+        type="button"
+        mat-flat-button
+        class="mat-primary"
+        (click)="addWitness()"
       >
-        <mat-expansion-panel-header>witness</mat-expansion-panel-header>
-        <cadmus-witness
-          [witness]="editedWitness()"
-          (witnessChange)="onWitnessSave($event!)"
-          (editorClose)="onWitnessClose()"
-        />
-      </mat-expansion-panel>
-      }
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
+        <mat-icon>add_circle</mat-icon> witness
+      </button>
+    </div>
+    @if (form.witnesses().value().length) {
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>range</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for ( witness of form.witnesses().value(); track witness; let i = $index; let
+        first = $first; let last = $last) {
+        <tr [class.selected]="i === editedIndex()">
+          <td class="fit-width">
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Edit this witness"
+              (click)="editWitness(i)"
+            >
+              <mat-icon class="mat-primary">edit</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Move this witness up"
+              [disabled]="first"
+              (click)="moveWitnessUp(i)"
+            >
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Move this witness down"
+              [disabled]="last"
+              (click)="moveWitnessDown(i)"
+            >
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Delete this witness"
+              (click)="deleteWitness(i)"
+            >
+              <mat-icon class="mat-warn">remove_circle</mat-icon>
+            </button>
+          </td>
+          <td>{{ witness.id }}</td>
+          <td>{{ witness.ranges | codLocationRange }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    } @if (editedWitness()) {
+    <mat-expansion-panel
+      [expanded]="editedWitness()"
+      [disabled]="!editedWitness()"
+    >
+      <mat-expansion-panel-header>witness</mat-expansion-panel-header>
+      <cadmus-witness
+        [witness]="editedWitness()"
+        (witnessChange)="onWitnessSave($event!)"
+        (editorClose)="onWitnessClose()"
       />
-    </mat-card-actions>
-  </mat-card>
-</form>
+    </mat-expansion-panel>
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

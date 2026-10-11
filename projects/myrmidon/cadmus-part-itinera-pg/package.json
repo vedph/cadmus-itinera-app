@@ -16,7 +16,18 @@
   "peerDependencies": {
     "@angular/common": "^22.2.1",
     "@angular/core": "^22.2.1",
-    "@angular/material": "^22.2.1"
+    "@angular/material": "^22.2.1",
+    "@angular/router": "^22.2.1",
+    "@myrmidon/cadmus-core": "^20.0.0",
+    "@myrmidon/cadmus-part-itinera-cod-loci": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-cod-poem-ranges": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-letter-info": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-literary-work-info": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-person-info": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-person-works": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-referenced-texts": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-related-persons": "^8.0.2",
+    "@myrmidon/cadmus-part-itinera-witnesses": "^8.0.2"
   },
   "dependencies": {
     "tslib": "^2.3.0"

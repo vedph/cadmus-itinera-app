@@ -1,13 +1,20 @@
-import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import { FormField, form, maxLength, required } from '@angular/forms/signals';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  copyFormValue,
+  isImplicitSubmission,
+  setFieldFromChild,
+} from '@myrmidon/cadmus-ui';
 import {
   AssertedCompositeId,
   AssertedCompositeIdsComponent,
@@ -23,14 +30,27 @@ import { MatIcon } from '@angular/material/icon';
 
 import { RelatedPerson } from '../related-persons-part';
 
+interface RelatedPersonControls {
+  type: string;
+  name: string;
+  ids: AssertedCompositeId[];
+}
+
+function toDraft(person?: RelatedPerson): RelatedPersonControls {
+  return {
+    type: person?.type || '',
+    name: person?.name || '',
+    ids: copyFormValue(person?.ids || []),
+  };
+}
+
 @Component({
   selector: 'cadmus-related-person',
   templateUrl: './related-person.component.html',
   styleUrls: ['./related-person.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -61,64 +81,61 @@ export class RelatedPersonComponent {
 
   public readonly editorClose = output();
 
-  public type: FormControl<string | null>;
-  public name: FormControl<string | null>;
-  public ids: FormControl<AssertedCompositeId[]>;
-  public form: FormGroup;
+  private readonly _draft = linkedSignal(() => toDraft(this.person()));
+  public readonly form = form(this._draft, (p) => {
+    required(p.type);
+    maxLength(p.type, 50);
+    required(p.name);
+    maxLength(p.name, 50);
+  });
 
-  constructor(formBuilder: FormBuilder) {
-    this.type = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.name = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.ids = formBuilder.control([], { nonNullable: true });
-    this.form = formBuilder.group({
-      type: this.type,
-      name: this.name,
-      ids: this.ids,
-    });
-
+  constructor() {
+    // a new person was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.person());
+      this.person();
+      untracked(() => this.form().reset());
     });
-  }
-
-  private updateForm(model: RelatedPerson | undefined): void {
-    if (!model) {
-      this.form.reset();
-      return;
-    }
-
-    this.type.setValue(model.type);
-    this.name.setValue(model.name);
-    this.ids.setValue(model.ids || []);
-    this.form.markAsPristine();
   }
 
   private getPerson(): RelatedPerson {
+    const draft = this._draft();
     return {
-      type: this.type.value?.trim() || '',
-      name: this.name.value?.trim() || '',
-      ids: this.ids.value?.length ? this.ids.value : undefined,
+      type: draft.type.trim(),
+      name: draft.name.trim(),
+      ids: draft.ids.length ? copyFormValue(draft.ids) : undefined,
     };
   }
 
   public onIdsChange(ids: AssertedCompositeId[]): void {
-    this.ids.setValue(ids);
-    this.ids.updateValueAndValidity();
-    this.ids.markAsDirty();
+    setFieldFromChild(this.form.ids, copyFormValue(ids || []));
   }
 
   public cancel(): void {
     this.editorClose.emit();
   }
 
+  /**
+   * Handle Enter in this editor: in a text input, save as the save button
+   * would, when enabled. This replaces the implicit submission of the form
+   * this editor used to render.
+   * @param event The keydown event.
+   */
+  public onEnterKey(event: Event): void {
+    if (
+      !isImplicitSubmission(event) ||
+      this.form().invalid() ||
+      !this.form().dirty()
+    ) {
+      return;
+    }
+    event.preventDefault();
+    this.save();
+  }
+
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
     this.person.set(this.getPerson());

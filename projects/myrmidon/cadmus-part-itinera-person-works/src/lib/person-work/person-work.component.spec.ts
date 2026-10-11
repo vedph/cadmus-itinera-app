@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
-import { createPartEditorMocks } from '../../../../../testing/part-testing';
+import {
+  createPartEditorMocks,
+  setInputValue,
+} from '../../../../../testing/part-testing';
 import { PersonWork } from '../person-works-part';
 import { PersonWorkComponent } from './person-work.component';
 
@@ -175,7 +178,7 @@ describe('PersonWorkComponent', () => {
 
     await user.clear(title());
     await user.click(title());
-    await user.paste('x'.repeat(101));
+    setInputValue(title(), 'x'.repeat(101));
     await user.tab();
 
     expect(screen.getByText('title too long')).toBeInTheDocument();
@@ -187,7 +190,7 @@ describe('PersonWorkComponent', () => {
 
     await user.clear(eid());
     await user.click(eid());
-    await user.paste('x'.repeat(101));
+    setInputValue(eid(), 'x'.repeat(101));
     await user.tab();
 
     expect(screen.getByText('EID too long')).toBeInTheDocument();
@@ -204,5 +207,23 @@ describe('PersonWorkComponent', () => {
 
     expect(editorClose).toHaveBeenCalledTimes(1);
     expect(workChange).not.toHaveBeenCalled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, workChange } = await setup({ work: WORK });
+
+    // pristine: nothing to save
+    await user.type(screen.getByLabelText('title'), '{Enter}');
+    expect(workChange).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText('title'), ' changed{Enter}');
+
+    expect(workChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render no form element of its own', async () => {
+    await setup({ work: WORK });
+
+    expect(acceptButton().closest('form')).toBeNull();
   });
 });

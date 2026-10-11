@@ -12,6 +12,7 @@ import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   createAssertedIdMocks,
   createPartEditorMocks,
+  setInputValue,
 } from '../../../../../testing/part-testing';
 import { RelatedPerson } from '../related-persons-part';
 import { RelatedPersonComponent } from './related-person.component';
@@ -183,7 +184,8 @@ describe('RelatedPersonComponent', () => {
     const { user } = await setup({ person: PERSON });
 
     await user.clear(type());
-    await user.type(type(), 'x'.repeat(51));
+    await user.click(type());
+    setInputValue(type(), 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('type too long')).toBeInTheDocument();
@@ -194,7 +196,8 @@ describe('RelatedPersonComponent', () => {
     const { user } = await setup({ person: PERSON });
 
     await user.clear(name());
-    await user.type(name(), 'x'.repeat(51));
+    await user.click(name());
+    setInputValue(name(), 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('name too long')).toBeInTheDocument();
@@ -213,5 +216,23 @@ describe('RelatedPersonComponent', () => {
 
     expect(editorClose).toHaveBeenCalledTimes(1);
     expect(personChange).not.toHaveBeenCalled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, personChange } = await setup({ person: PERSON });
+
+    // pristine: nothing to save
+    await user.type(name(), '{Enter}');
+    expect(personChange).not.toHaveBeenCalled();
+
+    await user.type(name(), ' changed{Enter}');
+
+    expect(personChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render no form element of its own', async () => {
+    await setup({ person: PERSON });
+
+    expect(acceptButton().closest('form')).toBeNull();
   });
 });

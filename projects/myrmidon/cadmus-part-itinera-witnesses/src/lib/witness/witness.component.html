@@ -1,12 +1,12 @@
-<form [formGroup]="form" (submit)="save(); $event.stopPropagation()">
+<div (keydown.enter)="onEnterKey($event)">
   <!-- id -->
   <div>
     <mat-form-field>
       <mat-label>ID</mat-label>
-      <input matInput [formControl]="id" />
-      @if ($any(id).errors?.required && (id.dirty || id.touched)) {
+      <input matInput [formField]="form.id" />
+      @if (form.id().getError("required") && (form.id().dirty() || form.id().touched())) {
       <mat-error>ID required</mat-error>
-      } @if ($any(id).errors?.maxlength && (id.dirty || id.touched)) {
+      } @if (form.id().getError("maxLength") && (form.id().dirty() || form.id().touched())) {
       <mat-error>ID too long</mat-error>
       }
     </mat-form-field>
@@ -15,7 +15,7 @@
   <div>
     <cadmus-cod-location
       [required]="true"
-      [location]="ranges.value"
+      [location]="form.ranges().value()"
       (locationChange)="onLocationChange($event)"
     />
   </div>
@@ -31,12 +31,13 @@
       <mat-icon class="mat-warn">clear</mat-icon>
     </button>
     <button
-      type="submit"
+      type="button"
       mat-icon-button
       matTooltip="Accept changes"
-      [disabled]="form.invalid || form.pristine"
+      [disabled]="form().invalid() || !form().dirty()"
+      (click)="save()"
     >
       <mat-icon class="mat-primary">check_circle</mat-icon>
     </button>
   </div>
-</form>
+</div>

@@ -1,17 +1,23 @@
-import { Component, effect, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import { FormField, form, maxLength, required } from '@angular/forms/signals';
 import {
   CodLocationRange,
   CodLocationComponent,
 } from '@myrmidon/cadmus-cod-location';
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import {
+  copyFormValue,
+  isImplicitSubmission,
+  setFieldFromChild,
+} from '@myrmidon/cadmus-ui';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -21,14 +27,25 @@ import { MatIcon } from '@angular/material/icon';
 
 import { Witness } from '../witnesses-part';
 
+interface WitnessControls {
+  id: string;
+  ranges: CodLocationRange[];
+}
+
+function toDraft(witness?: Witness): WitnessControls {
+  return {
+    id: witness?.id || '',
+    ranges: copyFormValue(witness?.ranges || []),
+  };
+}
+
 @Component({
   selector: 'cadmus-witness',
   templateUrl: './witness.component.html',
   styleUrls: ['./witness.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatInput,
@@ -44,50 +61,31 @@ export class WitnessComponent {
 
   public readonly editorClose = output();
 
-  public id: FormControl<string | null>;
-  public ranges: FormControl<CodLocationRange[]>;
-  public form: FormGroup;
+  private readonly _draft = linkedSignal(() => toDraft(this.witness()));
+  public readonly form = form(this._draft, (p) => {
+    required(p.id);
+    maxLength(p.id, 500);
+    NgxToolsSignalValidators.strictMinLength(p.ranges, 1);
+  });
 
-  constructor(formBuilder: FormBuilder) {
-    this.id = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(500),
-    ]);
-    this.ranges = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-    this.form = formBuilder.group({
-      id: this.id,
-      ranges: this.ranges,
-    });
-
+  constructor() {
+    // a new witness was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.witness());
+      this.witness();
+      untracked(() => this.form().reset());
     });
-  }
-
-  private updateForm(model: Witness | undefined): void {
-    if (!model) {
-      this.form.reset();
-      return;
-    }
-
-    this.id.setValue(model.id);
-    this.ranges.setValue(model.ranges || []);
-    this.form.markAsPristine();
   }
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
-    this.ranges.setValue(ranges || []);
-    this.ranges.updateValueAndValidity();
-    this.ranges.markAsDirty();
+    setFieldFromChild(this.form.ranges, copyFormValue(ranges || []));
   }
 
   private getWitness(): Witness {
+    const draft = this._draft();
     return {
-      id: this.id.value?.trim() || '',
-      ranges: this.ranges.value ?? [],
+      id: draft.id.trim(),
+      ranges: copyFormValue(draft.ranges),
     };
   }
 
@@ -95,8 +93,27 @@ export class WitnessComponent {
     this.editorClose.emit();
   }
 
+  /**
+   * Handle Enter in this editor: in a text input, save as the save button
+   * would, when enabled. This replaces the implicit submission of the form
+   * this editor used to render.
+   * @param event The keydown event.
+   */
+  public onEnterKey(event: Event): void {
+    if (
+      !isImplicitSubmission(event) ||
+      this.form().invalid() ||
+      !this.form().dirty()
+    ) {
+      return;
+    }
+    event.preventDefault();
+    this.save();
+  }
+
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
     this.witness.set(this.getWitness());

@@ -22,6 +22,7 @@ import {
   PartEditorMocksOptions,
   TEST_ITEM_ID,
   TEST_PART_ID,
+  setInputValue,
 } from '../../../../../testing/part-testing';
 import { PERSON_INFO_PART_TYPEID, PersonInfoPart } from '../person-info-part';
 import { PersonInfoPartComponent } from './person-info-part.component';
@@ -167,7 +168,8 @@ describe('PersonInfoPartComponent', () => {
 
     const sex = screen.getByRole('textbox', { name: 'sex' });
     await user.clear(sex);
-    await user.type(sex, 'x'.repeat(51));
+    await user.click(sex);
+    setInputValue(sex, 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('sex too long')).toBeInTheDocument();
@@ -178,7 +180,7 @@ describe('PersonInfoPartComponent', () => {
     const { user } = await setup({ data: createData() });
 
     await user.click(bio());
-    await user.paste('x'.repeat(50001));
+    setInputValue(bio(), 'x'.repeat(50001));
     await user.tab();
 
     expect(screen.getByText('too long')).toBeInTheDocument();
@@ -258,6 +260,28 @@ describe('PersonInfoPartComponent', () => {
       sex: 'm',
     });
     expect(part.bio).toBeFalsy();
+  });
+
+  it('should stay pristine when a saved bio comes back trimmed', async () => {
+    // the editor reports as a change also the text it is given
+    const { user, data, dataChange, dirtyChange, fixture } = await setup({
+      data: createData(),
+    });
+
+    await user.type(bio(), '  ');
+    await user.click(saveButton());
+    data.set(dataChange.mock.calls[0][0]);
+    await fixture.whenStable();
+
+    expect(bio()).toHaveValue('Born in Florence.');
+    expect(fixture.componentInstance.isDirty()).toBe(false);
+    expect(dirtyChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it('should render no form element', async () => {
+    const { container } = await setup({ data: createData() });
+
+    expect(container.querySelector('form')).toBeNull();
   });
 
   it('should focus the bio editor once ready', async () => {

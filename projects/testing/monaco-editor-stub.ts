@@ -5,13 +5,13 @@
  */
 import {
   Component,
-  forwardRef,
+  effect,
   input,
+  linkedSignal,
   OnInit,
   output,
-  signal,
+  untracked,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
  * A minimal fake of the Monaco standalone code editor, covering just the
@@ -64,71 +64,53 @@ export class FakeMonacoEditor {
 }
 
 /**
- * A textarea-based replacement for ngx-monaco-editor, usable as a form
- * control. The textarea is labelled "code editor". The fake editor passed
- * to the editorInitialized event is also exposed by the static `lastEditor`
- * property, so that specs can run the commands registered on it.
+ * A textarea-based replacement for ngx-monaco-editor, with its value input
+ * and its valueChange and blur outputs. The textarea is labelled "code
+ * editor". The fake editor passed to the editorInitialized event is also
+ * exposed by the static `lastEditor` property, so that specs can run the
+ * commands registered on it.
  */
 @Component({
   selector: 'ngx-monaco-editor',
   template: `<textarea
     aria-label="code editor"
-    [value]="value()"
-    [disabled]="disabled()"
+    [value]="text()"
     (input)="onInput($any($event.target).value)"
-    (blur)="onTouched()"
+    (blur)="blur.emit()"
   ></textarea>`,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MonacoEditorStubComponent),
-      multi: true,
-    },
-  ],
 })
-export class MonacoEditorStubComponent implements ControlValueAccessor, OnInit {
+export class MonacoEditorStubComponent implements OnInit {
   public static lastEditor?: FakeMonacoEditor;
 
+  public readonly value = input<string>('');
   public readonly language = input<string>();
   public readonly options = input<unknown>();
+  public readonly valueChange = output<string>();
+  public readonly blur = output<void>();
   public readonly editorInitialized = output<{ editor: FakeMonacoEditor }>();
 
-  public readonly value = signal<string>('');
-  public readonly disabled = signal<boolean>(false);
+  // the text in the editor: the bound value, until the user changes it
+  public readonly text = linkedSignal(() => this.value() ?? '');
 
-  private _onChange: (value: string) => void = () => {};
-  public onTouched: () => void = () => {};
+  constructor() {
+    // like the real editor, report as a change also the text set by code
+    effect(() => {
+      const value = this.value();
+      untracked(() => this.valueChange.emit(value));
+    });
+  }
 
   public ngOnInit(): void {
     const editor = new FakeMonacoEditor(
       () => document.querySelector('ngx-monaco-editor textarea')!,
-      (value) => {
-        this.value.set(value);
-        this._onChange(value);
-      },
+      (value) => this.onInput(value),
     );
     MonacoEditorStubComponent.lastEditor = editor;
     this.editorInitialized.emit({ editor });
   }
 
   public onInput(value: string): void {
-    this.value.set(value);
-    this._onChange(value);
-  }
-
-  public writeValue(value: string | null): void {
-    this.value.set(value ?? '');
-  }
-
-  public registerOnChange(fn: (value: string) => void): void {
-    this._onChange = fn;
-  }
-
-  public registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  public setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.text.set(value);
+    this.valueChange.emit(value);
   }
 }

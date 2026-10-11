@@ -1,6 +1,15 @@
 # History
 
 - 2026-10-10:
+  - ⚠️ updated the Cadmus core packages to version 20 and migrated all the libraries from reactive forms to Angular signal forms (`@angular/forms/signals`). Inputs, models and outputs are unchanged. Breaking for code that reached into the editors internals: each editor now exposes its form as a signal form field tree (`form`), replacing the former public `FormControl` fields (e.g. `CodLociPartComponent.loci` is now `form.loci`). See `signal-forms-migration.md` for details. Also:
+    - no editor renders a `<form>` any more. Part editors save through their save button, so Enter in an input no longer saves the part. The editors of single entries (locus, title, work, referenced text, related person, witness) still save on Enter in a text input, when their save button is enabled; and Enter still applies a poem layout, adds poem ranges and saves a layout note.
+    - text inputs with a maximum length no longer accept more characters than that (the signal forms `maxLength` rule also sets the `maxlength` attribute).
+    - empty optional text values are now saved as missing rather than as empty strings.
+    - thesauri entries are now computed signals; `LiteraryWorkInfoPartComponent.pickedGenre` is a computed signal too.
+    - removed `CodPoemRangesPartComponent.onTabIndexChange`, which only set ranges and layouts to the value they already had.
+    - removed the "required" message of the locus text and the "too long" message of the strophes, which had no corresponding rule.
+  - 🆕 added the context help link (`cadmus-help-link`) to the card header of all the part editors. It shows a button only for the parts having a help page configured.
+  - the libraries' `package.json` files now declare as peer dependencies all the packages they import.
   - replaced the libraries build script with `scripts/build-libs.mjs` (`pnpm run build:libs`), which builds libraries in dependency order and stops at the first failure.
   - ⚠️ migrated libraries tests from Karma/Jasmine to Vitest + Angular Testing Library (`pnpm run test:libs`), removing Karma, Jasmine and other stale packages (`istanbul-lib-instrument`, `@types/diff-match-patch`).
   - added tests to libraries, fixing the bugs they revealed:

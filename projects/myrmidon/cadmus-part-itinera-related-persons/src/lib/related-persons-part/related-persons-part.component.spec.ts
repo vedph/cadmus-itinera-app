@@ -439,4 +439,38 @@ describe('RelatedPersonsPartComponent', () => {
       screen.queryByRole('button', { name: /save/ }),
     ).not.toBeInTheDocument();
   });
+
+  it('should be pristine once data is bound', async () => {
+    const { dirtyChange, fixture } = await setup({ data: createData() });
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.isDirty()).toBe(false);
+    expect(dirtyChange).not.toHaveBeenCalledWith(true);
+  });
+
+  it('should emit persons without any form tag on save', async () => {
+    const { user, dataChange } = await setup({ data: createData() });
+
+    await user.click(rowButton(0, 'Move this person down'));
+    await user.click(saveButton());
+
+    for (const o of dataChange.mock.calls[0][0].value.persons) {
+      expect(Object.getOwnPropertySymbols(o)).toEqual([]);
+    }
+  });
+
+  it('should not tag the persons of the bound part', async () => {
+    const data = createData();
+    await setup({ data });
+
+    for (const o of data.value!.persons) {
+      expect(Object.getOwnPropertySymbols(o)).toEqual([]);
+    }
+  });
+
+  it('should render no form element around its buttons', async () => {
+    await setup({ data: createData() });
+
+    expect(saveButton().closest('form')).toBeNull();
+  });
 });

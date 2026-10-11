@@ -183,15 +183,21 @@ describe('CodPoemRangeLayoutsComponent', () => {
     expect(poems()).toEqual(['1 x', '2', '3 x']);
   });
 
-  it('should not apply a layout longer than 50 characters', async () => {
+  it('should not let the user type a layout longer than 50 characters', async () => {
     const { user } = await setup({ ranges: [{ a: '1', b: '3' }] });
 
     await user.click(checkPoem(1));
     await user.type(screen.getByLabelText('layout'), 'x'.repeat(51));
     await user.click(applyLayoutButton());
 
-    expect(screen.getByText('layout too long')).toBeInTheDocument();
-    expect(poems()).toEqual(['1', '2', '3']);
+    expect(screen.getByLabelText('layout')).toHaveValue('x'.repeat(50));
+    expect(poems()).toEqual(['1', `2 ${'x'.repeat(50)}`, '3']);
+  });
+
+  it('should render no form element', async () => {
+    const { container } = await setup({ ranges: [{ a: '1', b: '3' }] });
+
+    expect(container.querySelector('form')).toBeNull();
   });
 
   it('should pick the layout from the thesaurus when available', async () => {

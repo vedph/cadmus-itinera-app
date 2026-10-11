@@ -1,111 +1,111 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Related Persons Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div>
-        <button
-          type="button"
-          mat-flat-button
-          class="mat-primary"
-          (click)="addPerson()"
-        >
-          <mat-icon>add_circle</mat-icon> person
-        </button>
-      </div>
-      @if (persons.value.length) {
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>type</th>
-            <th>name</th>
-            <th>IDs</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for ( person of persons.value; track person; let i = $index; let
-          first = $first; let last = $last) {
-          <tr [class.selected]="editedIndex() === i">
-            <td class="fit-width">
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Edit this person"
-                (click)="editPerson(i)"
-              >
-                <mat-icon class="mat-primary">edit</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Move this person up"
-                [disabled]="first"
-                (click)="movePersonUp(i)"
-              >
-                <mat-icon>arrow_upward</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Move this person down"
-                [disabled]="last"
-                (click)="movePersonDown(i)"
-              >
-                <mat-icon>arrow_downward</mat-icon>
-              </button>
-              <button
-                type="button"
-                mat-icon-button
-                matTooltip="Delete this person"
-                (click)="deletePerson(i)"
-              >
-                <mat-icon class="mat-warn">remove_circle</mat-icon>
-              </button>
-            </td>
-            <td>
-              {{ person.type | flatLookup : prsTypeEntries() : "id" : "value" }}
-            </td>
-            <td>{{ person.name }}</td>
-            <td>{{ person.ids?.length || 0 }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-      } @if (editedPerson()) {
-      <mat-expansion-panel
-        [expanded]="editedPerson()"
-        [disabled]="!editedPerson()"
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Related Persons Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <button
+        type="button"
+        mat-flat-button
+        class="mat-primary"
+        (click)="addPerson()"
       >
-        <mat-expansion-panel-header>
-          <mat-panel-title> #{{ editedIndex() + 1 }} </mat-panel-title>
-        </mat-expansion-panel-header>
-        <cadmus-related-person
-          [idScopeEntries]="idScopeEntries()"
-          [idTagEntries]="idTagEntries()"
-          [assTagEntries]="assTagEntries()"
-          [refTagEntries]="refTagEntries()"
-          [prsTypeEntries]="prsTypeEntries()"
-          [refTypeEntries]="refTypeEntries()"
-          [person]="editedPerson()"
-          (personChange)="onPersonSave($event!)"
-          (editorClose)="onPersonClose()"
-        />
-      </mat-expansion-panel>
-      }
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
+        <mat-icon>add_circle</mat-icon> person
+      </button>
+    </div>
+    @if (form.persons().value().length) {
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>type</th>
+          <th>name</th>
+          <th>IDs</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for ( person of form.persons().value(); track person; let i = $index; let
+        first = $first; let last = $last) {
+        <tr [class.selected]="editedIndex() === i">
+          <td class="fit-width">
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Edit this person"
+              (click)="editPerson(i)"
+            >
+              <mat-icon class="mat-primary">edit</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Move this person up"
+              [disabled]="first"
+              (click)="movePersonUp(i)"
+            >
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Move this person down"
+              [disabled]="last"
+              (click)="movePersonDown(i)"
+            >
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Delete this person"
+              (click)="deletePerson(i)"
+            >
+              <mat-icon class="mat-warn">remove_circle</mat-icon>
+            </button>
+          </td>
+          <td>
+            {{ person.type | flatLookup : prsTypeEntries() : "id" : "value" }}
+          </td>
+          <td>{{ person.name }}</td>
+          <td>{{ person.ids?.length || 0 }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    } @if (editedPerson()) {
+    <mat-expansion-panel
+      [expanded]="editedPerson()"
+      [disabled]="!editedPerson()"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> #{{ editedIndex() + 1 }} </mat-panel-title>
+      </mat-expansion-panel-header>
+      <cadmus-related-person
+        [idScopeEntries]="idScopeEntries()"
+        [idTagEntries]="idTagEntries()"
+        [assTagEntries]="assTagEntries()"
+        [refTagEntries]="refTagEntries()"
+        [prsTypeEntries]="prsTypeEntries()"
+        [refTypeEntries]="refTypeEntries()"
+        [person]="editedPerson()"
+        (personChange)="onPersonSave($event!)"
+        (editorClose)="onPersonClose()"
       />
-    </mat-card-actions>
-  </mat-card>
-</form>
+    </mat-expansion-panel>
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

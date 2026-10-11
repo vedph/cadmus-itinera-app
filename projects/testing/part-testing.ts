@@ -148,6 +148,18 @@ export function createAssertedIdMocks(): Provider[] {
 }
 
 /**
+ * Set the value of a text input or textarea as if it came from outside the
+ * user's typing, notifying the form field bound to it. A signal forms
+ * `maxLength` rule also sets the `maxlength` attribute of its input, so
+ * that the user cannot type or paste a longer value: use this to test such
+ * rules and their error messages with a value beyond the limit.
+ */
+export function setInputValue(input: HTMLElement, value: string): void {
+  (input as HTMLInputElement | HTMLTextAreaElement).value = value;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/**
  * Build a thesauri set from a map of thesaurus IDs to their entries.
  */
 export function createThesauri(

@@ -1,12 +1,14 @@
-import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import { FormField, form, maxLength, required } from '@angular/forms/signals';
 
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -16,18 +18,34 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { isImplicitSubmission, setFieldFromChild } from '@myrmidon/cadmus-ui';
 import { Assertion, AssertionComponent } from '@myrmidon/cadmus-refs-assertion';
 
 import { PersonWork } from '../person-works-part';
+
+interface PersonWorkControls {
+  eid: string;
+  title: string;
+  hasAssertion: boolean;
+  assertion: Assertion | null;
+}
+
+function toDraft(work?: PersonWork): PersonWorkControls {
+  return {
+    eid: work?.eid || '',
+    title: work?.title || '',
+    hasAssertion: !!work?.assertion,
+    assertion: work?.assertion || null,
+  };
+}
 
 @Component({
   selector: 'cadmus-person-work',
   templateUrl: './person-work.component.html',
   styleUrls: ['./person-work.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatInput,
@@ -51,67 +69,60 @@ export class PersonWorkComponent {
 
   public readonly editorClose = output();
 
-  public eid: FormControl<string | null>;
-  public title: FormControl<string | null>;
-  public hasAssertion: FormControl<boolean>;
-  public assertion: FormControl<Assertion | null>;
-  public form: FormGroup;
+  private readonly _draft = linkedSignal(() => toDraft(this.work()));
+  public readonly form = form(this._draft, (p) => {
+    maxLength(p.eid, 100);
+    required(p.title);
+    maxLength(p.title, 100);
+  });
 
-  constructor(formBuilder: FormBuilder) {
-    this.eid = formBuilder.control(null, Validators.maxLength(100));
-    this.title = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(100),
-    ]);
-    this.hasAssertion = formBuilder.control(false, { nonNullable: true });
-    this.assertion = formBuilder.control(null);
-    this.form = formBuilder.group({
-      eid: this.eid,
-      title: this.title,
-      hasAssertion: this.hasAssertion,
-      assertion: this.assertion,
-    });
-
+  constructor() {
+    // a new work was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.work());
+      this.work();
+      untracked(() => this.form().reset());
     });
-  }
-
-  private updateForm(model: PersonWork | undefined): void {
-    if (!model) {
-      this.form.reset();
-      return;
-    }
-
-    this.eid.setValue(model.eid || null);
-    this.title.setValue(model.title);
-    this.assertion.setValue(model.assertion || null);
-    this.hasAssertion.setValue(model.assertion ? true : false);
-    this.form.markAsPristine();
   }
 
   private getWork(): PersonWork {
+    const draft = this._draft();
     return {
-      eid: this.eid.value?.trim(),
-      title: this.title.value?.trim() || '',
-      assertion: this.hasAssertion.value
-        ? this.assertion.value || undefined
-        : undefined,
+      eid: draft.eid.trim() || undefined,
+      title: draft.title.trim(),
+      assertion: draft.hasAssertion ? draft.assertion || undefined : undefined,
     };
   }
 
   public onAssertionChange(assertion: Assertion | undefined): void {
-    this.assertion.setValue(assertion || null);
-    this.assertion.updateValueAndValidity();
-    this.assertion.markAsDirty();
+    setFieldFromChild(this.form.assertion, assertion || null);
   }
 
   public cancel(): void {
     this.editorClose.emit();
   }
 
+  /**
+   * Handle Enter in this editor: in a text input, save as the save button
+   * would, when enabled. This replaces the implicit submission of the form
+   * this editor used to render.
+   * @param event The keydown event.
+   */
+  public onEnterKey(event: Event): void {
+    if (
+      !isImplicitSubmission(event) ||
+      this.form().invalid() ||
+      !this.form().dirty()
+    ) {
+      return;
+    }
+    event.preventDefault();
+    this.save();
+  }
+
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
     this.work.set(this.getWork());

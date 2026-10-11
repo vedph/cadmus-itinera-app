@@ -1,12 +1,11 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
@@ -28,21 +27,17 @@ import {
 import { MatTooltip } from '@angular/material/tooltip';
 
 import {
-  NgxToolsValidators,
+  NgxToolsSignalValidators,
   FlatLookupPipe,
-  deepCopy,
 } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   ReferencedText,
@@ -50,6 +45,16 @@ import {
   REFERENCED_TEXTS_PART_TYPEID,
 } from '../referenced-texts-part';
 import { ReferencedTextComponent } from '../referenced-text/referenced-text.component';
+
+interface ReferencedTextsPartControls {
+  texts: ReferencedText[];
+}
+
+function toDraft(
+  part?: ReferencedTextsPart | null,
+): ReferencedTextsPartControls {
+  return { texts: copyFormValue(part?.texts || []) };
+}
 
 /**
  * ReferencedTextsPart editor component.
@@ -60,10 +65,8 @@ import { ReferencedTextComponent } from '../referenced-text/referenced-text.comp
   selector: 'cadmus-referenced-texts-part',
   templateUrl: './referenced-texts-part.component.html',
   styleUrls: ['./referenced-texts-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -79,129 +82,52 @@ import { ReferencedTextComponent } from '../referenced-text/referenced-text.comp
     ReferencedTextComponent,
     MatCardActions,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
     TitleCasePipe,
     FlatLookupPipe,
   ],
 })
-export class ReferencedTextsPartComponent
-  extends ModelEditorComponentBase<ReferencedTextsPart>
-  implements OnInit
-{
+export class ReferencedTextsPartComponent extends ModelEditorComponentBase<ReferencedTextsPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedText = signal<ReferencedText | undefined>(undefined);
   public readonly editedIndex = signal<number>(-1);
 
   // related-text-types
-  public readonly txtTypeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly txtTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['related-text-types']?.entries,
   );
-  public readonly idScopeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  // asserted-id-scopes
+  public readonly idScopeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-scopes']?.entries,
   );
   // asserted-id-tags
-  public readonly idTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly idTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['asserted-id-tags']?.entries,
   );
   // assertion-tags
-  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly assTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['assertion-tags']?.entries,
   );
   // doc-reference-types
-  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly refTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-types']?.entries,
   );
   // doc-reference-tags
-  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly refTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-tags']?.entries,
   );
 
-  public texts: FormControl<ReferencedText[]>;
-
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.texts = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      entries: this.texts,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'related-text-types';
-    if (this.hasThesaurus(key)) {
-      this.txtTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.txtTypeEntries.set(undefined);
-    }
-    key = 'asserted-id-scopes';
-    if (this.hasThesaurus(key)) {
-      this.idScopeEntries.set(thesauri[key].entries);
-    } else {
-      this.idScopeEntries.set(undefined);
-    }
-    key = 'asserted-id-tags';
-    if (this.hasThesaurus(key)) {
-      this.idTagEntries.set(thesauri[key].entries);
-    } else {
-      this.idTagEntries.set(undefined);
-    }
-    key = 'assertion-tags';
-    if (this.hasThesaurus(key)) {
-      this.assTagEntries.set(thesauri[key].entries);
-    } else {
-      this.assTagEntries.set(undefined);
-    }
-    key = 'doc-reference-types';
-    if (this.hasThesaurus(key)) {
-      this.refTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.refTypeEntries.set(undefined);
-    }
-    key = 'doc-reference-tags';
-    if (this.hasThesaurus(key)) {
-      this.refTagEntries.set(thesauri[key].entries);
-    } else {
-      this.refTagEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: ReferencedTextsPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.texts.setValue(part.texts || []);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<ReferencedTextsPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.texts, 1);
+  });
 
   protected getValue(): ReferencedTextsPart {
     let part = this.getEditedPart(
       REFERENCED_TEXTS_PART_TYPEID
     ) as ReferencedTextsPart;
-    part.texts = this.texts.value || [];
+    part.texts = copyFormValue(this._draft().texts);
     return part;
   }
 
@@ -215,19 +141,18 @@ export class ReferencedTextsPartComponent
 
   public editText(index: number): void {
     this.editedIndex.set(index);
-    this.editedText.set(deepCopy(this.texts.value[index]));
+    this.editedText.set(copyFormValue(this.form.texts().value()[index]));
   }
 
   public onTextSave(text: ReferencedText): void {
-    const texts = [...this.texts.value];
+    const texts = [...this.form.texts().value()];
     if (this.editedIndex() === -1) {
       texts.push(text);
     } else {
       texts.splice(this.editedIndex(), 1, text);
     }
-    this.texts.setValue(texts);
-    this.texts.updateValueAndValidity();
-    this.texts.markAsDirty();
+    this.form.texts().value.set(texts);
+    this.form.texts().markAsDirty();
     this.closeText();
   }
 
@@ -242,11 +167,10 @@ export class ReferencedTextsPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const texts = [...this.texts.value];
+          const texts = [...this.form.texts().value()];
           texts.splice(index, 1);
-          this.texts.setValue(texts);
-          this.texts.updateValueAndValidity();
-          this.texts.markAsDirty();
+          this.form.texts().value.set(texts);
+          this.form.texts().markAsDirty();
           // keep the edited text in sync with the changed list
           if (index === this.editedIndex()) {
             this.closeText();
@@ -273,27 +197,25 @@ export class ReferencedTextsPartComponent
     if (index < 1) {
       return;
     }
-    const text = this.texts.value[index];
-    const texts = [...this.texts.value];
+    const text = this.form.texts().value()[index];
+    const texts = [...this.form.texts().value()];
     texts.splice(index, 1);
     texts.splice(index - 1, 0, text);
-    this.texts.setValue(texts);
-    this.texts.updateValueAndValidity();
-    this.texts.markAsDirty();
+    this.form.texts().value.set(texts);
+    this.form.texts().markAsDirty();
     this.onTextsSwapped(index, index - 1);
   }
 
   public moveTextDown(index: number): void {
-    if (index + 1 >= this.texts.value.length) {
+    if (index + 1 >= this.form.texts().value().length) {
       return;
     }
-    const text = this.texts.value[index];
-    const texts = [...this.texts.value];
+    const text = this.form.texts().value()[index];
+    const texts = [...this.form.texts().value()];
     texts.splice(index, 1);
     texts.splice(index + 1, 0, text);
-    this.texts.setValue(texts);
-    this.texts.updateValueAndValidity();
-    this.texts.markAsDirty();
+    this.form.texts().value.set(texts);
+    this.form.texts().markAsDirty();
     this.onTextsSwapped(index, index + 1);
   }
 }

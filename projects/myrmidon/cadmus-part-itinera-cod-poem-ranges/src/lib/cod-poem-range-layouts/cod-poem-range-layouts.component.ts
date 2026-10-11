@@ -1,12 +1,13 @@
-import { Component, effect, input, model, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  model,
+  signal,
+} from '@angular/core';
+import { FormField, form, maxLength } from '@angular/forms/signals';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -52,13 +53,12 @@ const PRESETS = [
   selector: 'cadmus-cod-poem-range-layouts',
   templateUrl: './cod-poem-range-layouts.component.html',
   styleUrls: ['./cod-poem-range-layouts.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatSelect,
-    ReactiveFormsModule,
     MatOption,
     MatInput,
     MatError,
@@ -71,13 +71,21 @@ const PRESETS = [
   ],
 })
 export class CodPoemRangeLayoutsComponent {
-  private readonly _table: PoemLayoutTable;
+  private readonly _alnumService = inject(AlnumRangeService);
+  private readonly _table = new PoemLayoutTable();
 
-  public rows$: Observable<PoemLayoutRow[]>;
+  public readonly rows$: Observable<PoemLayoutRow[]> = this._table.rows$;
 
-  public layout: FormControl<string | null>;
-  public presets: FormControl<number | null>;
-  public form: FormGroup;
+  // the layout to apply and the preset to check: not part of the model
+  public readonly form = form(
+    signal<{ layout: string; presets: number | null }>({
+      layout: '',
+      presets: null,
+    }),
+    (p) => {
+      maxLength(p.layout, 50);
+    },
+  );
 
   /**
    * The ranges defined for poems.
@@ -92,20 +100,7 @@ export class CodPoemRangeLayoutsComponent {
   // cod-poem-range-layouts
   public readonly layoutEntries = input<ThesaurusEntry[]>();
 
-  constructor(
-    formBuilder: FormBuilder,
-    private _alnumService: AlnumRangeService
-  ) {
-    this._table = new PoemLayoutTable();
-    this.rows$ = this._table.rows$;
-    // form
-    this.layout = formBuilder.control(null, Validators.maxLength(50));
-    this.presets = formBuilder.control(null);
-    this.form = formBuilder.group({
-      layout: this.layout,
-      presets: this.presets,
-    });
-
+  constructor() {
     effect(() => {
       this.updateTable(this.ranges(), this.layouts());
     });
@@ -134,10 +129,11 @@ export class CodPoemRangeLayoutsComponent {
   }
 
   public applyLayout(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
-    this._table.setCheckedLayout(this.layout.value);
+    this._table.setCheckedLayout(this.form.layout().value() || null);
   }
 
   public checkAllPoems(): void {
@@ -149,12 +145,11 @@ export class CodPoemRangeLayoutsComponent {
   }
 
   public checkPreset(checked = true): void {
-    if (!this.presets.value) {
+    const preset = this.form.presets().value();
+    if (!preset) {
       return;
     }
-    const ranges = this._alnumService.parseRanges(
-      PRESETS[+this.presets.value - 1]
-    );
+    const ranges = this._alnumService.parseRanges(PRESETS[preset - 1]);
     const numbers: Alnum[] = this._alnumService
       .expandRanges(ranges)
       .map((s) => Alnum.parse(s)!);

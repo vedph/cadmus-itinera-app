@@ -12,6 +12,7 @@ import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   createAssertedIdMocks,
   createPartEditorMocks,
+  setInputValue,
 } from '../../../../../testing/part-testing';
 import { ReferencedText } from '../referenced-texts-part';
 import { ReferencedTextComponent } from './referenced-text.component';
@@ -227,7 +228,8 @@ describe('ReferencedTextComponent', () => {
     const { user } = await setup({ text: TEXT });
 
     await user.clear(type());
-    await user.type(type(), 'x'.repeat(51));
+    await user.click(type());
+    setInputValue(type(), 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('type too long')).toBeInTheDocument();
@@ -238,7 +240,8 @@ describe('ReferencedTextComponent', () => {
     const { user } = await setup({ text: TEXT });
 
     await user.clear(targetCitation());
-    await user.type(targetCitation(), 'x'.repeat(51));
+    await user.click(targetCitation());
+    setInputValue(targetCitation(), 'x'.repeat(51));
     await user.tab();
 
     expect(screen.getByText('citation too long')).toBeInTheDocument();
@@ -249,7 +252,7 @@ describe('ReferencedTextComponent', () => {
     const { user } = await setup({ text: TEXT });
 
     await user.click(sources());
-    await user.paste('x'.repeat(1001));
+    setInputValue(sources(), 'x'.repeat(1001));
     await user.tab();
 
     expect(screen.getByText('sources too long')).toBeInTheDocument();
@@ -266,5 +269,23 @@ describe('ReferencedTextComponent', () => {
 
     expect(editorClose).toHaveBeenCalledTimes(1);
     expect(textChange).not.toHaveBeenCalled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, textChange } = await setup({ text: TEXT });
+
+    // pristine: nothing to save
+    await user.type(targetCitation(), '{Enter}');
+    expect(textChange).not.toHaveBeenCalled();
+
+    await user.type(targetCitation(), ' changed{Enter}');
+
+    expect(textChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render no form element of its own', async () => {
+    await setup({ text: TEXT });
+
+    expect(acceptButton().closest('form')).toBeNull();
   });
 });

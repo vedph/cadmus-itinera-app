@@ -1,182 +1,188 @@
-<form [formGroup]="form" (submit)="save()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>picture_in_picture</mat-icon>
-      </div>
-      <mat-card-title>{{
-        (modelName() | titlecase) || "Poem Ranges Part"
-      }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-tab-group (selectedIndexChange)="onTabIndexChange($event)">
-        <!-- RANGES -->
-        <mat-tab label="ranges">
-          <div>
-            <!-- sortType (bound) -->
-            @if (sortEntries()?.length) {
-            <mat-form-field class="form-col">
-              <mat-label>type</mat-label>
-              <mat-select [formControl]="sortType">
-                @for (e of sortEntries(); track e.id) {
-                <mat-option [value]="e.id">{{ e.value }}</mat-option>
-                }
-              </mat-select>
-              @if ( $any(sortType).errors?.required && (sortType.dirty ||
-              sortType.touched) ) {
-              <mat-error>type required</mat-error>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>picture_in_picture</mat-icon>
+    </div>
+    <mat-card-title>{{
+      (modelName() | titlecase) || "Poem Ranges Part"
+    }}</mat-card-title>
+    <cadmus-help-link [url]="helpUrl()" />
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <!-- RANGES -->
+      <mat-tab label="ranges">
+        <div>
+          <!-- sortType (bound) -->
+          @if (sortEntries()?.length) {
+          <mat-form-field class="form-col">
+            <mat-label>type</mat-label>
+            <mat-select [formField]="form.sortType">
+              @for (e of sortEntries(); track e.id) {
+              <mat-option [value]="e.id">{{ e.value }}</mat-option>
               }
-            </mat-form-field>
+            </mat-select>
+            @if ( form.sortType().getError("required") && (form.sortType().dirty() ||
+            form.sortType().touched()) ) {
+            <mat-error>type required</mat-error>
             }
-            <!-- sortType (free) -->
-            @if (!sortEntries()?.length) {
-            <mat-form-field class="form-col">
-              <mat-label>type</mat-label>
-              <input matInput [formControl]="sortType" />
-              @if ( $any(sortType).errors?.required && (sortType.dirty ||
-              sortType.touched) ) {
-              <mat-error>type required</mat-error>
-              } @if ( $any(sortType).errors?.maxlength && (sortType.dirty ||
-              sortType.touched) ) {
-              <mat-error>type too long</mat-error>
-              }
-            </mat-form-field>
+          </mat-form-field>
+          }
+          <!-- sortType (free) -->
+          @if (!sortEntries()?.length) {
+          <mat-form-field class="form-col">
+            <mat-label>type</mat-label>
+            <input matInput [formField]="form.sortType" />
+            @if ( form.sortType().getError("required") && (form.sortType().dirty() ||
+            form.sortType().touched()) ) {
+            <mat-error>type required</mat-error>
+            } @if ( form.sortType().getError("maxLength") && (form.sortType().dirty() ||
+            form.sortType().touched()) ) {
+            <mat-error>type too long</mat-error>
             }
+          </mat-form-field>
+          }
+        </div>
+
+        <!-- ranges adder -->
+        <fieldset>
+          <legend>ranges</legend>
+          <div class="form-row">
+            <!-- addedRanges -->
+            <mat-form-field style="flex: 1 0 auto">
+              <mat-label>ranges</mat-label>
+              <input
+                #adder
+                matInput
+                [formField]="addForm.addedRanges"
+                (keydown.enter)="addRanges()"
+              />
+            </mat-form-field>
+
+            <!-- add -->
+            <button
+              type="button"
+              mat-icon-button
+              matTooltip="Add ranges"
+              [disabled]="addForm().invalid()"
+              (click)="addRanges()"
+            >
+              <mat-icon class="mat-primary">add_circle</mat-icon>
+            </button>
+
+            <button
+              type="button"
+              mat-icon-button
+              [disabled]="!form.ranges().value().length"
+              matTooltip="Delete all ranges"
+              (click)="deleteAllRanges()"
+            >
+              <mat-icon class="mat-warn">delete_sweep</mat-icon>
+            </button>
           </div>
-
-          <!-- ranges adder -->
-          <fieldset>
-            <legend>ranges</legend>
-            <form class="form-row" (submit)="addRanges(); $event.stopPropagation()">
-              <!-- addedRanges -->
-              <mat-form-field style="flex: 1 0 auto">
-                <mat-label>ranges</mat-label>
-                <input #adder matInput [formControl]="addedRanges" />
-              </mat-form-field>
-
-              <!-- add -->
-              <button
-                type="submit"
-                mat-icon-button
-                matTooltip="Add ranges"
-                [disabled]="addedRanges.invalid"
-              >
-                <mat-icon class="mat-primary">add_circle</mat-icon>
-              </button>
-
-              <button
-                type="button"
-                mat-icon-button
-                [disabled]="!ranges.value.length"
-                matTooltip="Delete all ranges"
-                (click)="deleteAllRanges()"
-              >
-                <mat-icon class="mat-warn">delete_sweep</mat-icon>
-              </button>
-            </form>
-          </fieldset>
-          <!-- ranges -->
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>range</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for ( range of ranges.value || []; track range; let i = $index;
-              let first = $first; let last = $last) {
-              <tr>
-                <td>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this range up"
-                    [disabled]="first"
-                    (click)="moveRangeUp(i)"
-                  >
-                    <mat-icon>arrow_upward</mat-icon>
-                  </button>
-                  <button
-                    type="button"
-                    mat-icon-button
-                    matTooltip="Move this range down"
-                    [disabled]="last"
-                    (click)="moveRangeDown(i)"
-                  >
-                    <mat-icon>arrow_downward</mat-icon>
-                  </button>
-                  <button
-                    mat-icon-button
-                    type="button"
-                    matTooltip="Delete this range"
-                    (click)="deleteRange(i)"
-                  >
-                    <mat-icon class="mat-warn">delete</mat-icon>
-                  </button>
-                </td>
-                <td>{{ range | alnumRange }}</td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </mat-tab>
-
-        <!-- LAYOUTS -->
-        <mat-tab label="layouts">
-          <cadmus-cod-poem-range-layouts
-            [layoutEntries]="layoutEntries()"
-            [ranges]="ranges.value"
-            [layouts]="layouts.value"
-            (layoutsChange)="onLayoutsChange($event)"
-          />
-        </mat-tab>
-
-        <!-- NOTE -->
-        <mat-tab label="note">
-          <div>
-            <!-- tag (bound) -->
-            @if (tagEntries()?.length) {
-            <mat-form-field>
-              <mat-label>tag</mat-label>
-              <mat-select [formControl]="tag">
-                @for (e of tagEntries(); track e.id) {
-                <mat-option [value]="e.id">{{ e.value }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+        </fieldset>
+        <!-- ranges -->
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>range</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for ( range of form.ranges().value(); track range; let i = $index;
+            let first = $first; let last = $last) {
+            <tr>
+              <td>
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Move this range up"
+                  [disabled]="first"
+                  (click)="moveRangeUp(i)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button
+                  type="button"
+                  mat-icon-button
+                  matTooltip="Move this range down"
+                  [disabled]="last"
+                  (click)="moveRangeDown(i)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Delete this range"
+                  (click)="deleteRange(i)"
+                >
+                  <mat-icon class="mat-warn">delete</mat-icon>
+                </button>
+              </td>
+              <td>{{ range | alnumRange }}</td>
+            </tr>
             }
-            <!-- tag (free) -->
-            @if (!tagEntries()?.length) {
-            <mat-form-field>
-              <mat-label>tag</mat-label>
-              <input matInput [formControl]="tag" />
-              @if ( $any(tag).errors?.maxlength && (tag.dirty || tag.touched) )
-              {
-              <mat-error>tag too long</mat-error>
+          </tbody>
+        </table>
+      </mat-tab>
+
+      <!-- LAYOUTS -->
+      <mat-tab label="layouts">
+        <cadmus-cod-poem-range-layouts
+          [layoutEntries]="layoutEntries()"
+          [ranges]="form.ranges().value()"
+          [layouts]="form.layouts().value()"
+          (layoutsChange)="onLayoutsChange($event)"
+        />
+      </mat-tab>
+
+      <!-- NOTE -->
+      <mat-tab label="note">
+        <div>
+          <!-- tag (bound) -->
+          @if (tagEntries()?.length) {
+          <mat-form-field>
+            <mat-label>tag</mat-label>
+            <mat-select [formField]="form.tag">
+              @for (e of tagEntries(); track e.id) {
+              <mat-option [value]="e.id">{{ e.value }}</mat-option>
               }
-            </mat-form-field>
+            </mat-select>
+          </mat-form-field>
+          }
+          <!-- tag (free) -->
+          @if (!tagEntries()?.length) {
+          <mat-form-field>
+            <mat-label>tag</mat-label>
+            <input matInput [formField]="form.tag" />
+            @if ( form.tag().getError("maxLength") && (form.tag().dirty() || form.tag().touched()) )
+            {
+            <mat-error>tag too long</mat-error>
             }
-          </div>
-          <div>
-            <mat-form-field class="long-text">
-              <mat-label>note</mat-label>
-              <textarea rows="4" matInput [formControl]="note"></textarea>
-              @if ( $any(note).errors?.maxlength && (note.dirty || note.touched)
-              ) {
-              <mat-error>note too long</mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card-content>
-    <mat-card-actions>
-      <cadmus-close-save-buttons
-        [form]="form"
-        [noSave]="userLevel < 2"
-        (closeRequest)="close()"
-      />
-    </mat-card-actions>
-  </mat-card>
-</form>
+          </mat-form-field>
+          }
+        </div>
+        <div>
+          <mat-form-field class="long-text">
+            <mat-label>note</mat-label>
+            <textarea rows="4" matInput [formField]="form.note"></textarea>
+            @if ( form.note().getError("maxLength") && (form.note().dirty() || form.note().touched())
+            ) {
+            <mat-error>note too long</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <cadmus-close-save-buttons
+      [form]="form"
+      [noSave]="userLevel < 2"
+      (closeRequest)="close()"
+      (saveRequest)="save()"
+    />
+  </mat-card-actions>
+</mat-card>

@@ -1,14 +1,20 @@
-import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import {
+  FormField,
+  form,
+  maxLength,
+  required,
+  validate,
+} from '@angular/forms/signals';
 
 import {
   MatFormField,
@@ -25,31 +31,42 @@ import { MatIcon } from '@angular/material/icon';
 
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
+  copyFormValue,
+  isImplicitSubmission,
+  setFieldFromChild,
+} from '@myrmidon/cadmus-ui';
+import {
   AssertedCompositeId,
   AssertedCompositeIdComponent,
 } from '@myrmidon/cadmus-refs-asserted-ids';
 
 import { ReferencedText } from '../referenced-texts-part';
 
-/**
- * Validate that the ID in the control has a target. A new text comes with
- * a placeholder ID having an empty target, which is not null and thus
- * would satisfy the required validator.
- */
-function targetRequiredValidator(
-  control: AbstractControl
-): ValidationErrors | null {
-  return control.value?.target?.gid ? null : { required: true };
+interface ReferencedTextControls {
+  type: string;
+  targetId: AssertedCompositeId | null;
+  targetCitation: string;
+  sourceCitations: string;
+}
+
+function toDraft(text?: ReferencedText): ReferencedTextControls {
+  return {
+    type: text?.type || '',
+    targetId: copyFormValue(text?.targetId) || null,
+    targetCitation: text?.targetCitation || '',
+    sourceCitations: text?.sourceCitations?.length
+      ? text.sourceCitations.join('\n')
+      : '',
+  };
 }
 
 @Component({
   selector: 'cadmus-referenced-text',
   templateUrl: './referenced-text.component.html',
   styleUrls: ['./referenced-text.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -81,51 +98,30 @@ export class ReferencedTextComponent {
 
   public readonly editorClose = output();
 
-  public type: FormControl<string | null>;
-  public targetId: FormControl<AssertedCompositeId | null>;
-  public targetCitation: FormControl<string | null>;
-  public sourceCitations: FormControl<string | null>;
-  public form: FormGroup;
-
-  constructor(formBuilder: FormBuilder) {
-    this.type = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.targetId = formBuilder.control(null, targetRequiredValidator);
-    this.targetCitation = formBuilder.control(null, Validators.maxLength(50));
-    this.sourceCitations = formBuilder.control(
-      null,
-      Validators.maxLength(1000)
+  private readonly _draft = linkedSignal(() => toDraft(this.text()));
+  public readonly form = form(this._draft, (p) => {
+    required(p.type);
+    maxLength(p.type, 50);
+    // the ID must have a target. A new text comes with a placeholder ID
+    // having an empty target, which is not null and thus would satisfy
+    // the required rule.
+    validate(p.targetId, ({ value }) =>
+      value()?.target?.gid ? null : { kind: 'required' },
     );
-    this.form = formBuilder.group({
-      type: this.type,
-      targetId: this.targetId,
-      targetCitation: this.targetCitation,
-      sourceCitations: this.sourceCitations,
-    });
+    maxLength(p.targetCitation, 50);
+    maxLength(p.sourceCitations, 1000);
+  });
 
+  constructor() {
+    // a new text was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.text());
+      this.text();
+      untracked(() => this.form().reset());
     });
   }
 
-  private updateForm(model: ReferencedText | undefined): void {
-    if (!model) {
-      this.form.reset();
-      return;
-    }
-
-    this.type.setValue(model.type);
-    this.targetId.setValue(model.targetId);
-    this.targetCitation.setValue(model.targetCitation || null);
-    this.sourceCitations.setValue(
-      model.sourceCitations?.length ? model.sourceCitations.join('\n') : ''
-    );
-    this.form.markAsPristine();
-  }
-
-  private parseCitations(text: string | null): string[] | undefined {
+  private parseCitations(text: string): string[] | undefined {
     if (!text) {
       return undefined;
     }
@@ -134,33 +130,51 @@ export class ReferencedTextComponent {
         text
           .split('\n')
           .map((s) => s.trim())
-          .filter((s) => s)
+          .filter((s) => s),
       ),
     ];
     return citations.length ? citations : undefined;
   }
 
   private getText(): ReferencedText {
+    const draft = this._draft();
     return {
-      type: this.type.value?.trim() || '',
-      targetId: this.targetId.value!,
-      targetCitation: this.targetCitation.value?.trim(),
-      sourceCitations: this.parseCitations(this.sourceCitations.value),
+      type: draft.type.trim(),
+      targetId: copyFormValue(draft.targetId)!,
+      targetCitation: draft.targetCitation.trim() || undefined,
+      sourceCitations: this.parseCitations(draft.sourceCitations),
     };
   }
 
   public onIdChange(id: AssertedCompositeId): void {
-    this.targetId.setValue(id);
-    this.targetId.updateValueAndValidity();
-    this.targetId.markAsDirty();
+    setFieldFromChild(this.form.targetId, copyFormValue(id) || null);
   }
 
   public cancel(): void {
     this.editorClose.emit();
   }
 
+  /**
+   * Handle Enter in this editor: in a text input, save as the save button
+   * would, when enabled. This replaces the implicit submission of the form
+   * this editor used to render.
+   * @param event The keydown event.
+   */
+  public onEnterKey(event: Event): void {
+    if (
+      !isImplicitSubmission(event) ||
+      this.form().invalid() ||
+      !this.form().dirty()
+    ) {
+      return;
+    }
+    event.preventDefault();
+    this.save();
+  }
+
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
     this.text.set(this.getText());

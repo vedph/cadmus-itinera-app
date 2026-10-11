@@ -1,12 +1,11 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
@@ -15,18 +14,15 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { CodLocationRangePipe } from '@myrmidon/cadmus-cod-location';
 
 import { CodLociPart, CodLocus, COD_LOCI_PART_TYPEID } from '../cod-loci-part';
@@ -40,6 +36,14 @@ import {
 } from '@angular/material/card';
 import { CodLocusComponent } from '../cod-locus/cod-locus.component';
 
+interface CodLociPartControls {
+  loci: CodLocus[];
+}
+
+function toDraft(part?: CodLociPart | null): CodLociPartControls {
+  return { loci: copyFormValue(part?.loci || []) };
+}
+
 /**
  * CodLociPart editor component.
  * Thesauri: cod-loci, cod-image-types (all optional).
@@ -48,10 +52,8 @@ import { CodLocusComponent } from '../cod-locus/cod-locus.component';
   selector: 'cadmus-cod-loci-part',
   templateUrl: './cod-loci-part.component.html',
   styleUrls: ['./cod-loci-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -67,88 +69,40 @@ import { CodLocusComponent } from '../cod-locus/cod-locus.component';
     CodLocusComponent,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
     CodLocationRangePipe,
   ],
 })
-export class CodLociPartComponent
-  extends ModelEditorComponentBase<CodLociPart>
-  implements OnInit
-{
+export class CodLociPartComponent extends ModelEditorComponentBase<CodLociPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedLocus = signal<CodLocus | undefined>(undefined);
   public readonly editedIndex = signal<number>(-1);
   public readonly tabIndex = signal<number>(0);
 
   // cod-loci
-  public readonly locEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly locEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['cod-loci']?.entries,
+  );
   // cod-image-types
-  public readonly imgTypeEntries = signal<ThesaurusEntry[] | undefined>(
-    undefined
+  public readonly imgTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['cod-image-types']?.entries,
   );
 
-  public loci: FormControl<CodLocus[]>;
-
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.loci = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      loci: this.loci,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'cod-loci';
-    if (this.hasThesaurus(key)) {
-      this.locEntries.set(thesauri[key].entries);
-    } else {
-      this.locEntries.set(undefined);
-    }
-
-    key = 'cod-image-types';
-    if (this.hasThesaurus(key)) {
-      this.imgTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.imgTypeEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: CodLociPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.loci.setValue(part.loci || []);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<CodLociPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.loci, 1);
+  });
 
   protected getValue(): CodLociPart {
     let part = this.getEditedPart(COD_LOCI_PART_TYPEID) as CodLociPart;
-    part.loci = this.loci.value || [];
+    part.loci = copyFormValue(this._draft().loci);
     return part;
+  }
+
+  private setLoci(loci: CodLocus[]): void {
+    this.form.loci().value.set(loci);
+    this.form.loci().markAsDirty();
   }
 
   public addLocus(): void {
@@ -157,10 +111,8 @@ export class CodLociPartComponent
       range: { start: { n: 0 }, end: { n: 0 } },
       text: '',
     };
-    this.loci.setValue([...this.loci.value, entry]);
-    this.loci.updateValueAndValidity();
-    this.loci.markAsDirty();
-    this.editLocus(this.loci.value.length - 1);
+    this.setLoci([...this.form.loci().value(), entry]);
+    this.editLocus(this.form.loci().value().length - 1);
   }
 
   public editLocus(index: number): void {
@@ -170,7 +122,7 @@ export class CodLociPartComponent
       this.editedLocus.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedLocus.set(deepCopy(this.loci.value[index]));
+      this.editedLocus.set(copyFormValue(this.form.loci().value()[index]));
       setTimeout(() => {
         this.tabIndex.set(1);
       }, 300);
@@ -178,13 +130,14 @@ export class CodLociPartComponent
   }
 
   public onLocusSave(entry: CodLocus): void {
-    this.loci.setValue(
-      this.loci.value.map((e: CodLocus, i: number) =>
-        i === this.editedIndex() ? entry : e
-      )
+    this.setLoci(
+      this.form
+        .loci()
+        .value()
+        .map((e: CodLocus, i: number) =>
+          i === this.editedIndex() ? entry : e,
+        ),
     );
-    this.loci.updateValueAndValidity();
-    this.loci.markAsDirty();
     this.editLocus(-1);
   }
 
@@ -198,11 +151,9 @@ export class CodLociPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const entries = [...this.loci.value];
+          const entries = [...this.form.loci().value()];
           entries.splice(index, 1);
-          this.loci.setValue(entries);
-          this.loci.updateValueAndValidity();
-          this.loci.markAsDirty();
+          this.setLoci(entries);
           // keep the edited locus in sync with the changed list
           if (index === this.editedIndex()) {
             this.editLocus(-1);
@@ -229,27 +180,23 @@ export class CodLociPartComponent
     if (index < 1) {
       return;
     }
-    const entry = this.loci.value[index];
-    const entries = [...this.loci.value];
+    const entry = this.form.loci().value()[index];
+    const entries = [...this.form.loci().value()];
     entries.splice(index, 1);
     entries.splice(index - 1, 0, entry);
-    this.loci.setValue(entries);
-    this.loci.updateValueAndValidity();
-    this.loci.markAsDirty();
+    this.setLoci(entries);
     this.onLociSwapped(index, index - 1);
   }
 
   public moveLocusDown(index: number): void {
-    if (index + 1 >= this.loci.value.length) {
+    if (index + 1 >= this.form.loci().value().length) {
       return;
     }
-    const entry = this.loci.value[index];
-    const entries = [...this.loci.value];
+    const entry = this.form.loci().value()[index];
+    const entries = [...this.form.loci().value()];
     entries.splice(index, 1);
     entries.splice(index + 1, 0, entry);
-    this.loci.setValue(entries);
-    this.loci.updateValueAndValidity();
-    this.loci.markAsDirty();
+    this.setLoci(entries);
     this.onLociSwapped(index, index + 1);
   }
 }

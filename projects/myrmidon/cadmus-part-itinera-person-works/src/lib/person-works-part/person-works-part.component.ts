@@ -1,12 +1,11 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormControl,
-  FormBuilder,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { take } from 'rxjs/operators';
 
@@ -23,18 +22,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { deepCopy, NgxToolsValidators } from '@myrmidon/ngx-tools';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 import { DialogService } from '@myrmidon/ngx-mat-tools';
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  copyFormValue,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 import {
   PersonWork,
@@ -42,6 +38,14 @@ import {
   PERSON_WORKS_PART_TYPEID,
 } from '../person-works-part';
 import { PersonWorkComponent } from '../person-work/person-work.component';
+
+interface PersonWorksPartControls {
+  works: PersonWork[];
+}
+
+function toDraft(part?: PersonWorksPart | null): PersonWorksPartControls {
+  return { works: copyFormValue(part?.works || []) };
+}
 
 /**
  * PersonWorksPart editor component.
@@ -51,10 +55,8 @@ import { PersonWorkComponent } from '../person-work/person-work.component';
   selector: 'cadmus-person-works-part',
   templateUrl: './person-works-part.component.html',
   styleUrls: ['./person-works-part.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -69,90 +71,36 @@ import { PersonWorkComponent } from '../person-work/person-work.component';
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
   ],
 })
-export class PersonWorksPartComponent
-  extends ModelEditorComponentBase<PersonWorksPart>
-  implements OnInit
-{
+export class PersonWorksPartComponent extends ModelEditorComponentBase<PersonWorksPart> {
+  private readonly _dialogService = inject(DialogService);
+
   public readonly editedIndex = signal<number>(-1);
   public readonly editedWork = signal<PersonWork | undefined>(undefined);
 
   // assertion-tags
-  public readonly assTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly assTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['assertion-tags']?.entries,
+  );
   // doc-reference-types
-  public readonly refTypeEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly refTypeEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-types']?.entries,
+  );
   // doc-reference-tags
-  public readonly refTagEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly refTagEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['doc-reference-tags']?.entries,
+  );
 
-  public works: FormControl<PersonWork[]>;
-
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.works = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-  }
-
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      entries: this.works,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    let key = 'assertion-tags';
-    if (this.hasThesaurus(key)) {
-      this.assTagEntries.set(thesauri[key].entries);
-    } else {
-      this.assTagEntries.set(undefined);
-    }
-    key = 'doc-reference-types';
-    if (this.hasThesaurus(key)) {
-      this.refTypeEntries.set(thesauri[key].entries);
-    } else {
-      this.refTypeEntries.set(undefined);
-    }
-    key = 'doc-reference-tags';
-    if (this.hasThesaurus(key)) {
-      this.refTagEntries.set(thesauri[key].entries);
-    } else {
-      this.refTagEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: PersonWorksPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.works.setValue(part.works || []);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<PersonWorksPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    NgxToolsSignalValidators.strictMinLength(p.works, 1);
+  });
 
   protected getValue(): PersonWorksPart {
     let part = this.getEditedPart(PERSON_WORKS_PART_TYPEID) as PersonWorksPart;
-    part.works = this.works.value || [];
+    part.works = copyFormValue(this._draft().works);
     return part;
   }
 
@@ -160,10 +108,9 @@ export class PersonWorksPartComponent
     const work: PersonWork = {
       title: '',
     };
-    this.works.setValue([...this.works.value, work]);
-    this.works.updateValueAndValidity();
-    this.works.markAsDirty();
-    this.editWork(this.works.value.length - 1);
+    this.form.works().value.set([...this.form.works().value(), work]);
+    this.form.works().markAsDirty();
+    this.editWork(this.form.works().value().length - 1);
   }
 
   public editWork(index: number): void {
@@ -172,18 +119,17 @@ export class PersonWorksPartComponent
       this.editedWork.set(undefined);
     } else {
       this.editedIndex.set(index);
-      this.editedWork.set(deepCopy(this.works.value[index]));
+      this.editedWork.set(copyFormValue(this.form.works().value()[index]));
     }
   }
 
   public onWorkSave(work: PersonWork): void {
-    this.works.setValue(
-      this.works.value.map((e: PersonWork, i: number) =>
+    this.form.works().value.set(
+      this.form.works().value().map((e: PersonWork, i: number) =>
         i === this.editedIndex() ? work : e
       )
     );
-    this.works.updateValueAndValidity();
-    this.works.markAsDirty();
+    this.form.works().markAsDirty();
     this.editWork(-1);
   }
 
@@ -197,11 +143,10 @@ export class PersonWorksPartComponent
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          const works = [...this.works.value];
+          const works = [...this.form.works().value()];
           works.splice(index, 1);
-          this.works.setValue(works);
-          this.works.updateValueAndValidity();
-          this.works.markAsDirty();
+          this.form.works().value.set(works);
+          this.form.works().markAsDirty();
           // keep the edited work in sync with the changed list
           if (index === this.editedIndex()) {
             this.editWork(-1);
@@ -228,27 +173,25 @@ export class PersonWorksPartComponent
     if (index < 1) {
       return;
     }
-    const work = this.works.value[index];
-    const works = [...this.works.value];
+    const work = this.form.works().value()[index];
+    const works = [...this.form.works().value()];
     works.splice(index, 1);
     works.splice(index - 1, 0, work);
-    this.works.setValue(works);
-    this.works.updateValueAndValidity();
-    this.works.markAsDirty();
+    this.form.works().value.set(works);
+    this.form.works().markAsDirty();
     this.onWorksSwapped(index, index - 1);
   }
 
   public moveWorkDown(index: number): void {
-    if (index + 1 >= this.works.value.length) {
+    if (index + 1 >= this.form.works().value().length) {
       return;
     }
-    const work = this.works.value[index];
-    const works = [...this.works.value];
+    const work = this.form.works().value()[index];
+    const works = [...this.form.works().value()];
     works.splice(index, 1);
     works.splice(index + 1, 0, work);
-    this.works.setValue(works);
-    this.works.updateValueAndValidity();
-    this.works.markAsDirty();
+    this.form.works().value.set(works);
+    this.form.works().markAsDirty();
     this.onWorksSwapped(index, index + 1);
   }
 }

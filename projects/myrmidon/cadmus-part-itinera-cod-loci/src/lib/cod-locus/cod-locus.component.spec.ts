@@ -162,12 +162,25 @@ describe('CodLocusComponent', () => {
     expect(acceptButton()).toBeDisabled();
   });
 
-  it('should reject a citation longer than 50 characters', async () => {
+  // the length limits are also set on the inputs, so that a longer value
+  // can only come from the bound data
+  it('should not let the user type a citation longer than 50 characters', async () => {
     const { user } = await setup({ locus: LOCUS });
 
     const citation = screen.getByLabelText('citation');
     await user.clear(citation);
     await user.type(citation, 'x'.repeat(51));
+
+    expect(citation).toHaveValue('x'.repeat(50));
+  });
+
+  it('should reject a citation longer than 50 characters', async () => {
+    const { user } = await setup({
+      locus: { ...LOCUS, citation: 'x'.repeat(51) },
+    });
+
+    await user.type(screen.getByLabelText('note'), ' changed');
+    await user.click(screen.getByLabelText('citation'));
     await user.tab();
 
     expect(screen.getByText('citation too long')).toBeInTheDocument();
@@ -175,11 +188,12 @@ describe('CodLocusComponent', () => {
   });
 
   it('should reject a text longer than 1000 characters', async () => {
-    const { user } = await setup({ locus: LOCUS });
+    const { user } = await setup({
+      locus: { ...LOCUS, text: 'x'.repeat(1001) },
+    });
 
-    const text = screen.getByLabelText('text');
-    await user.click(text);
-    await user.paste('x'.repeat(1001));
+    await user.type(screen.getByLabelText('note'), ' changed');
+    await user.click(screen.getByLabelText('text'));
     await user.tab();
 
     expect(screen.getByText('text too long')).toBeInTheDocument();
@@ -187,15 +201,38 @@ describe('CodLocusComponent', () => {
   });
 
   it('should reject a note longer than 5000 characters', async () => {
-    const { user } = await setup({ locus: LOCUS });
+    const { user } = await setup({
+      locus: { ...LOCUS, note: 'x'.repeat(5001) },
+    });
 
-    const note = screen.getByLabelText('note');
-    await user.click(note);
-    await user.paste('x'.repeat(5001));
+    await user.type(screen.getByLabelText('citation'), ' changed');
+    await user.click(screen.getByLabelText('note'));
     await user.tab();
 
     expect(screen.getByText('note too long')).toBeInTheDocument();
     expect(acceptButton()).toBeDisabled();
+  });
+
+  it('should save on Enter in a text input when it can be saved', async () => {
+    const { user, locusChange } = await setup({ locus: LOCUS });
+
+    // pristine: nothing to save
+    await user.type(screen.getByLabelText('text'), '{Enter}');
+    expect(locusChange).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText('note'), ' changed{Enter}');
+
+    expect(locusChange).toHaveBeenCalledTimes(1);
+    expect(locusChange.mock.calls[0][0].note).toBe('a note changed');
+  });
+
+  it('should render no form element of its own', async () => {
+    const { container } = await setup({ locus: LOCUS });
+
+    // only the forms of the embedded bricks, if any
+    for (const form of Array.from(container.querySelectorAll('form'))) {
+      expect(form.closest('cadmus-cod-location, cadmus-cod-images')).not.toBeNull();
+    }
   });
 
   it('should pick the citation from the thesaurus when available', async () => {

@@ -1,12 +1,14 @@
-import { Component, effect, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  linkedSignal,
+  model,
+  output,
+  untracked,
+} from '@angular/core';
+import { FormField, form, maxLength, required } from '@angular/forms/signals';
 
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
@@ -23,18 +25,45 @@ import {
 } from '@myrmidon/cadmus-cod-location';
 import { CodImage, CodImagesComponent } from '@myrmidon/cadmus-codicology-ui';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { NgxToolsValidators } from '@myrmidon/ngx-tools';
+import {
+  copyFormValue,
+  isImplicitSubmission,
+  setFieldFromChild,
+} from '@myrmidon/cadmus-ui';
+import { NgxToolsSignalValidators } from '@myrmidon/ngx-tools';
 
 import { CodLocus } from '../cod-loci-part';
+
+interface CodLocusControls {
+  citation: string;
+  ranges: CodLocationRange[];
+  text: string;
+  note: string;
+  images: CodImage[];
+}
+
+function toDraft(locus?: CodLocus): CodLocusControls {
+  return {
+    citation: locus?.citation || '',
+    // the range of a new locus is a placeholder rendered as an empty
+    // location: it is not a location, so it must not satisfy validation
+    ranges:
+      locus?.range && CodLocationParser.rangesToString([locus.range])
+        ? [copyFormValue(locus.range)]
+        : [],
+    text: locus?.text || '',
+    note: locus?.note || '',
+    images: copyFormValue(locus?.images || []),
+  };
+}
 
 @Component({
   selector: 'cadmus-cod-locus',
   templateUrl: './cod-locus.component.html',
   styleUrls: ['./cod-locus.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -58,87 +87,70 @@ export class CodLocusComponent {
 
   public readonly editorClose = output();
 
-  public citation: FormControl<string | null>;
-  public ranges: FormControl<CodLocationRange[]>;
-  public text: FormControl<string | null>;
-  public note: FormControl<string | null>;
-  public images: FormControl<CodImage[]>;
-  public form: FormGroup;
+  private readonly _draft = linkedSignal(() => toDraft(this.locus()));
+  public readonly form = form(this._draft, (p) => {
+    required(p.citation);
+    maxLength(p.citation, 50);
+    NgxToolsSignalValidators.strictMinLength(p.ranges, 1);
+    maxLength(p.text, 1000);
+    maxLength(p.note, 5000);
+  });
 
-  constructor(formBuilder: FormBuilder) {
-    this.citation = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.ranges = formBuilder.control([], {
-      validators: NgxToolsValidators.strictMinLengthValidator(1),
-      nonNullable: true,
-    });
-    this.text = formBuilder.control(null, Validators.maxLength(1000));
-    this.note = formBuilder.control(null, Validators.maxLength(5000));
-    this.images = formBuilder.control([], { nonNullable: true });
-
-    this.form = formBuilder.group({
-      citation: this.citation,
-      ranges: this.ranges,
-      text: this.text,
-      note: this.note,
-      images: this.images,
-    });
-
+  constructor() {
+    // a new locus was bound: no unsaved edits (keyed on the bound model:
+    // the draft also changes with each user edit)
     effect(() => {
-      this.updateForm(this.locus());
+      this.locus();
+      untracked(() => this.form().reset());
     });
-  }
-
-  private updateForm(model: CodLocus | undefined): void {
-    if (!model) {
-      this.form.reset();
-      return;
-    }
-
-    this.citation.setValue(model.citation);
-    // the range of a new locus is a placeholder rendered as an empty
-    // location: it is not a location, so it must not satisfy validation
-    this.ranges.setValue(
-      model.range && CodLocationParser.rangesToString([model.range])
-        ? [model.range]
-        : []
-    );
-    this.text.setValue(model.text);
-    this.note.setValue(model.note || null);
-    this.images.setValue(model.images || []);
-    this.form.markAsPristine();
   }
 
   private getLocus(): CodLocus {
+    const draft = this._draft();
     return {
-      citation: this.citation.value?.trim() || '',
-      range: this.ranges.value.length ? this.ranges.value[0] : (null as any),
-      text: this.text.value?.trim() || '',
-      note: this.note.value?.trim() || undefined,
-      images: this.images.value?.length ? this.images.value : undefined,
+      citation: draft.citation.trim(),
+      range: draft.ranges.length
+        ? copyFormValue(draft.ranges[0])
+        : (null as any),
+      text: draft.text.trim(),
+      note: draft.note.trim() || undefined,
+      images: draft.images.length ? copyFormValue(draft.images) : undefined,
     };
   }
 
   public onLocationChange(ranges: CodLocationRange[] | null): void {
-    this.ranges.setValue(ranges || []);
-    this.ranges.updateValueAndValidity();
-    this.ranges.markAsDirty();
+    setFieldFromChild(this.form.ranges, copyFormValue(ranges || []));
   }
 
   public onImagesChange(images: CodImage[] | undefined): void {
-    this.images.setValue(images || []);
-    this.images.updateValueAndValidity();
-    this.images.markAsDirty();
+    setFieldFromChild(this.form.images, copyFormValue(images || []));
   }
 
   public cancel(): void {
     this.editorClose.emit();
   }
 
+  /**
+   * Handle Enter in this editor: in a text input, save as the save button
+   * would, when enabled. This replaces the implicit submission of the form
+   * this editor used to render.
+   * @param event The keydown event.
+   */
+  public onEnterKey(event: Event): void {
+    if (
+      !isImplicitSubmission(event) ||
+      this.form().invalid() ||
+      !this.form().dirty()
+    ) {
+      return;
+    }
+    event.preventDefault();
+    this.save();
+  }
+
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
     this.locus.set(this.getLocus());

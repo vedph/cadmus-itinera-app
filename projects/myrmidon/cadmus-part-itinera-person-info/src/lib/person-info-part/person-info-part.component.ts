@@ -1,22 +1,12 @@
 import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Optional,
-  signal,
   ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  linkedSignal,
 } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormField, maxLength, required } from '@angular/forms/signals';
 
 import {
   MatCard,
@@ -39,16 +29,13 @@ import {
   StandaloneEditorConstructionOptions,
 } from '@jean-merelis/ngx-monaco-editor';
 
-import { AuthJwtService } from '@myrmidon/auth-jwt-login';
 import {
   ModelEditorComponentBase,
   CloseSaveButtonsComponent,
+  HelpLinkComponent,
+  setFieldFromEditor,
 } from '@myrmidon/cadmus-ui';
-import {
-  ThesauriSet,
-  ThesaurusEntry,
-  EditedObject,
-} from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   CADMUS_TEXT_ED_BINDINGS_TOKEN,
   CadmusTextEdBindings,
@@ -56,6 +43,18 @@ import {
 } from '@myrmidon/cadmus-text-ed';
 
 import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
+
+interface PersonInfoPartControls {
+  sex: string;
+  bio: string;
+}
+
+function toDraft(part?: PersonInfoPart | null): PersonInfoPartControls {
+  return {
+    sex: part?.sex || '',
+    bio: part?.bio || '',
+  };
+}
 
 /**
  * PersonInfo part editor component.
@@ -66,10 +65,9 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
   templateUrl: './person-info-part.component.html',
   styleUrls: ['./person-info-part.component.css'],
   providers: [CadmusTextEdService],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
+    FormField,
     MatCard,
     MatCardHeader,
     MatCardAvatar,
@@ -86,12 +84,16 @@ import { PersonInfoPart, PERSON_INFO_PART_TYPEID } from '../person-info-part';
     MatCardActions,
     TitleCasePipe,
     CloseSaveButtonsComponent,
+    HelpLinkComponent,
   ],
 })
-export class PersonInfoPartComponent
-  extends ModelEditorComponentBase<PersonInfoPart>
-  implements OnInit, OnDestroy
-{
+export class PersonInfoPartComponent extends ModelEditorComponentBase<PersonInfoPart> {
+  private readonly _editService = inject(CadmusTextEdService);
+  private readonly _editorBindings = inject<CadmusTextEdBindings>(
+    CADMUS_TEXT_ED_BINDINGS_TOKEN,
+    { optional: true },
+  );
+
   private _editor?: StandaloneCodeEditor;
   public readonly editorOptions: StandaloneEditorConstructionOptions = {
     minimap: { side: 'right' },
@@ -99,32 +101,19 @@ export class PersonInfoPartComponent
     automaticLayout: true,
   };
 
-  public sex: FormControl<string | null>;
-  public bio: FormControl<string | null>;
-
   // person-sex
-  public readonly sexEntries = signal<ThesaurusEntry[] | undefined>(undefined);
+  public readonly sexEntries = computed<ThesaurusEntry[] | undefined>(
+    () => this.data()?.thesauri?.['person-sex']?.entries,
+  );
 
-  constructor(
-    authService: AuthJwtService,
-    formBuilder: FormBuilder,
-    private _editService: CadmusTextEdService,
-    @Inject(CADMUS_TEXT_ED_BINDINGS_TOKEN)
-    @Optional()
-    private _editorBindings?: CadmusTextEdBindings,
-  ) {
-    super(authService, formBuilder);
-    // form
-    this.sex = formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(50),
-    ]);
-    this.bio = formBuilder.control(null, Validators.maxLength(50000));
-  }
+  private readonly _draft = linkedSignal(() => toDraft(this.data()?.value));
+  public readonly form = this.createForm(this._draft, (p) => {
+    required(p.sex);
+    maxLength(p.sex, 50);
+    maxLength(p.bio, 50000);
+  });
 
-  public override ngOnInit(): void {
-    super.ngOnInit();
-  }
+  public readonly setFieldFromEditor = setFieldFromEditor;
 
   private async applyEdit(selector: string) {
     if (!this._editor) {
@@ -159,46 +148,12 @@ export class PersonInfoPartComponent
       });
     }
   }
-  protected buildForm(formBuilder: FormBuilder): FormGroup | UntypedFormGroup {
-    return formBuilder.group({
-      sex: this.sex,
-      bio: this.bio,
-    });
-  }
-
-  private updateThesauri(thesauri: ThesauriSet): void {
-    const key = 'person-sex';
-    if (this.hasThesaurus(key)) {
-      this.sexEntries.set(thesauri[key].entries);
-    } else {
-      this.sexEntries.set(undefined);
-    }
-  }
-
-  private updateForm(part?: PersonInfoPart | null): void {
-    if (!part) {
-      this.form.reset();
-      return;
-    }
-    this.sex.setValue(part.sex);
-    this.bio.setValue(part.bio || null);
-    this.form.markAsPristine();
-  }
-
-  protected override onDataSet(data?: EditedObject<PersonInfoPart>): void {
-    // thesauri
-    if (data?.thesauri) {
-      this.updateThesauri(data.thesauri);
-    }
-
-    // form
-    this.updateForm(data?.value);
-  }
 
   protected getValue(): PersonInfoPart {
     let part = this.getEditedPart(PERSON_INFO_PART_TYPEID) as PersonInfoPart;
-    part.sex = this.sex.value?.trim() || '';
-    part.bio = this.bio.value?.trim();
+    const draft = this._draft();
+    part.sex = draft.sex.trim();
+    part.bio = draft.bio.trim() || undefined;
     return part;
   }
 }
