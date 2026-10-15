@@ -1,7 +1,8 @@
 # History
 
+- 2026-10-15: updated Angular and packages.
 - 2026-10-10:
-  - ⚠️ updated the Cadmus core packages to version 20 and migrated all the libraries from reactive forms to Angular signal forms (`@angular/forms/signals`). Inputs, models and outputs are unchanged. Breaking for code that reached into the editors internals: each editor now exposes its form as a signal form field tree (`form`), replacing the former public `FormControl` fields (e.g. `CodLociPartComponent.loci` is now `form.loci`). See `signal-forms-migration.md` for details. Also:
+  - ⚠️ updated the Cadmus core packages to version 20 and migrated all libraries from reactive forms to Angular signal forms (`@angular/forms/signals`). Inputs, models and outputs are unchanged. Breaking for code that reached into the editors internals: each editor now exposes its form as a signal form field tree (`form`), replacing the former public `FormControl` fields (e.g. `CodLociPartComponent.loci` is now `form.loci`). See `signal-forms-migration.md` for details. Also:
     - no editor renders a `<form>` any more. Part editors save through their save button, so Enter in an input no longer saves the part. The editors of single entries (locus, title, work, referenced text, related person, witness) still save on Enter in a text input, when their save button is enabled; and Enter still applies a poem layout, adds poem ranges and saves a layout note.
     - text inputs with a maximum length no longer accept more characters than that (the signal forms `maxLength` rule also sets the `maxlength` attribute).
     - empty optional text values are now saved as missing rather than as empty strings.
